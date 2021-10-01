@@ -1,0 +1,107 @@
+.setecincoporcento{
+	width: 75%;
+	margin: auto;
+}
+
+.displaynone{
+	display:none;
+}
+
+.duzentospixelsfundoazul{
+	width: 170px;
+    height: 140px;
+	background-color:blue;
+    float: left;
+	border-radius: 20px;
+	margin: 5px;
+	text-align: center;
+	padding-top:40px;
+}
+
+.linkbranco{
+	color: white;
+}
+
+.linkbranco:hover{
+	color: white;
+}
+
+.borderumpixelpaddingvintepixel{
+	border: solid black 1px;
+	padding-top:20px;
+	padding-left:20px;
+	padding-right:20px;
+	margin-bottom:10px;
+}
+
+.borderumpixelpaddingquinzepixel{
+	border: solid black 1px;
+	padding:15px;
+	margin-bottom:10px;
+}
+
+.widthtrintaporcento{
+	width: 30%;	
+}
+
+.widthvintecincoporcento{
+	width: 25%;	
+}
+
+.widthvinteporcento{
+	width: 20%;	
+}
+
+.heighttrintapixel{
+	height: 34px;
+}
+
+.paddingzeropixelheightvintepixel{
+	padding:0px;
+	height:20px;
+}
+
+.paddingtopzeropixel{
+	padding-top:0px;
+}
+
+.accordion {
+    margin-top: 25px;
+}
+
+.accordion-button.collapsed {
+    background:#ddeeff;
+}
+
+/*
+.accordion-button:not(.collapsed) {
+    background:#ee6666;
+}
+*/
+
+.floatleft{
+	float: left;
+}
+
+.floatright{
+	float: right;
+}
+
+.clearboth{
+	clear: both;
+}
+
+.paddingdoispixel{
+	padding: 2px;
+}
+
+select.form-control{
+	-webkit-appearance: auto;
+    -moz-appearance: auto;
+    appearance: auto;
+}
+
+.asterisk:after{
+	content:" * ";
+	color:red;
+}

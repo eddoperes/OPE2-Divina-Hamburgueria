@@ -1,0 +1,80 @@
+<div id="itemN">
+
+    <input type="hidden" id="idN" value="0">
+
+    <div class="widthtrintaporcento floatleft paddingdoispixel">
+        <select id="itemdocardapioN" class="form-control heighttrintapixel">
+        </select>
+        <label id="feedItemdocardapioN" class="invalid-feedback">O item precisa ser informado</label>        
+    </div>    
+
+    <div class="widthvintecincoporcento floatleft paddingdoispixel">
+        <input id="precoN" class="form-control heighttrintapixel text-center" type="number" required min="0" value="0" step="1.0">
+        <label id="feedPrecoN" class="invalid-feedback">O preço precisa ser informado</label>
+    </div>
+
+    <div class="widthvintecincoporcento floatleft paddingdoispixel">
+        <input id="observacaoN" class="form-control heighttrintapixel" type="text" value="" />
+    </div>
+
+    <div class="widthvinteporcento floatleft paddingdoispixel">
+        <input type="button" id="excluirN" class="btn btn-link heighttrintapixel paddingtopzeropixel" value="Retirar" />
+    </div>
+
+    <div class="clearboth">        
+    </div>
+
+</div>
+
+<div id="sucessoN" class="alert alert-success displaynone" role="alert" >
+</div>
+
+<div id="falhaN" class="alert alert-danger displaynone" role="alert" >
+</div>
+
+<script>
+
+    function ValidarItemCardapio(){
+
+        var result = true;
+
+        var total = 0;
+
+        var i;
+        for(i=0; i <= incrementar_id; i++){
+
+            //if ($('#item' + i).is(':visible')){
+            if ($('#item' + i).css('display') == 'block'){
+
+                if ($("#itemdocardapio"  + i).val() == null){
+                    $("#itemdocardapio"  + i).addClass("is-invalid");
+                    result = false;
+                } else {
+                    $("#itemdocardapio"  + i).removeClass("is-invalid");
+                }
+
+                if ($("#preco"  + i).val() <= 0){
+                    $("#preco"  + i).addClass("is-invalid");
+                    result = false;
+                } else {
+                    $("#preco"  + i).removeClass("is-invalid");
+                }
+
+                total += parseFloat($('#preco' + i).val());
+            
+            }
+
+        }
+
+        if (total <= 0){
+            $("#total").addClass("is-invalid");
+            result = false;
+        } else {
+            $("#total").removeClass("is-invalid");
+        }
+
+        return result;
+
+    }
+
+</script>

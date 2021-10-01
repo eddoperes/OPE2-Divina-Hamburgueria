@@ -1,0 +1,74 @@
+<div id="itemN" >
+
+    <input type="hidden" id="idN" value="0">
+
+    <div class="widthtrintaporcento floatleft paddingdoispixel">
+        <select id="itemdocardapioN" class="form-control heighttrintapixel">
+        </select>
+        <label id="feedItemN" class="invalid-feedback">O item já foi atribuido e não pode ser duplicado</label>
+    </div>    
+
+    <div class="widthvintecincoporcento floatleft paddingdoispixel">
+        <input id="precoN" class="form-control heighttrintapixel text-center" type="number" required min="0" value="0" step="1.0">
+        <label id="feedPrecoN" class="invalid-feedback">O preço precisa ser maior que zero</label>
+    </div>
+
+    <div class="widthvinteporcento floatleft paddingdoispixel">
+        <select id="estadoN" class="form-control heighttrintapixel" data-toggle="dropdown">
+            <option value="1">Ativo</option>
+            <option value="0">Inativo</option>
+        </select>
+    </div>
+
+    <div class="widthvintecincoporcento floatleft paddingdoispixel">
+        <input type="button" id="excluirN" class="btn btn-link heighttrintapixel paddingtopzeropixel" value="Retirar" />
+    </div>
+
+    <div class="clearboth">        
+    </div>
+
+</div>
+
+<div id="sucessoN" class="alert alert-success displaynone" role="alert" > 
+</div>
+
+<div id="falhaN" class="alert alert-danger displaynone" role="alert" > 			
+</div>
+
+<script>
+
+	function ValidarItemCardapio(){
+
+        var result = true;
+        var dictItemdocardapio = {};
+
+        var i;
+        for(i=0; i <= incrementar_id; i++){
+
+            //if ($('#item' + i).is(':visible')){
+            if ($('#item' + i).css('display') == 'block'){
+
+                if ($("#preco"  + i).val() <= 0){
+                    $("#preco"  + i).addClass("is-invalid");
+                    result = false;
+                } else {
+                    $("#preco"  + i).removeClass("is-invalid");
+                }
+
+                if (dictItemdocardapio[$("#itemdocardapio"  + i).val()] == true){
+                    $("#itemdocardapio"  + i).addClass("is-invalid");
+                    result = false;
+                } else {
+                    $("#itemdocardapio"  + i).removeClass("is-invalid");
+                    dictItemdocardapio[$("#itemdocardapio"  + i).val()] = true;                                        
+                }
+            
+            }
+
+        }
+
+       return result;
+
+	}
+
+</script>

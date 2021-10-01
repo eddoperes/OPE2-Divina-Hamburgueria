@@ -1,0 +1,87 @@
+<html>
+
+	<head>
+		<meta charset="utf8"/>
+		<script src="jquery/jquery3.6.js"></script>
+		<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
+		<script src="bootstrap/dist/js/bootstrap.js"></script>
+		<link rel="stylesheet" href="css/sistema.css" >
+		<script src="js/sistema.js"></script>
+	</head>
+
+	<body>        
+
+		<div class="setecincoporcento">
+
+			<input type="hidden" id="idcliente" value="0">
+
+			<br/>
+			<a href="home.html">Home</a>		
+			<br/>
+
+			<br/>
+			<h1 class="floatleft">Novo fornecedor</h1>
+			<label class="floatright widthvintecincoporcento"><label class="asterisk"></label>
+				Campos obrigatórios
+			</label>
+			<br/>
+			<div class="clearboth"></div>
+			<br/>
+
+		</div>
+
+		<div id="base_FOR" class="setecincoporcento">				
+		</div>
+
+		<div id="base_ENV" class="setecincoporcento">				
+		</div>
+
+	</body>
+
+	<script>
+
+		$(function(){
+			if (CheckLogin() == false)
+				return;
+			$("#base_FOR").load("fornecedor_base_FOR.html", function (){
+				$("#base_FOR_END").load("fornecedor_base_FOR_END.html"); 
+				$("#base_FOR_TEL").load("fornecedor_base_FOR_TEL.html", function (){
+					AdicionarEndereco();
+					$("#adicionarEndereco").css('display', 'none');
+					$("#retirarEndereco").css('display', 'none');
+					AdicionarTelefone();
+					$("#adicionarTelefone").css('display', 'none');
+					$("#retirarTelefone").css('display', 'none');
+				}); 
+			});			
+			$("#base_ENV").load("fornecedor_base_ENV.html");
+		});
+
+		function CheckLogin(){
+			var idusuario = getLoggedUserId();
+			if (idusuario == -1)
+			{
+				var page =  window.location.pathname.split("/").pop();
+				window.location.href = window.location.href.replace(page,'login.html');	
+				return false;					
+			}								
+			else
+			{
+				$('#idusuario').val(idusuario);
+				return true;
+			}
+		}
+
+		function Enviar_Click()
+		{	
+			
+			if (ValidarFornecedor() == false)
+				return;
+
+			CrudTelefone();
+		
+		}
+
+	</script>
+
+</html>

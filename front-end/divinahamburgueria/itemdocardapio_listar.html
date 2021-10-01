@@ -1,0 +1,149 @@
+<html>
+
+<head>
+	<meta charset="utf8"/>
+	<script src="jquery/jquery3.6.js"></script>
+	<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
+	<script src="bootstrap/dist/js/bootstrap.js"></script>
+        <link rel="stylesheet" href="css/sistema.css" >
+        <script src="js/sistema.js"></script>
+</head>
+
+<body>     
+
+	<div class="setecincoporcento">
+
+		<br/>
+		<a href="home.html">Home</a>		
+		<br/>
+
+		<br/>
+                <h1>Listar itens do cardápio</h1>
+                <br/>
+
+		<a href="itemdocardapio_novo.html">Novo</a>
+		<br/>
+		<br/>
+
+		<div class="borderumpixelpaddingvintepixel">
+			<div class="mb-3">
+				<label for="nome" class="form-label">Nome</label>
+				<input id="nome" class="form-control" type='text' value='' />
+			</div>
+
+			<div class="col-auto">
+    				<input type='button' class="btn btn-primary mb-3" value='Pesquisar' onclick="Busca()" />    
+			</div>
+		</div>
+
+		<div id="table_container">
+		</div>
+
+	</div>
+
+</body>
+
+<script>
+
+	$(function(){
+		if (CheckLogin() == false)
+			return;
+	});
+	
+	function CheckLogin(){
+		var idusuario = getLoggedUserId();
+		if (idusuario == -1)
+		{
+			var page =  window.location.pathname.split("/").pop();
+			window.location.href = window.location.href.replace(page,'login.html');	
+			return false;					
+		}								
+		else
+		{
+			return true;
+		}
+	}
+
+
+	function Busca()
+	{
+
+		WebApi_GET_LIST_ItemDoCardapio
+		(
+			'?nome=' + $('#nome').val(), 
+			function success(data) {			
+				console.log(data);			
+				var textData = '<table class="table">';
+
+				textData += '<tr>';
+
+				textData += '<th>';
+				textData += 'Id';
+				textData += '</th>';
+
+				textData += '<th>';
+				textData += 'Nome';
+				textData += '</th>';
+
+				textData += '<th>';
+				textData += 'Descricao';
+				textData += '</th>';
+
+				textData += '<th>';
+				textData += 'Fotografia';
+				textData += '</th>';
+
+				textData += '<th>';
+				textData += '';
+				textData += '</th>';
+
+				textData += '<th>';
+				textData += '';
+				textData += '</th>';
+
+				textData += '</tr>';
+
+							var i;	                       
+				for (i=0; i < data.length; i++){
+					textData += '<tr>';
+
+					textData += '<td>';
+					textData += data[i].id;
+					textData += '</td>';
+
+					textData += '<td>';
+					textData += data[i].nome;
+					textData += '</td>';
+
+					textData += '<td>';
+					textData += data[i].descricao;
+					textData += '</td>';
+
+					textData += '<td>';
+					textData += data[i].fotografia;
+					textData += '</td>';
+
+					textData += '<td>';
+					textData += '<a href="itemdocardapio_editar.html?id=' + data[i].id + '">Editar</a>';
+					textData += '</td>';
+
+					textData += '<td>';
+					textData += '<a href="itemdocardapio_excluir.html?id=' + data[i].id + '">Excluir</a>';
+					textData += '</td>';
+
+					textData += '</tr>';
+				}	
+				textData += '</table>'
+				$('#table_container').html(textData);	
+			},
+			function complete(xhr, text) {
+				console.log(xhr.status);
+				console.log(xhr.responseText);			
+			}     
+		);
+
+	}
+
+</script>
+
+</html>

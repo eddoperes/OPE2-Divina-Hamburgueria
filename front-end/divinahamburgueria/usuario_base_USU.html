@@ -1,0 +1,147 @@
+<input type="hidden" id="id" value="0">
+
+<div class="mb-3">
+	<label for="nome" class="form-label asterisk">Nome</label>
+	<input id="nome" class="form-control" type='text' value='' />
+	<label class="invalid-feedback">O nome precisa ser informado</label>
+</div>
+
+<div class="mb-3">
+	<label for="tipo" class="form-label asterisk">Tipo</label>
+  	<select id="tipo" class="form-control">
+   		<option value="1">Chef</option>
+   		<option value="2">Auxiliar</option>
+   		<option value="3">Caixa</option>
+  	</select>
+	<label class="invalid-feedback">O tipo precisa ser informado</label>
+</div>
+
+<div class="mb-3">
+ 	<label for="email" class="form-label asterisk">Email</label>
+  	<input id="email" class="form-control" type='text' value='' />
+	<label class="invalid-feedback">O email precisa ser informado</label>
+</div>
+
+<div class="mb-3">
+ 	<label for="senha" class="form-label asterisk">Senha</label>
+  	<input id="senha" class="form-control" type='password' value='' />
+	<label class="invalid-feedback">A senha precisa ser informada</label>
+</div>
+
+<div class="mb-3">
+	<label for="estado" class="form-label asterisk">Estado</label>
+  	<select id="estado" class="form-control">
+   		<option value="1">Ativo</option>
+   		<option value="0">Inativo</option>
+  	</select>
+</div>
+
+<div class="col-auto">
+   	<input type='button' class="btn btn-primary mb-3" value='Enviar' onclick="Enviar_Click()" />    
+</div>
+
+<div id="sucesso" class="alert alert-success displaynone" role="alert" >	
+</div>
+
+<div id="falha" class="alert alert-danger displaynone" role="alert" >  			
+</div>
+
+<script>
+
+	$(function(){
+
+		$("#nome").keyup(function (){
+			if ($("#nome").val() == "")
+				$("#nome").addClass("is-invalid");
+			else
+				$("#nome").removeClass("is-invalid");
+		}); 
+
+		$("#nome").focusout(function (){
+			if ($("#nome").val() == "")
+				$("#nome").addClass("is-invalid");
+			else
+				$("#nome").removeClass("is-invalid");
+		});
+
+		$("#tipo").change(function (){
+			if ($("#tipo").val() == null)
+				$("#tipo").addClass("is-invalid");
+			else
+				$("#tipo").removeClass("is-invalid");
+		});
+
+		$("#tipo").focusout(function (){
+			if ($("#tipo").val() == null)
+				$("#tipo").addClass("is-invalid");
+			else
+				$("#tipo").removeClass("is-invalid");
+		}); 
+
+		$("#email").keyup(function (){
+			if ($("#email").val() == "")
+				$("#email").addClass("is-invalid");
+			else
+				$("#email").removeClass("is-invalid");
+		}); 
+
+		$("#email").focusout(function (){
+			if ($("#email").val() == "")
+				$("#email").addClass("is-invalid");
+			else
+				$("#email").removeClass("is-invalid");
+		}); 
+
+		$("#senha").keyup(function (){
+			if ($("#senha").val() == "")
+				$("#senha").addClass("is-invalid");
+			else
+				$("#senha").removeClass("is-invalid");
+		}); 
+
+		$("#senha").focusout(function (){
+			if ($("#senha").val() == "")
+				$("#senha").addClass("is-invalid");
+			else
+				$("#senha").removeClass("is-invalid");
+		});
+
+	});
+
+	function ValidarUsuario (){
+
+		var result = true;
+
+		if ($("#nome").val() == ""){
+			$("#nome").addClass("is-invalid");
+			result = false;
+		} else {
+			$("#nome").removeClass("is-invalid");
+		}
+
+		if ($("#tipo").val() == null){
+			$("#tipo").addClass("is-invalid");
+			result = false;
+		} else {
+			$("#tipo").removeClass("is-invalid");
+		}
+
+		if ($("#email").val() == ""){
+			$("#email").addClass("is-invalid");
+			result = false;
+		} else {
+			$("#email").removeClass("is-invalid");
+		}
+
+		if ($("#senha").val() == ""){
+			$("#senha").addClass("is-invalid");
+			result = false;
+		}else{
+			$("#senha").removeClass("is-invalid");
+		}
+
+		return result;
+
+	}
+	
+</script>

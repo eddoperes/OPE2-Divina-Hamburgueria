@@ -1,0 +1,106 @@
+<input type="hidden" id="id" value="0">
+
+<div class="mb-3">
+    <label for="nome" class="form-label asterisk">Nome</label>
+    <input id="nome" class="form-control" type='text' value='' />
+    <label class="invalid-feedback">O nome precisa ser informado</label>
+</div>
+
+<div class="mb-3">
+      <label for="descricao" class="form-label asterisk">Descrição</label>
+      <input id="descricao" class="form-control" type='text' value='' />
+      <label class="invalid-feedback">A descrição precisa ser informada</label>
+</div>
+
+<div class="mb-3">
+      <label for="estado" class="form-label asterisk">Estado</label>
+      <select id="estado" class="form-control">
+           <option value="1">Ativo</option>
+           <option value="0">Inativo</option>
+      </select>
+      <label class="invalid-feedback">O estado precisa ser informado</label>
+</div>
+
+<script>
+
+	$(function(){
+
+		$("#nome").keyup(function (){
+			if ($("#nome").val() == "")
+				$("#nome").addClass("is-invalid");
+			else
+				$("#nome").removeClass("is-invalid");
+		}); 
+
+		$("#nome").focusout(function (){
+			if ($("#nome").val() == "")
+				$("#nome").addClass("is-invalid");
+			else
+				$("#nome").removeClass("is-invalid");
+		});
+
+		$("#descricao").keyup(function (){
+			if ($("#descricao").val() == "")
+				$("#descricao").addClass("is-invalid");
+			else
+				$("#descricao").removeClass("is-invalid");
+		}); 
+
+		$("#descricao").focusout(function (){
+			if ($("#descricao").val() == "")
+				$("#descricao").addClass("is-invalid");
+			else
+				$("#descricao").removeClass("is-invalid");
+		}); 
+
+		$("#estado").change(function (){
+			if ($("#estado").val() == null)
+				$("#estado").addClass("is-invalid");
+			else
+				$("#estado").removeClass("is-invalid");
+		}); 
+
+		$("#estado").focusout(function (){
+			if ($("#estado").val() == null)
+				$("#estado").addClass("is-invalid");
+			else
+				$("#estado").removeClass("is-invalid");
+		});
+
+	});
+
+	function ValidarCardapio(){
+
+		var result = true;
+
+		if ($("#nome").val() == ""){
+			$("#nome").addClass("is-invalid");
+			result = false;
+		} else {
+			$("#nome").removeClass("is-invalid");
+		}
+
+		if ($("#descricao").val() == ""){
+			$("#descricao").addClass("is-invalid");
+			result = false;
+		} else {
+			$("#descricao").removeClass("is-invalid");
+		}
+
+		if ($("#estado").val() == null){
+			$("#estado").addClass("is-invalid");
+			result = false;
+		}else{
+			$("#estado").removeClass("is-invalid");
+		}
+
+		var resultItem = ValidarItemCardapio();
+
+		if (result == true)
+			result = resultItem; 
+
+		return result;
+
+	}
+	
+</script>

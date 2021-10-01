@@ -1,0 +1,108 @@
+<input type="hidden" id="id" value="0">
+
+<div class="mb-3">
+	<label for="nome" class="form-label asterisk">Nome</label>
+	<input id="nome" class="form-control" type='text' value='' />
+	<label class="invalid-feedback">O nome precisa ser informado</label>
+</div>
+
+<div class="mb-3">
+	<label for="descricao" class="form-label asterisk">Descrição</label>
+	<textarea id="descricao" class="form-control" rows="3" value="" ></textarea>
+	<label class="invalid-feedback">A descrição precisa ser informada</label>
+</div>
+
+<div class="mb-3">
+	<label for="fotografia" class="form-label asterisk">Fotografia</label>
+	<input id="fotografia" class="form-control" type="text" value='' />
+	<label class="invalid-feedback">A fotografia precisa ser informada</label>
+</div>
+
+<div class="col-auto">
+	<input type='button' class="btn btn-primary mb-3" value='Enviar' onclick="Enviar_Click()" />    
+</div>
+
+<div id="sucesso" class="alert alert-success displaynone" role="alert" >  			
+</div>
+
+<div id="falha" class="alert alert-danger displaynone" role="alert" >  			
+</div>
+
+<script>
+
+	$(function(){
+
+		$("#nome").keyup(function (){
+			if ($("#nome").val() == "")
+				$("#nome").addClass("is-invalid");
+			else
+				$("#nome").removeClass("is-invalid");
+		}); 
+
+		$("#nome").focusout(function (){
+			if ($("#nome").val() == "")
+				$("#nome").addClass("is-invalid");
+			else
+				$("#nome").removeClass("is-invalid");
+		});
+
+		$("#descricao").keyup(function (){
+			if ($("#descricao").val() == "")
+				$("#descricao").addClass("is-invalid");
+			else
+				$("#descricao").removeClass("is-invalid");
+		}); 
+
+		$("#descricao").focusout(function (){
+			if ($("#descricao").val() == "")
+				$("#descricao").addClass("is-invalid");
+			else
+				$("#descricao").removeClass("is-invalid");
+		}); 
+
+		$("#fotografia").keyup(function (){
+			if ($("#fotografia").val() == "")
+				$("#fotografia").addClass("is-invalid");
+			else
+				$("#fotografia").removeClass("is-invalid");
+		}); 
+
+		$("#fotografia").focusout(function (){
+			if ($("#fotografia").val() == "")
+				$("#fotografia").addClass("is-invalid");
+			else
+				$("#fotografia").removeClass("is-invalid");
+		});
+
+	});
+
+	function ValidarItemDoCardapio(){
+
+		var result = true;
+
+		if ($("#nome").val() == ""){
+			$("#nome").addClass("is-invalid");
+			result = false;
+		} else {
+			$("#nome").removeClass("is-invalid");
+		}
+
+		if ($("#descricao").val() == ""){
+			$("#descricao").addClass("is-invalid");
+			result = false;
+		} else {
+			$("#descricao").removeClass("is-invalid");
+		}
+
+		if ($("#fotografia").val() == ""){
+			$("#fotografia").addClass("is-invalid");
+			result = false;
+		}else{
+			$("#fotografia").removeClass("is-invalid");
+		}
+
+		return result;
+
+	}
+	
+</script>

@@ -1,0 +1,383 @@
+<input type="hidden" id="idcliente" value="0">
+
+<div class="mb-3">
+      <label for="nome" class="form-label asterisk">Nome</label>                                                            
+      <input id="nome" class="form-control" type='text' value="" />
+      <label id="feedNome" class="invalid-feedback">O nome precisa ser informado</label>  
+</div>
+
+<div class="mb-3 ">
+      <label for="cpf" class="form-label">CPF</label>
+      <input id="cpf" class="form-control" type='number' value="" />   
+      <label id="feedCpf" class="invalid-feedback">O CPF precisa ser válido, não use pontos ou traços</label>  
+</div>
+
+<div class="accordion" id="accordiEnderecoExample">
+      <div class="accordion-item">
+            <h2 class="accordion-header" id="headingEndereco">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEndereco" aria-expanded="true" aria-controls="collapseEndereco">
+                        Endereço
+                  </button>
+            </h2>
+            <div id="collapseEndereco" class="accordion-collapse collapse show" aria-labelledby="headingEndereco" data-bs-parent="#accordiEnderecoxample">
+                  <div class="accordion-body">
+      
+                        <div id="base_CLI_END" class="displaynone">
+                        </div>
+                             
+                        <input id="adicionarEndereco" type="button" class="btn btn-link heighttrintapixel" onclick="AdicionarEndereco()" value='Adicionar Endereço' />
+
+                  </div>	
+            </div>
+      </div>              
+</div>
+
+<div class="accordion" id="accordiTelefoneExample">
+      <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTelefone">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTelefone" aria-expanded="true" aria-controls="collapseTelefone">
+                        Telefone
+                  </button>
+            </h2>
+            <div id="collapseTelefone" class="accordion-collapse collapse show" aria-labelledby="headingTelefone" data-bs-parent="#accordiTelefonexample">
+                  <div class="accordion-body">
+      
+                        <div id="base_CLI_TEL" class="displaynone">
+                        </div>
+                             
+                        <input id="adicionarTelefone" type="button" class="btn btn-link heighttrintapixel" onclick="AdicionarTelefone()" value='Adicionar Telefone' />
+
+                  </div>
+            </div>
+      </div>              
+</div>
+<br/>
+
+<script>
+
+      $(function(){
+
+            $("#nome").on('keyup focusout change', function(e) {
+                  // e.type is the type of event fired
+                  if ($("#nome").val() == '')
+				$("#nome").addClass("is-invalid");
+			else
+				$("#nome").removeClass("is-invalid");
+            });      
+
+            $("#cpf").on('keyup focusout change', function(e) {
+                  
+                  var isFirefox = typeof InstallTrigger !== 'undefined';
+            
+                  if (isFirefox){
+                        if (!((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105))) { 
+                              $("#cpf").val($("#cpf").val().replace(e.key,""));
+                        }
+                  }
+                  
+                  if ($("#cpf").val() != ''){                        
+                        if (ValidarCPF($("#cpf").val()) == false){
+                              $("#cpf").addClass("is-invalid");
+                              result = false;
+                        } else {
+                              $("#cpf").removeClass("is-invalid");
+                        }
+                  } else {
+                        $("#cpf").removeClass("is-invalid");
+                  }
+
+            });
+
+            $('#idcliente').val(0);
+
+      });
+
+      function AdicionarEndereco()
+      {
+            $('#base_CLI_END').css('display','block');
+            $('#adicionarEndereco').css('display','none');
+            $('#idendereco').val('0');		
+            $('#cep').val('');
+            $('#logradouro').val('');
+            $('#numero').val(''); 
+            $('#complemento').val('');
+            $('#bairro').val('');
+            $('#cidade').val(''); 
+            $('#uf').val('SP');
+
+            $("#cep").removeClass("is-invalid");
+            $("#logradouro").removeClass("is-invalid");
+            $("#numero").removeClass("is-invalid");
+            $("#bairro").removeClass("is-invalid");
+            $("#cidade").removeClass("is-invalid");
+
+            $("#cep").on('keyup focusout change', function(e) {
+                  
+                  var isFirefox = typeof InstallTrigger !== 'undefined';
+
+                  if (isFirefox){
+                        if (!((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105))) {
+                              $("#cep").val($("#cep").val().replace(e.key,""));
+                        }
+                  }
+                  
+                  if ($("#cep").val().length < 8){
+                        $("#cep").addClass("is-invalid");
+                  } else {
+                        $("#cep").removeClass("is-invalid");
+                  }                  
+
+            });
+
+            $("#logradouro").on('keyup focusout change', function(e) {
+                  
+                  if ($("#logradouro").val() == ''){
+                        $("#logradouro").addClass("is-invalid");
+                  } else {
+                        $("#logradouro").removeClass("is-invalid");
+                  }                  
+
+            });
+
+            $("#numero").on('keyup focusout change', function(e) {
+                  
+                  var isFirefox = typeof InstallTrigger !== 'undefined';
+
+                  if (isFirefox){
+                        if (!((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105))) {
+                              $("#numero").val($("#numero").val().replace(e.key,""));
+                        }
+                  }
+                  
+                  if (!($("#numero").val() > 0)){
+                        $("#numero").addClass("is-invalid");
+                  } else {
+                        $("#numero").removeClass("is-invalid");
+                  }                  
+
+            });
+
+            $("#bairro").on('keyup focusout change', function(e) {
+                  
+                  if ($("#bairro").val() == ''){
+                        $("#bairro").addClass("is-invalid");
+                  } else {
+                        $("#bairro").removeClass("is-invalid");
+                  }                  
+
+            });
+
+            $("#cidade").on('keyup focusout change', function(e) {
+                  
+                  if ($("#cidade").val() == ''){
+                        $("#cidade").addClass("is-invalid");
+                  } else {
+                        $("#cidade").removeClass("is-invalid");
+                  }                  
+
+            });
+
+      }
+
+      function AdicionarTelefone()
+      {
+            $('#base_CLI_TEL').css('display','block');
+            $('#adicionarTelefone').css('display','none');
+            $('#idtelefone').val('0');		
+            $('#ddd').val('');
+            $('#telefone').val('');
+
+            $("#ddd").removeClass("is-invalid");
+            $("#telefone").removeClass("is-invalid");
+
+            $("#ddd").on('keyup focusout change', function(e) {
+                  
+                  var isFirefox = typeof InstallTrigger !== 'undefined';
+
+                  if (isFirefox){
+                        if (!((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105))) {
+                              $("#ddd").val($("#ddd").val().replace(e.key,""));
+                        }
+                  }
+                  
+                  if (!($("#ddd").val().length == 2)){
+                        $("#ddd").addClass("is-invalid");
+                  } else {
+                        $("#ddd").removeClass("is-invalid");
+                  }                  
+
+            });
+
+            $("#telefone").on('keyup focusout change', function(e) {
+                  
+                  var isFirefox = typeof InstallTrigger !== 'undefined';
+
+                  if (isFirefox){
+                        if (!((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105))) {
+                              $("#telefone").val($("#telefone").val().replace(e.key,""));
+                        }
+                  }
+                  
+                  if (!($("#telefone").val().length == 8 || $("#telefone").val().length == 9)){
+                        $("#telefone").addClass("is-invalid");
+                  } else {
+                        $("#telefone").removeClass("is-invalid");
+                  }                  
+
+            });
+
+      }
+
+      function LoadCliente(id)
+      {            
+
+            WebApi_GET_Cliente
+            (
+                  id, 
+                  function success(data) {			
+                        console.log(data);	                                             
+                        $('#idcliente').val(data.id);		
+                        $('#nome').val(data.nome);
+                        $('#cpf').val(data.cpf);                       
+                        if (data.endereco != null)
+                        {
+                              AdicionarEndereco();
+                              LoadEndereco(data.endereco);
+                        }       
+                        else
+                        {                              
+                              $('#cep').val('');
+                              $('#logradouro').val('');
+                              $('#numero').val(''); 
+                              $('#complemento').val('');
+                              $('#bairro').val('');
+                              $('#cidade').val(''); 
+                              $('#uf').val('');
+                        }                 
+                        if (data.telefone != null)
+                        {                              
+                              AdicionarTelefone();
+                              LoadTelefone(data.telefone);
+                        }
+                        else
+                        {
+                              $('#ddd').val('');
+                              $('#telefone').val('');
+                        }
+                  },
+                  function complete(xhr, text) {
+                        console.log(xhr.status);
+                        console.log(xhr.responseText);			
+                  }
+            );
+
+      }
+
+      function ValidarCliente(){
+
+            var result = true;
+
+            //if ($('#base_CLI').is(':visible'))
+            if ($('#base_CLI').css('display') == 'block')
+            {
+                  
+                  if ($("#nome").val() == ''){
+                        $("#nome").addClass("is-invalid");
+                        result = false;
+                  } else {
+                        $("#nome").removeClass("is-invalid");
+                  }
+                  
+                  if ($("#cpf").val() != ''){                  
+                        if (ValidarCPF($("#cpf").val()) == false){
+                              $("#cpf").addClass("is-invalid");
+                              result = false;
+                        } else {
+                              $("#cpf").removeClass("is-invalid");
+                        }
+                  } else {
+                        $("#cpf").removeClass("is-invalid");
+                  }
+            
+                  var resultEndereco = ValidarEndereco();
+
+                  if (result == true)
+                        result = resultEndereco; 
+
+                  var resultTelefone = ValidarTelefone();
+
+                  if (result == true)
+                        result = resultTelefone; 
+
+            }
+
+            return result;
+
+      }
+
+      function CrudCliente()
+      {
+
+            if($('#idcliente').val() == '0'){	
+                  
+                  WebApi_POST_Cliente
+                  (
+                        {
+                              nome : $('#nome').val() , cpf : $('#cpf').val(),
+                              endereco : $('#idendereco').val() , telefone : $('#idtelefone').val()
+                        }, 
+                        function success(data) {
+                              console.log(data);
+                              $('#idcliente').val(data.id);
+                        },
+                        function complete(xhr, text) {
+                              console.log(xhr.status);
+                              console.log(xhr.responseText);
+                              if (xhr.status == 201){
+                                    $('#falha').css('display','none');
+                                    $('#sucesso').css('display','block');
+                                    $('#sucesso').html("O cliente foi criado com sucesso! <a href='cliente_listar.html'>Seguir para a lista de clientes</a>");
+                              }
+                              else{
+                                    $('#sucesso').css('display','none');
+                                    $('#falha').css('display','block');
+                                    $('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+                              }
+                        }  
+                  );
+
+            }
+            else
+            {
+
+                  WebApi_PUT_Cliente
+                  (
+                        $('#idcliente').val(), 
+                        {
+                              nome : $('#nome').val() , cpf : $('#cpf').val(),
+                              endereco : $('#idendereco').val() , telefone : $('#idtelefone').val()
+                        }, 
+                        function success(data) {
+                              console.log(data);
+                        },
+                        function complete(xhr, text) {
+                              console.log(xhr.status);
+                              console.log(xhr.responseText);
+                              if (xhr.status == 200){
+                                    $('#falha').css('display','none');
+                                    $('#sucesso').css('display','block');
+                                    $('#sucesso').html("O cliente foi editado com sucesso! <a href='cliente_listar.html'>Seguir para a lista de clientes</a>");
+                              }
+                              else{
+                                    $('#sucesso').css('display','none');
+                                    $('#falha').css('display','block');
+                                    $('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+                              }
+                        }     
+                  );
+            }
+
+
+      }
+
+</script>

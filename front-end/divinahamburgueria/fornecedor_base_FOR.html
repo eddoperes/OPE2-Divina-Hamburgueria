@@ -1,0 +1,375 @@
+<input type="hidden" id="idfornecedor" value="0">
+
+<div class="mb-3">
+      <label for="nome" class="form-label asterisk">Nome</label>                                                            
+      <input id="nome" class="form-control" type='text' value="" />
+      <label id="feedNome" class="invalid-feedback">O nome precisa ser informado</label>  
+</div>
+
+<div class="mb-3 ">
+      <label for="cnpj" class="form-labelb asterisk">CNPJ</label>
+      <input id="cnpj" class="form-control" type='number' value="" />   
+      <label id="feedCpf" class="invalid-feedback">O CNPJ precisa ser válido, não use pontos ou traços</label>  
+</div>
+
+<div class="accordion" id="accordiEnderecoExample">
+      <div class="accordion-item">
+            <h2 class="accordion-header" id="headingEndereco">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEndereco" aria-expanded="true" aria-controls="collapseEndereco">
+                        Endereço
+                  </button>
+            </h2>
+            <div id="collapseEndereco" class="accordion-collapse collapse show" aria-labelledby="headingEndereco" data-bs-parent="#accordiEnderecoxample">
+                  <div class="accordion-body">
+      
+                        <div id="base_FOR_END" class="displaynone">
+                        </div>
+                             
+                        <input id="adicionarEndereco" type="button" class="btn btn-link heighttrintapixel" onclick="AdicionarEndereco()" value='Adicionar Endereço' />
+
+                  </div>	
+            </div>
+      </div>              
+</div>
+
+<div class="accordion" id="accordiTelefoneExample">
+      <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTelefone">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTelefone" aria-expanded="true" aria-controls="collapseTelefone">
+                        Telefone
+                  </button>
+            </h2>
+            <div id="collapseTelefone" class="accordion-collapse collapse show" aria-labelledby="headingTelefone" data-bs-parent="#accordiTelefonexample">
+                  <div class="accordion-body">
+      
+                        <div id="base_FOR_TEL" class="displaynone">
+                        </div>
+                             
+                        <input id="adicionarTelefone" type="button" class="btn btn-link heighttrintapixel" onclick="AdicionarTelefone()" value='Adicionar Telefone' />
+
+                  </div>
+            </div>
+      </div>              
+</div>
+<br/>
+
+<script>
+
+      $(function(){
+
+            $("#nome").on('keyup focusout change', function(e) {
+                  // e.type is the type of event fired
+                  if ($("#nome").val() == '')
+				$("#nome").addClass("is-invalid");
+			else
+				$("#nome").removeClass("is-invalid");
+            });      
+
+            $("#cnpj").on('keyup focusout change', function(e) {
+                  
+                  var isFirefox = typeof InstallTrigger !== 'undefined';
+            
+                  if (isFirefox){
+                        if (!((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105))) { 
+                              $("#cnpj").val($("#cnpj").val().replace(e.key,""));
+                        }
+                  }
+                                         
+                  if (ValidarCNPJ($("#cnpj").val()) == false){
+                        $("#cnpj").addClass("is-invalid");
+                        result = false;
+                  } else {
+                        $("#cnpj").removeClass("is-invalid");
+                  }
+                
+            });
+
+            $('#idfornecedor').val(0);
+
+      });
+
+      function AdicionarEndereco()
+      {
+            $('#base_FOR_END').css('display','block');
+            $('#adicionarEndereco').css('display','none');
+            $('#idendereco').val('0');		
+            $('#cep').val('');
+            $('#logradouro').val('');
+            $('#numero').val(''); 
+            $('#complemento').val('');
+            $('#bairro').val('');
+            $('#cidade').val(''); 
+            $('#uf').val('SP');
+
+            $("#cep").removeClass("is-invalid");
+            $("#logradouro").removeClass("is-invalid");
+            $("#numero").removeClass("is-invalid");
+            $("#bairro").removeClass("is-invalid");
+            $("#cidade").removeClass("is-invalid");
+
+            $("#cep").on('keyup focusout change', function(e) {
+                  
+                  var isFirefox = typeof InstallTrigger !== 'undefined';
+
+                  if (isFirefox){
+                        if (!((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105))) {
+                              $("#cep").val($("#cep").val().replace(e.key,""));
+                        }
+                  }
+                  
+                  if ($("#cep").val().length < 8){
+                        $("#cep").addClass("is-invalid");
+                  } else {
+                        $("#cep").removeClass("is-invalid");
+                  }                  
+
+            });
+
+            $("#logradouro").on('keyup focusout change', function(e) {
+                  
+                  if ($("#logradouro").val() == ''){
+                        $("#logradouro").addClass("is-invalid");
+                  } else {
+                        $("#logradouro").removeClass("is-invalid");
+                  }                  
+
+            });
+
+            $("#numero").on('keyup focusout change', function(e) {
+                  
+                  var isFirefox = typeof InstallTrigger !== 'undefined';
+
+                  if (isFirefox){
+                        if (!((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105))) {
+                              $("#numero").val($("#numero").val().replace(e.key,""));
+                        }
+                  }
+                  
+                  if (!($("#numero").val() > 0)){
+                        $("#numero").addClass("is-invalid");
+                  } else {
+                        $("#numero").removeClass("is-invalid");
+                  }                  
+
+            });
+
+            $("#bairro").on('keyup focusout change', function(e) {
+                  
+                  if ($("#bairro").val() == ''){
+                        $("#bairro").addClass("is-invalid");
+                  } else {
+                        $("#bairro").removeClass("is-invalid");
+                  }                  
+
+            });
+
+            $("#cidade").on('keyup focusout change', function(e) {
+                  
+                  if ($("#cidade").val() == ''){
+                        $("#cidade").addClass("is-invalid");
+                  } else {
+                        $("#cidade").removeClass("is-invalid");
+                  }                  
+
+            });
+
+      }
+
+      function AdicionarTelefone()
+      {
+            $('#base_FOR_TEL').css('display','block');
+            $('#adicionarTelefone').css('display','none');
+            $('#idtelefone').val('0');		
+            $('#ddd').val('');
+            $('#telefone').val('');
+
+            $("#ddd").removeClass("is-invalid");
+            $("#telefone").removeClass("is-invalid");
+
+            $("#ddd").on('keyup focusout change', function(e) {
+                  
+                  var isFirefox = typeof InstallTrigger !== 'undefined';
+
+                  if (isFirefox){
+                        if (!((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105))) {
+                              $("#ddd").val($("#ddd").val().replace(e.key,""));
+                        }
+                  }
+                  
+                  if (!($("#ddd").val().length == 2)){
+                        $("#ddd").addClass("is-invalid");
+                  } else {
+                        $("#ddd").removeClass("is-invalid");
+                  }                  
+
+            });
+
+            $("#telefone").on('keyup focusout change', function(e) {
+                  
+                  var isFirefox = typeof InstallTrigger !== 'undefined';
+
+                  if (isFirefox){
+                        if (!((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105))) {
+                              $("#telefone").val($("#telefone").val().replace(e.key,""));
+                        }
+                  }
+                  
+                  if (!($("#telefone").val().length == 8 || $("#telefone").val().length == 9)){
+                        $("#telefone").addClass("is-invalid");
+                  } else {
+                        $("#telefone").removeClass("is-invalid");
+                  }                  
+
+            });
+
+      }
+
+      function LoadFornecedor(id)
+      {            
+
+            WebApi_GET_Fornecedor
+            (
+                  id, 
+                  function success(data) {			
+                        console.log(data);	                                             
+                        $('#idfornecedor').val(data.id);		
+                        $('#nome').val(data.nome);
+                        $('#cnpj').val(data.cnpj);                       
+                        if (data.endereco != null)
+                        {
+                              AdicionarEndereco();
+                              LoadEndereco(data.endereco);
+                        }       
+                        else
+                        {                              
+                              $('#cep').val('');
+                              $('#logradouro').val('');
+                              $('#numero').val(''); 
+                              $('#complemento').val('');
+                              $('#bairro').val('');
+                              $('#cidade').val(''); 
+                              $('#uf').val('');
+                        }                 
+                        if (data.telefone != null)
+                        {                              
+                              AdicionarTelefone();
+                              LoadTelefone(data.telefone);
+                        }
+                        else
+                        {
+                              $('#ddd').val('');
+                              $('#telefone').val('');
+                        }
+                  },
+                  function complete(xhr, text) {
+                        console.log(xhr.status);
+                        console.log(xhr.responseText);			
+                  }
+            );
+
+      }
+
+      function ValidarFornecedor(){
+
+            var result = true;
+
+            //if ($('#base_FOR').is(':visible'))
+            if ($('#base_FOR').css('display') == 'block')
+            {
+                  
+                  if ($("#nome").val() == ''){
+                        $("#nome").addClass("is-invalid");
+                        result = false;
+                  } else {
+                        $("#nome").removeClass("is-invalid");
+                  }
+                                              
+                  if (ValidarCNPJ($("#cnpj").val()) == false){
+                        $("#cnpj").addClass("is-invalid");
+                        result = false;
+                  } else {
+                        $("#cnpj").removeClass("is-invalid");
+                  }
+            
+                  var resultEndereco = ValidarEndereco();
+
+                  if (result == true)
+                        result = resultEndereco; 
+
+                  var resultTelefone = ValidarTelefone();
+
+                  if (result == true)
+                        result = resultTelefone; 
+
+            }
+
+            return result;
+
+      }
+
+      function CrudFornecedor()
+      {
+
+            if($('#idfornecedor').val() == '0'){	
+                  
+                  WebApi_POST_Fornecedor
+                  (
+                        {
+                              nome : $('#nome').val() , cnpj : $('#cnpj').val(),
+                              endereco : $('#idendereco').val() , telefone : $('#idtelefone').val()
+                        }, 
+                        function success(data) {
+                              console.log(data);
+                              $('#idfornecedor').val(data.id);
+                        },
+                        function complete(xhr, text) {
+                              console.log(xhr.status);
+                              console.log(xhr.responseText);
+                              if (xhr.status == 201){
+                                    $('#falha').css('display','none');
+                                    $('#sucesso').css('display','block');
+                                    $('#sucesso').html("O fornecedor foi criado com sucesso! <a href='fornecedor_listar.html'>Seguir para a lista de fornecedores</a>");
+                              }
+                              else{
+                                    $('#sucesso').css('display','none');
+                                    $('#falha').css('display','block');
+                                    $('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+                              }
+                        }  
+                  );
+
+            }
+            else
+            {
+
+                  WebApi_PUT_Fornecedor
+                  (
+                        $('#idfornecedor').val(), 
+                        {
+                              nome : $('#nome').val() , cnpj : $('#cnpj').val(),
+                              endereco : $('#idendereco').val() , telefone : $('#idtelefone').val()
+                        }, 
+                        function success(data) {
+                              console.log(data);
+                        },
+                        function complete(xhr, text) {
+                              console.log(xhr.status);
+                              console.log(xhr.responseText);
+                              if (xhr.status == 200){
+                                    $('#falha').css('display','none');
+                                    $('#sucesso').css('display','block');
+                                    $('#sucesso').html("O fornecedor foi editado com sucesso! <a href='fornecedor_listar.html'>Seguir para a lista de fornecedores</a>");
+                              }
+                              else{
+                                    $('#sucesso').css('display','none');
+                                    $('#falha').css('display','block');
+                                    $('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+                              }
+                        }     
+                  );
+            }
+
+
+      }
+
+</script>

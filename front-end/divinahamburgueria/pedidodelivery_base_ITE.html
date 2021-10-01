@@ -1,0 +1,253 @@
+<div class="accordion" id="accordionExample">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingOne">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Itens
+        </button>
+      </h2>
+      <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+        <div class="accordion-body">			
+
+            <label class="form-label-inline widthtrintaporcento heighttrintapixel asterisk">Item</label>
+            <label class="form-label-inline widthvintecincoporcento heighttrintapixel asterisk">Preço</label>
+            <label class="form-label-inline widthvintecincoporcento heighttrintapixel">Observação</label>
+
+            <div id="item_container">
+            </div>
+
+            <input id="adicionar" type="button" class="btn btn-link heighttrintapixel" onclick="AdicionarItem()" value='Adicionar Item' />
+
+        </div>
+    </div>
+</div>  
+<br/>
+
+<div class="mb-3">
+  <label for="total" class="form-label">Total</label>
+  <input id="total" class="form-control text-center" type="number" required min="0" value="0" step="1.0" />
+  <label id="feedTotal" class="invalid-feedback">O total precisa ser maior que zero</label>
+</div>
+
+<script>
+
+      var incrementar_id = 0;
+
+      function AdicionarItem()
+      {
+
+            incrementar_id += 1;
+            var local_id = incrementar_id;
+                  
+            var textData = $("#base_ITE_LIN").html();
+
+            textData = textData.replace('itemN', "item" + local_id); 
+            textData = textData.replace('idN', "id" + local_id); 
+            textData = textData.replace('itemdocardapioN', "itemdocardapio" + local_id); 
+            textData = textData.replace('feedItemdocardapioN', "feedItemdocardapio" + local_id);
+            textData = textData.replace('precoN', "preco" + local_id);
+            textData = textData.replace('feedPrecoN', "feedPreco" + local_id);
+            textData = textData.replace('observacaoN', "observacao" + local_id);
+            textData = textData.replace('sucessoN', "sucesso" + local_id); 
+            textData = textData.replace('falhaN', "falha" + local_id); 
+            textData = textData.replace('excluirN', "excluir" + local_id); 
+
+            $('#item_container').append(textData);                  
+
+            $('#excluir' + local_id).click(function() {                        
+                  $('#item' + local_id).css('display','none');
+                  $('#sucesso' + local_id).remove();
+                  $('#falha' + local_id).remove();
+                  PrecoChange();
+            });
+
+            $('#itemdocardapio' + local_id).change(function() {  
+                  ItemChange(local_id);
+            });
+
+            var i;	                       
+            for (i=0; i < itemdocardapio_list.length; i++){
+                  $("#itemdocardapio" + local_id).append('<option value="' + itemdocardapio_list[i].id + '">' + itemdocardapio_list[i].nome + '</option>');
+            }            
+
+            $('#itemdocardapio' + local_id).val(0);
+            $('#preco' + local_id).attr('disabled', true);
+
+      }
+
+      function ItemChange(id){
+            
+            WebApi_GET_LIST_CardapioItemDoCardapio
+            (                  
+                  '?itemdocardapio=' + $('#itemdocardapio' + id).val(), 
+                  function sucess(data)
+                  {
+                        console.log(data);
+                        var i;
+                        var valor = 0;
+                        for(i=0; i < data.length; i++)
+                        {
+                              if (data[i].estado == 1)
+                              {
+                                    if (valor <  data[i].preco)
+                                          valor = data[i].preco;
+                              }                                    
+                        }    
+                        $('#preco' + id).val(valor);                    
+                        PrecoChange();
+                  
+                        if ($("#itemdocardapio"  + id).val() == null){
+                              $("#itemdocardapio"  + id).addClass("is-invalid");
+                        } else {
+                              $("#itemdocardapio"  + id).removeClass("is-invalid");
+                        }
+
+                        if ($("#preco"  + id).val() <= 0){
+                              $("#preco"  + id).addClass("is-invalid");
+                        } else {
+                              $("#preco"  + id).removeClass("is-invalid");
+                        }
+
+                  }, 
+                  function complete(xhr, text)
+                  {
+                        console.log(xhr.status);
+                        console.log(xhr.responseText);
+                  }
+            );            
+      }
+
+      function PrecoChange(){
+            var i;
+            var total = 0;	                       
+            for (i=0; i <= incrementar_id; i++){
+                  //if ($('#preco' + i).is(':visible')){
+                  if ($('#preco' + i).css('display') == 'block'){
+                        total += parseFloat($('#preco' + i).val());
+                  }                        
+            }
+            $('#total').val(parseFloat(total).toFixed(2));
+
+            if (total <= 0){
+                  $("#total").addClass("is-invalid");
+            } else {
+                  $("#total").removeClass("is-invalid");
+            }          
+
+      }
+
+      function CrudPedidoDeliveryItemDoCardapio(i)
+      {	
+
+            if (i > incrementar_id)
+                  return;
+
+            //if ($('#item' + i).is(':visible')){
+            if ($('#item' + i).css('display') == 'block'){
+
+                  if($('#id' + i).val() == '0'){			
+                       
+                        if ($('#itemdocardapio' + i).val() == null){
+                              $('#sucesso' + i).css('display','none');
+                              $('#falha' + i).css('display','block');
+                              $('#falha' + i).text("Ocorreu uma falha: " + "O campo item precisa ser preenchido");
+                              return;
+                        }
+
+                        WebApi_POST_PedidoDeliveryItemDoCardapio
+                        (
+                              {
+                                    pedidodelivery : $('#id').val(), itemdocardapio : $('#itemdocardapio' + i).val(), 
+                                    preco : $('#preco'+ i).val(), observacao : $('#observacao' + i).val() 
+                              }, 
+                              function success(data) {
+                                    console.log(data);
+                                    $('#id' + i).val(data.id);
+                                    CrudPedidoDeliveryItemDoCardapio(i + 1);
+                              },
+                              function complete(xhr, text) {
+                                    console.log(xhr.status);
+                                    console.log(xhr.responseText);
+                                    if (xhr.status == 201){
+                                          $('#falha' + i).css('display','none');
+                                          $('#sucesso' + i).css('display','block');
+                                          $('#sucesso' + i).html("O item foi criado com sucesso!");
+                                    }
+                                    else{
+                                          $('#sucesso' + i).css('display','none');
+                                          $('#falha' + i).css('display','block');
+                                          $('#falha' + i).text("Ocorreu uma falha: " + xhr.responseText);
+                                    }					
+                              }     
+                        );
+
+                  }
+                  else
+                  {
+                  
+                        WebApi_PUT_PedidoDeliveryItemDoCardapio
+                        (
+                              $('#id' + i).val(), 
+                              {
+                                    pedidodelivery : $('#id').val(), itemdocardapio : $('#itemdocardapio' + i).val(), 
+                                    preco : $('#preco'+ i).val(), observacao : $('#observacao' + i).val() 
+                              }, 
+                              function success(data) {
+                                    console.log(data);					
+                                    CrudPedidoDeliveryItemDoCardapio(i + 1);
+                              },
+                              function complete(xhr, text) {
+                                    console.log(xhr.status);
+                                    console.log(xhr.responseText);
+                                    if (xhr.status == 200){
+                                          $('#falha' + i).css('display','none');
+                                          $('#sucesso' + i).css('display','block');
+                                          $('#sucesso' + i).html("O item foi editado com sucesso!");
+                                    }
+                                    else{
+                                          $('#sucesso' + i).css('display','none');
+                                          $('#falha' + i).css('display','block');
+                                          $('#falha' + i).text("Ocorreu uma falha: " + xhr.responseText);
+                                    }
+                              }
+                        );
+
+                  }
+            }
+            else
+            {
+                  
+                  if($('#id' + i).val() != '0'){
+
+                        WebApi_DELETE_PedidoDeliveryItemDoCardapio
+                        (
+                              $('#id' + i).val(), 
+                              function success(data) {
+                                    console.log(data);
+                                    CrudPedidoDeliveryItemDoCardapio(i + 1);
+                              },
+                              function complete(xhr, text) {
+                                    console.log(xhr.status);
+                                    console.log(xhr.responseText);
+                                    if (xhr.status == 204){
+                                          $('#falha' + i).css('display','none');
+                                          $('#sucesso' + i).css('display','block');	                                          
+                                    }
+                                    else{
+                                          $('#sucesso' + i).css('display','none');
+                                          $('#falha' + i).css('display','block');
+                                          $('#falha' + i).text("Ocorreu uma falha: " + xhr.responseText);
+                                    }
+                              } 
+                        );                     
+
+                  }
+                  else
+                  {
+                        CrudPedidoDeliveryItemDoCardapio(i + 1);
+                  }
+
+            }
+
+      }
+
+</script>

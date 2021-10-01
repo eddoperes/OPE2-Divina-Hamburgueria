@@ -1,0 +1,62 @@
+<div class="accordion" id="accordiClienteExample">
+      <div class="accordion-item">
+            <h2 class="accordion-header" id="headingCliente">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCliente" aria-expanded="true" aria-controls="collapseCliente">
+                        Cliente
+                  </button>
+            </h2>
+            <div id="collapseCliente" class="accordion-collapse collapse show" aria-labelledby="headingCliente" data-bs-parent="#accordiClienteexample">
+                  <div class="accordion-body">	
+
+                        <div id="base_CLI_CLI" class="displaynone">
+                        </div>
+                             
+                        <input id="adicionarCliente" type="button" class="btn btn-link heighttrintapixel" onclick="AdicionarCliente()" value='Adicionar Cliente' />
+
+                  </div>
+            </div>
+      </div> 
+</div>  
+<br/>
+
+<script>
+
+      function AdicionarCliente()
+      {
+            $('#base_CLI_CLI').css('display','block');
+            $('#adicionarCliente').css('display','none');       
+            
+            $("#nome").on('keyup focusout change', function(e) {
+                  // e.type is the type of event fired
+                  if ($("#nome").val() == '')
+				$("#nome").addClass("is-invalid");
+			else
+				$("#nome").removeClass("is-invalid");
+            });      
+
+            $("#cpf").on('keyup focusout change', function(e) {
+                  
+                  var isFirefox = typeof InstallTrigger !== 'undefined';
+
+                  if (isFirefox){
+                        if (!((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105))) {
+                              $("#cpf").val($("#cpf").val().replace(e.key,""));
+                        }
+                  }
+                  
+                  if ($("#cpf").val() != ''){                        
+                        if (ValidarCPF($("#cpf").val()) == false){
+                              $("#cpf").addClass("is-invalid");
+                              result = false;
+                        } else {
+                              $("#cpf").removeClass("is-invalid");
+                        }
+                  } else {
+                        $("#cpf").removeClass("is-invalid");
+                  }
+
+            });
+
+      }
+
+</script>

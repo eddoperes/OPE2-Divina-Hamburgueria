@@ -1,0 +1,85 @@
+<html>
+
+<head>
+	<meta charset="utf8"/>
+	<script src="jquery/jquery3.6.js"></script>
+	<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
+	<script src="bootstrap/dist/js/bootstrap.js"></script>
+        <link rel="stylesheet" href="css/sistema.css" >
+        <script src="js/sistema.js"></script>
+</head>
+
+<body>
+
+	<div class="setecincoporcento">
+
+		<br/>
+		<a href="home.html">Home</a>		
+		<br/>
+
+		<br/>
+		<h1>Login</h1>
+		<br/>
+
+		<div class="mb-3">
+  			<label for="email" class="form-label">Email</label>
+  			<input id="email" class="form-control" type='text' value='' />
+		</div>
+
+		<div class="mb-3">
+  			<label for="senha" class="form-label">Senha</label>
+  			<input id="senha" class="form-control" type='password' value='' />
+		</div>
+
+		<div class="col-auto">
+    			<input type='button' class="btn btn-primary mb-3" value='Enviar' onclick="Login()" />    
+		</div>
+
+		<div id="sucesso" class="alert alert-success displaynone" role="alert" >
+			Login aceito! <a href="home.html">Seguir para home page</a>
+		</div>
+
+		<div id="falha" class="alert alert-danger displaynone" role="alert" >  			
+		</div>
+
+	</div>
+
+</body>
+
+<script>
+
+function Login()
+{
+
+	$.ajax({
+    		url: 'http://127.0.0.1:8000/usuario_login/',
+    		data: {email : $('#email').val(), senha : $('#senha').val()},
+    		type: 'POST',
+    		crossDomain: true,
+    		success: function(data) {
+            	console.log(data);
+				setCookie("user_id", data['id'], 1); //set "user_id" cookie, expires in 1 days					
+    		},
+    		complete: function(xhr, text) {
+        		console.log(xhr.status);
+				console.log(xhr.responseText);
+				if (xhr.status == 200){
+					$('#falha').css('display','none');
+					$('#sucesso').css('display','block');
+					//setTimeout(function(){ 							
+					//			window.location.href = window.location.href.replace('login','home'); 
+					//		     }, 1000);				
+				}
+				else{
+					$('#sucesso').css('display','none');
+					$('#falha').css('display','block');
+					$('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+				}
+    		}     
+	});
+
+}
+
+</script>
+
+</html>

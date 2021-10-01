@@ -1,0 +1,114 @@
+<html>
+
+	<head>
+		<meta charset="utf8"/>
+		<script src="jquery/jquery3.6.js"></script>
+		<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
+		<script src="bootstrap/dist/js/bootstrap.js"></script>
+        <link rel="stylesheet" href="css/sistema.css" >
+        <script src="js/sistema.js"></script>
+	</head>
+
+	<body>        
+
+		<div class="setecincoporcento">
+
+			<input type="hidden" id="idusuario" value="0">
+
+			<br/>
+			<a href="home.html">Home</a>		
+			<br/>
+
+			<br/>
+			<h1 class="floatleft">Editar item do estoque</h1>
+			<label class="floatright widthvintecincoporcento"><label class="asterisk"></label>
+				Campos obrigatórios
+			</label>
+			<br/>
+			<div class="clearboth"></div>
+			<br/>
+
+		</div>
+
+		<div id="base_ITE" class="setecincoporcento">
+		</div>
+
+	</body>
+
+	<script>
+
+		$(function(){
+			if (CheckLogin() == false)
+				return;
+			$("#base_ITE").load("itemdoestoque_base_ITE.html",function (){
+				LoadData();
+			});	 				
+		});	
+
+		function CheckLogin(){
+			var idusuario = getLoggedUserId();
+			if (idusuario == -1)
+			{
+				var page =  window.location.pathname.split("/").pop();
+				window.location.href = window.location.href.replace(page,'login.html');	
+				return false;					
+			}								
+			else
+			{
+				$('#idusuario').val(idusuario);
+				return true;
+			}
+		}
+
+		function LoadData(){
+			var query = queryObj();
+			WebApi_GET_ItemDoEstoque
+			(
+				query.id,
+				function sucess(data) {
+					console.log(data);
+					$('#id').val(data.id);
+					$('#nome').val(data.nome);
+					$('#descricao').val(data.descricao);
+					$('#estoqueminimo').val(data.estoqueminimo);
+				},
+				function complete(xhr, text) {
+					console.log(xhr.status);
+					console.log(xhr.responseText);
+				}
+			);
+		}
+
+		function Enviar_Click()
+		{
+
+			if (ValidarItemDoEstoque() == false)
+				return;
+
+			WebApi_PUT_ItemDoEstoque
+			(
+				$('#id').val(),
+				{nome : $('#nome').val() , descricao : $('#descricao').val(), estoqueminimo : $('#estoqueminimo').val() },
+				function success(data){
+					console.log(data);
+				},
+				function complete(xhr, text){
+					console.log(xhr.status);
+					console.log(xhr.responseText);
+					if (xhr.status == 200){
+						$('#falha').css('display','none');
+						$('#sucesso').css('display','block');
+						$('#sucesso').html("O item do estoque foi editado com sucesso! <a href='itemdoestoque_listar.html'>Seguir para a lista de itens do estoque</a>");
+					}
+					else{
+						$('#sucesso').css('display','none');
+						$('#falha').css('display','block');
+						$('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+					}
+				}
+			);			
+		}
+
+	</script>
+
+</html>

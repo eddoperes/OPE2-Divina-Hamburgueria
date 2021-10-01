@@ -1,0 +1,218 @@
+<html>
+
+	<head>
+		<meta charset="utf8"/>
+		<script src="jquery/jquery3.6.js"></script>
+		<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
+		<script src="bootstrap/dist/js/bootstrap.js"></script>
+		<link rel="stylesheet" href="css/sistema.css" >
+		<script src="js/sistema.js"></script>
+	</head>
+
+	<body>        
+
+		<div class="setecincoporcento">
+
+			<input type="hidden" id="idusuario" value="0">
+
+			<br/>
+			<a href="home.html">Home</a>		
+			<br/>
+
+			<br/>
+			<h1 class="floatleft">Editar pedido delivery</h1>
+			<label class="floatright widthvintecincoporcento"><label class="asterisk"></label>
+				Campos obrigatórios
+			</label>
+			<br/>
+			<div class="clearboth">
+			</div>
+			<br/>
+
+		</div>
+
+		<div id="base_PDD" class="setecincoporcento">
+		</div>
+
+		<div id="base_ITE" class="setecincoporcento">
+		</div>
+
+		<div id="base_ITE_LIN" class="displaynone">
+		</div>
+
+		<div id="base_CLI" class="setecincoporcento">
+		</div>
+
+		<div id="base_ENV" class="setecincoporcento">
+		</div>
+
+	</body>
+
+	<script>
+
+		$(function(){
+
+			$("#base_PDD").load("pedidodelivery_base_PDD.html"); 
+			$("#base_ITE").load("pedidodelivery_base_ITE.html", function (){
+				$('#adicionar').css('display', 'none');	
+				$('#total').prop('disabled', true);							
+			}); 
+			$("#base_ITE_LIN").load("pedidodelivery_base_ITE_LIN.html"); 
+			$("#base_CLI").load("pedidodelivery_base_CLI.html", function (){
+				$("#headingCliente button").addClass('collapsed'); 
+				$("#collapseCliente").removeClass('show');
+				$("#base_CLI_CLI").load("pedidodelivery_base_CLI_CLI.html", function (){
+					$("#headingEndereco button").addClass('collapsed'); 
+					$("#collapseEndereco").removeClass('show');
+					$("#headingTelefone button").addClass('collapsed'); 
+					$("#collapseTelefone").removeClass('show');
+					$('#nome').prop('disabled', true);
+					$('#cpf').prop('disabled', true);
+					$('#retirarCliente').css('display', 'none');
+					$('#adicionarCliente').css('display', 'none');					
+					$("#base_CLI_CLI_END").load("pedidodelivery_base_CLI_CLI_END.html", function (){
+						$('#cep').prop('disabled', true);
+						$('#logradouro').prop('disabled', true);
+						$('#numero').prop('disabled', true);
+						$('#complemento').prop('disabled', true);
+						$('#bairro').prop('disabled', true);
+						$('#cidade').prop('disabled', true);
+						$('#uf').prop('disabled', true);
+						$('#retirarEndereco').css('display', 'none');
+						$('#adicionarEndereco').css('display', 'none');
+					}); 
+					$("#base_CLI_CLI_TEL").load("pedidodelivery_base_CLI_CLI_TEL.html", function (){
+						$('#ddd').prop('disabled', true);
+						$('#telefone').prop('disabled', true);
+						$('#retirarTelefone').css('display', 'none');
+						$('#adicionarTelefone').css('display', 'none');
+					}); 
+				});
+			}); 	
+			if (CheckLogin() == false)
+				return;	
+			$("#base_ENV").load("pedidodelivery_base_ENV.html", function (){
+				LoadLists();
+			});		
+		});		
+
+		function CheckLogin(){
+			var idusuario = getLoggedUserId();
+			if (idusuario == -1)
+			{
+				var page =  window.location.pathname.split("/").pop();
+				window.location.href = window.location.href.replace(page,'login.html');	
+				return false;					
+			}								
+			else
+			{
+				$('#idusuario').val(idusuario);
+				return true;
+			}
+		}
+		
+		var itemdocardapio_list;
+
+		function LoadLists(){
+
+			WebApi_GET_LIST_ItemDoCardapio
+			(
+				'', 
+				function success(data) {			
+					console.log(data);
+					itemdocardapio_list = data;
+					LoadData();
+				},
+				function complete(xhr, text) {
+					console.log(xhr.status);
+					console.log(xhr.responseText);			
+				}   
+			)					
+
+		}
+
+		function LoadData(){
+
+			var query = queryObj();
+
+			WebApi_GET_PedidoDelivery
+			(
+				query.id, 
+				function success(data) {
+					console.log(data);
+					$('#id').val(data.id);
+					$('#estado').val(data.estado);
+					$('#observacao').val(data.observacao);
+					$('#total').val(data.total);
+					LoadCliente(data.cliente);
+					//$('#observacao').prop('disabled', true);
+					//$('#observacao').prop('disabled', false);						
+				},
+				function complete(xhr, text) {
+					console.log(xhr.status);
+					console.log(xhr.responseText);
+				} 
+			);
+
+			WebApi_GET_LIST_PedidoDeliveryItemDoCardapio
+			(
+				'?pedidodelivery=' + query.id, 
+				function success(data) {
+					console.log(data);		
+					for (i=0; i < data.length; i++){
+						AdicionarItem();
+						$('#id' + (i + 1)).val(data[i].id);				
+						$('#itemdocardapio' + (i + 1)).val(data[i].itemdocardapio);
+						$('#preco' + (i + 1)).val(data[i].preco);
+						$('#observacao' + (i + 1)).val(data[i].observacao);	
+						
+						$('#itemdocardapio' + (i + 1)).prop('disabled', true);
+						$('#preco' + (i + 1)).prop('disabled', true);
+						$('#observacao' + (i + 1)).prop('disabled', true);
+						$('#excluir' + (i + 1)).prop('disabled', true);
+					}											
+				},
+				function complete(xhr, text) {
+					console.log(xhr.status);
+					console.log(xhr.responseText);					
+				}     
+			);			
+
+		}
+
+		function Enviar_Click()
+		{		
+
+			if (!$('#base_CLI_CLI').is(':visible')){
+				$('#idcliente').val('');
+			}
+
+			WebApi_PUT_PedidoDelivery
+			(
+				$('#id').val(), 
+				{usuario : $('#idusuario').val() , estado : $('#estado').val(), observacao : $('#observacao').val(), total: $('#total').val(), cliente : $('#idcliente').val()}, 
+				function success(data) {
+					console.log(data);						
+				},
+				function complete(xhr, text) {
+					console.log(xhr.status);
+					console.log(xhr.responseText);
+					if (xhr.status == 200){
+						$('#falha').css('display','none');
+						$('#sucesso').css('display','block');
+						$('#sucesso').html("O pedido salão foi editado com sucesso! <a href='pedidodelivery_listar.html'>Seguir para a lista de pedidos salão</a>");
+					}
+					else{
+						$('#sucesso').css('display','none');
+						$('#falha').css('display','block');
+						$('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+					}
+				}     
+			);
+			//CrudPedidoDeliveryItemDoCardapio(1);
+						
+		}
+
+	</script>
+
+</html>

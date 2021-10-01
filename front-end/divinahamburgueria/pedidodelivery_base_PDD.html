@@ -1,0 +1,56 @@
+<input type="hidden" id="id" value="0">
+
+<div class="mb-3">
+      <label for="estado" class="form-label asterisk">Estado</label>
+      <select id="estado" class="form-control">
+            <option value="1">Emitido</option>
+            <option value="2">Cancelado</option>
+            <option value="3">Embalado</option>
+            <option value="4">Entregue</option>
+      </select>
+</div>
+
+<div class="mb-3">
+      <label for="observacao" class="form-label">Observação</label>
+      <textarea id="observacao" class="form-control" rows="3" value="" ></textarea>
+</div>
+
+<div class="mb-3">
+      <input class="form-check-input" type="checkbox" value="0" id="pago">
+      <label class="form-check-label" for="pago">
+            Pago
+      </label>
+</div>
+
+<script>
+
+      $(function(){
+
+            $('#pago').on(' change ', function(){
+                  if ($('#pago').prop('checked') == true)
+                        $('#pago').val("1");
+                  else
+                        $('#pago').val("0");
+            });
+
+      });
+
+      function ValidarPedidoDelivery(){
+      
+            var result = true;
+
+            var resultItem = ValidarItemCardapio();
+
+            if (result == true)
+                  result = resultItem; 
+
+            var resultCliente = ValidarCliente();
+
+            if (result == true)
+                  result = resultCliente;            
+
+            return result;
+
+      }
+
+</script>

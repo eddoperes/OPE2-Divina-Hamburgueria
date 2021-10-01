@@ -1,0 +1,134 @@
+<html>
+
+	<head>
+		<meta charset="utf8"/>
+		<script src="jquery/jquery3.6.js"></script>
+		<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
+		<script src="bootstrap/dist/js/bootstrap.js"></script>
+		<link rel="stylesheet" href="css/sistema.css" >
+		<script src="js/sistema.js"></script>
+	</head>
+
+	<body">        
+
+		<div class="setecincoporcento">
+
+			<input type="hidden" id="idusuario" value="0">
+
+			<br/>
+			<a href="home.html">Home</a>		
+			<br/>
+
+			<br/>
+			<h1 class="floatleft">Novo cardápio</h1>
+			<label class="floatright widthvintecincoporcento"><label class="asterisk"></label>
+				Campos obrigatórios
+			</label>
+			<br/>
+			<div class="clearboth"></div>
+			<br/>
+
+		</div>
+
+		<div id="base_CDP" class="setecincoporcento">
+		</div>
+
+		<div id="base_ITE" class="setecincoporcento">
+		</div>
+
+		<div id="cardapio_base_ITE_LIN" class="displaynone">
+		</div>
+
+		<div id="base_ENV" class="setecincoporcento">
+		</div>
+
+	</body>
+
+	<script>
+
+		$(function(){
+			$("#base_CDP").load("cardapio_base_CDP.html"); 
+			$("#base_ITE").load("cardapio_base_ITE.html"); 
+			$("#cardapio_base_ITE_LIN").load("cardapio_base_ITE_LIN.html");							
+			if (CheckLogin() == false)
+				return;
+			$("#base_ENV").load("cardapio_base_ENV.html",function (){
+				LoadLists();
+			});	
+		});		
+
+		function CheckLogin(){
+			var idusuario = getLoggedUserId();
+			if (idusuario == -1)
+			{
+				var page =  window.location.pathname.split("/").pop();
+				window.location.href = window.location.href.replace(page,'login.html');	
+				return false;					
+			}								
+			else
+			{
+				return true;
+			}
+		}
+
+		var itemdocardapio_list;
+
+		function LoadLists(){
+
+			WebApi_GET_LIST_ItemDoCardapio
+			(
+				'', 
+				function success(data) {			
+					console.log(data);
+					itemdocardapio_list = data;
+				},
+				function complete(xhr, text) {
+					console.log(xhr.status);
+					console.log(xhr.responseText);			
+				}   
+			)
+
+		}
+
+		function Enviar_Click()
+		{	
+
+			if (ValidarCardapio() == false)
+				return;
+							
+			if ($('#id').val() == '0'){
+
+				WebApi_POST_Cardapio(
+					{nome : $('#nome').val() , descricao : $('#descricao').val(), estado : $('#estado').val() }, 
+					function success(data) {
+						console.log(data);
+						$('#id').val(data.id);
+						CrudCardapioItemDoCardapio(1);
+					},
+					function complete(xhr, text) {
+						console.log(xhr.status);
+						console.log(xhr.responseText);
+						if (xhr.status == 201){
+							$('#falha').css('display','none');
+							$('#sucesso').css('display','block');
+							$('#sucesso').html("O cardápio foi criado com sucesso! <a href='cardapio_listar.html'>Seguir para a lista de cardápios</a>");
+						}
+						else{
+							$('#sucesso').css('display','none');
+							$('#falha').css('display','block');
+							$('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+						}
+					}
+				);
+
+			}
+			else
+			{
+				CrudCardapioItemDoCardapio(1);
+			}
+			
+		}
+
+	</script>
+
+</html>

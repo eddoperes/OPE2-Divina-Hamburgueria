@@ -1,0 +1,164 @@
+<input type="hidden" id="idtelefone" value="">
+
+<div class="mb-3">
+      <label for="ddd" class="form-label asterisk">DDD</label>
+      <input id="ddd" class="form-control" type='number' value='' />
+      <label id="feedDdd" class="invalid-feedback">O ddd precisa ter dois digitos</label>
+</div>
+
+<div class="mb-3">
+      <label for="telefone" class="form-label asterisk">Telefone</label>
+      <input id="telefone" class="form-control" type='number' value='' />
+      <label id="feedTelefone" class="invalid-feedback">O telefone precisa ter oito ou nove digitos</label>
+</div>
+
+<div id="sucessotelefone" class="alert alert-success displaynone" role="alert" >
+</div>
+
+<div id="falhatelefone" class="alert alert-danger displaynone" role="alert" >  			
+</div>
+     
+<input id="retirarTelefone" type="button" class="btn btn-link heighttrintapixel" onclick="RetirarTelefone()" value='Retirar Telefone' />
+
+
+<script>
+
+      function RetirarTelefone()
+      {
+            $('#base_CLI_TEL').css('display','none');
+            $('#adicionarTelefone').css('display','block');
+            //$('#idtelefone').val('');
+      }
+
+      function LoadTelefone(id)
+      {
+
+            WebApi_GET_Telefone
+            (
+                  id, 
+                  function success(data) {			
+                        console.log(data);	
+                        $('#idtelefone').val(data.id);		
+                        $('#ddd').val(data.ddd);
+                        $('#telefone').val(data.numero);
+                  },
+                  function complete(xhr, text) {
+                        console.log(xhr.status);
+                        console.log(xhr.responseText);			
+                  }
+            );
+           
+      }
+
+      function CrudTelefone()
+      {
+
+            //if ($('#base_CLI_TEL').is(':visible'))
+            if ($('#base_CLI_TEL').css('display') == 'block')
+            {
+                  if($('#idtelefone').val() == '0'){	
+
+                        WebApi_POST_Telefone
+                        (
+                              {
+                                    ddd : $('#ddd').val() , numero : $('#telefone').val()
+                              }, 
+                              function success(data) {
+                                    console.log(data);
+                                    $('#idtelefone').val(data.id);
+                                    CrudEndereco();
+                              },
+                              function complete(xhr, text) {
+                                    console.log(xhr.status);
+                                    console.log(xhr.responseText);
+                                    if (xhr.status == 201){
+                                          $('#falhatelefone').css('display','none');
+                                          $('#sucessotelefone').css('display','block');
+                                          $('#sucessotelefone').html("O telefone foi criado com sucesso!");
+                                    }
+                                    else{
+                                          $('#sucessotelefone').css('display','none');
+                                          $('#falhatelefone').css('display','block');
+                                          $('#falhatelefone').text("Ocorreu uma falha: " + xhr.responseText);
+                                    }
+                              }   
+                        );
+                      
+                  }
+                  else
+                  {
+
+                        WebApi_PUT_Telefone
+                        (
+                              $('#idtelefone').val(), 
+                              {
+                                    ddd : $('#ddd').val() , numero : $('#telefone').val()
+                              }, 
+                              function success(data) {
+                                    console.log(data);
+                              },
+                              function complete(xhr, text) {
+                                    console.log(xhr.status);
+                                    console.log(xhr.responseText);
+                                    if (xhr.status == 200){
+                                          $('#falhatelefone').css('display','none');
+                                          $('#sucessotelefone').css('display','block');
+                                          $('#sucessotelefone').html("O telefone foi editado com sucesso!");
+                                    }
+                                    else{
+                                          $('#sucessotelefone').css('display','none');
+                                          $('#falhatelefone').css('display','block');
+                                          $('#falhatelefone').text("Ocorreu uma falha: " + xhr.responseText);
+                                    }
+                              }     
+                        );
+                        CrudEndereco();                       
+                        
+                  }
+            }
+            else
+            {
+                  if($('#idtelefone').val() != '0' && $('#idtelefone').val() != '')
+                  {
+
+                        $('#idtelefone').val('');
+                        CrudEndereco();                                             
+                  }
+                  else
+                  {
+                        $('#idtelefone').val('');
+                        CrudEndereco();
+                  }
+            }
+            
+      }
+
+      function ValidarTelefone(){
+
+            var result = true;
+
+            //if ($('#base_CLI_TEL').is(':visible'))
+            if ($('#base_CLI_TEL').css('display') == 'block')
+            {
+
+                  if (!($("#ddd").val().length == 2)){
+                        $("#ddd").addClass("is-invalid");
+                        result = false;
+                  } else {
+                        $("#ddd").removeClass("is-invalid");
+                  }
+
+                  if (!($("#telefone").val().length == 8 || $("#telefone").val().length == 9)){
+                        $("#telefone").addClass("is-invalid");
+                        result = false;
+                  } else {
+                        $("#telefone").removeClass("is-invalid");
+                  }                 
+
+            }
+
+            return result;
+
+      }
+
+</script>

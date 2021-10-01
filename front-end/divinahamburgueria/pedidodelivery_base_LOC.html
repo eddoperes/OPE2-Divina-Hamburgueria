@@ -1,0 +1,101 @@
+<div class="accordion" id="accordiSixExample">
+      <div class="accordion-item">
+            <h2 class="accordion-header" id="headingSix">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="true" aria-controls="collapseSix">
+                        Localizar cliente
+                  </button>
+            </h2>
+            <div id="collapseSix" class="accordion-collapse collapse " aria-labelledby="headingSix" data-bs-parent="#accordiSixxample">
+                  <div class="accordion-body">
+
+                        <div class="mb-3">
+                              <label for="nome_busca" class="form-label">Nome</label>
+                              <input id="nome_busca" class="form-control" type='text' value='' />
+                        </div>
+
+                        <div class="col-auto">
+                              <input type='button' class="btn btn-primary mb-3" value='Pesquisar' onclick="Busca()" />    
+                        </div>
+
+                        <div id="table_container">
+                        </div>
+
+                  </div>
+            </div>
+      </div>
+</div>
+
+
+<script>
+
+      function Busca()
+      {
+
+            WebApi_GET_LIST_Cliente
+            (
+                  '?nome=' + $('#nome_busca').val(), 
+                  function success(data) {			
+                        console.log(data);			
+                        var textData = '<table class="table">';
+
+                        textData += '<tr>';
+
+                        textData += '<th>';
+                        textData += 'Id';
+                        textData += '</th>';
+
+                        textData += '<th>';
+                        textData += 'Nome';
+                        textData += '</th>';
+
+                        textData += '<th>';
+                        textData += 'CPF';
+                        textData += '</th>';
+
+                        textData += '<th>';
+                        textData += '';
+                        textData += '</th>';
+
+                        textData += '</tr>';
+
+                        var i;	                       
+                        for (i=0; i < data.length; i++){
+                              textData += '<tr>';
+
+                              textData += '<td>';
+                              textData += data[i].id;
+                              textData += '</td>';
+
+                              textData += '<td>';
+                              textData += data[i].nome;
+                              textData += '</td>';
+
+                              textData += '<td>';
+                              if (data[i].cpf == null)
+                                    textData += '-- em branco --';
+                              else
+                                    textData += data[i].cpf;
+                              textData += '</td>';
+
+                              textData += '<td>';
+                              textData += '<input type="button" class="btn btn-link paddingzeropixelheightvintepixel" value="Selecionar" onclick="SelecionarCliente(' + data[i].id + ')" />'		
+                              textData += '</td>';
+
+                              textData += '</tr>';
+                        }	
+                        textData += '</table>'
+                        $('#table_container').html(textData);	
+                  },
+                  function complete(xhr, text) {
+                        console.log(xhr.status);
+                        console.log(xhr.responseText);			
+                  }     
+            );
+      
+      }
+
+      function SelecionarCliente(id){
+            LoadCliente(id);
+      }
+
+</script>

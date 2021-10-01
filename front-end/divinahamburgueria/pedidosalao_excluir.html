@@ -1,0 +1,119 @@
+<html>
+
+	<head>
+		<meta charset="utf8"/>
+		<script src="jquery/jquery3.6.js"></script>
+		<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
+		<script src="bootstrap/dist/js/bootstrap.js"></script>
+		<link rel="stylesheet" href="css/sistema.css" >
+		<script src="js/sistema.js"></script>
+	</head>
+
+	<body>        
+
+		<div class="setecincoporcento">
+
+			<input type="hidden" id="idusuario" value="0">
+
+			<br/>
+			<a href="home.html">Home</a>		
+			<br/>
+
+			<br/>
+			<h1>Excluir pedido salão</h1>
+			<br/>
+
+			<div class="alert alert-warning" role="alert">
+				Atenção! Esta operação não poderá ser desfeita!
+			</div>
+
+		</div>
+
+		<div id="base_PDS" class="setecincoporcento">
+		</div>
+
+		<div id="base_ENV" class="setecincoporcento">
+		</div>
+
+	</body>
+
+	<script>
+
+		$(function(){
+			$("#base_PDS").load("pedidosalao_base_PDS.html"); 	
+			if (CheckLogin() == false)
+				return;	
+			$("#base_ENV").load("pedidosalao_base_ENV.html",function (){
+				LoadData();
+			});						
+		});		
+
+		function CheckLogin(){
+			var idusuario = getLoggedUserId();
+			if (idusuario == -1)
+			{
+				var page =  window.location.pathname.split("/").pop();
+				window.location.href = window.location.href.replace(page,'login.html');	
+				return false;					
+			}								
+			else
+			{
+				$('#idusuario').val(idusuario);
+				return true;
+			}
+		}	
+
+		function LoadData(){
+
+			var query = queryObj();
+
+			$.ajax({
+					url: 'http://127.0.0.1:8000/pedidosalao_detail/' + query.id,
+					data: {},
+					type: 'GET',
+					crossDomain: true,
+					success: function(data) {
+						console.log(data);
+						$('#id').val(data.id);
+						$('#estado').val(data.estado);
+						$('#observacao').val(data.observacao);
+						$('#total').val(data.total);
+					},
+					complete: function(xhr, text) {
+						console.log(xhr.status);
+						console.log(xhr.responseText);
+					}     
+			});						
+
+		}
+
+		function Enviar_Click()
+		{	
+
+			WebApi_DELETE_PedidoSalao
+			(
+				$('#id').val(), 
+				function success(data) {
+					console.log(data);
+				},
+				function complete(xhr, text) {
+					console.log(xhr.status);
+					console.log(xhr.responseText);
+					if (xhr.status == 204){
+						$('#falha').css('display','none');
+						$('#sucesso').css('display','block');
+						$('#sucesso').html("O pedido salão foi excluido com sucesso! <a href='pedidosalao_listar.html'>Seguir para a lista de pedidos salão</a>");
+					}
+					else{
+						$('#sucesso').css('display','none');
+						$('#falha').css('display','block');
+						$('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+					}
+				}
+			);
+			
+		}
+
+	</script>
+
+</html>

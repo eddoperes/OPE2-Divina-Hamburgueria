@@ -1,0 +1,224 @@
+<input type="hidden" id="idendereco" value="">
+
+<div class="mb-3">
+      <label for="cep" class="form-label asterisk">CEP</label>
+      <input id="cep" class="form-control" type='number' value=''/>
+      <label id="feedCep" class="invalid-feedback">O CEP precisa ser válido, não use pontos ou traços</label>  
+</div>
+
+<div class="mb-3">
+      <label for="logradouro" class="form-label asterisk">Logradouro</label>
+      <input id="logradouro" class="form-control" type='text' value='' />
+      <label id="feedLogradouro" class="invalid-feedback">O logradouro precisa ser informado</label>  
+</div>
+
+<div class="mb-3">
+      <label for="numero" class="form-label asterisk">Número</label>
+      <input id="numero" class="form-control" type='number' value='' />
+      <label id="feedNumero" class="invalid-feedback">O número precisa ser maior que zero</label>
+</div>
+
+<div class="mb-3">
+      <label for="complemento" class="form-label">Complemento</label>
+      <input id="complemento" class="form-control" type='text' value='' />
+</div>
+
+<div class="mb-3">
+      <label for="bairro" class="form-label asterisk">Bairro</label>
+      <input id="bairro" class="form-control" type='text' value='' />
+      <label id="feedBairro" class="invalid-feedback">O bairro precisa ser informado</label>
+</div>
+
+<div class="mb-3">
+      <label for="cidade" class="form-label asterisk">Cidade</label>
+      <input id="cidade" class="form-control" type='text' value='' />
+      <label id="feedCidade" class="invalid-feedback">A cidade precisa ser informada</label>
+</div>
+
+<div class="mb-3">
+      <label for="uf" class="form-label asterisk">UF</label>
+      <select id="uf" class="form-control">
+            <option value="SP">SP</option>
+            <option value="RJ">RJ</option>
+            <option value="MG">MG</option>
+      </select>
+</div>
+
+<div id="sucessoendereco" class="alert alert-success displaynone" role="alert" >
+</div>
+
+<div id="falhaendereco" class="alert alert-danger displaynone" role="alert" >  			
+</div>
+
+<input id="retirarEndereco" type="button" class="btn btn-link heighttrintapixel" onclick="RetirarEndereco()" value='Retirar Endereço' />
+
+
+<script>
+
+      function RetirarEndereco()
+      {
+            $('#base_CLI_END').css('display','none');
+            $('#adicionarEndereco').css('display','block');
+      }
+
+      function LoadEndereco(id)
+      {
+
+            WebApi_GET_Endereco
+            (
+                  id, 
+                  function success(data) {			
+                        console.log(data);	
+                        $('#idendereco').val(data.id);		
+                        $('#cep').val(data.cep);
+                        $('#logradouro').val(data.logradouro);
+                        $('#numero').val(data.numero); 
+                        $('#complemento').val(data.complemento);
+                        $('#bairro').val(data.bairro);
+                        $('#cidade').val(data.cidade); 
+                        $('#uf').val(data.uf);
+                  },
+                  function complete(xhr, text) {
+                        console.log(xhr.status);
+                        console.log(xhr.responseText);			
+                  }
+            );
+
+      }
+
+      function CrudEndereco()
+      {
+
+            //if ($('#base_CLI_END').is(':visible'))
+            if ($('#base_CLI_END').css('display') == 'block')
+            {
+                  if($('#idendereco').val() == '0'){		
+                        
+                        WebApi_POST_Endereco
+                        (
+                              {
+                                    cep : $('#cep').val() , logradouro : $('#logradouro').val(),
+                                    numero : $('#numero').val() , complemento : $('#complemento').val(),
+                                    bairro : $('#bairro').val() , cidade : $('#cidade').val() , uf : $('#uf').val()                  
+                              }, 
+                              function success(data) {
+                                    console.log(data);
+                                    $('#idendereco').val(data.id);
+                                    CrudCliente();
+                              },
+                              function complete(xhr, text) {
+                                    console.log(xhr.status);
+                                    console.log(xhr.responseText);
+                                    if (xhr.status == 201){
+                                          $('#falhaendereco').css('display','none');
+                                          $('#sucessoendereco').css('display','block');
+                                          $('#sucessoendereco').html("O endereco foi criado com sucesso!");
+                                    }
+                                    else{
+                                          $('#sucessoendereco').css('display','none');
+                                          $('#falhaendereco').css('display','block');
+                                          $('#falhaendereco').text("Ocorreu uma falha: " + xhr.responseText);
+                                    }
+                              }     
+                        );
+                        
+                  }
+                  else
+                  {
+
+                        WebApi_PUT_Endereco
+                        (
+                              $('#idendereco').val(), 
+                              {
+                                    cep : $('#cep').val() , logradouro : $('#logradouro').val(),
+                                    numero : $('#numero').val() , complemento : $('#complemento').val(),
+                                    bairro : $('#bairro').val() , cidade : $('#cidade').val() , uf : $('#uf').val()                  
+                              }, 
+                              function success(data) {
+                                    console.log(data);
+                              },
+                              function complete(xhr, text) {
+                                    console.log(xhr.status);
+                                    console.log(xhr.responseText);
+                                    if (xhr.status == 200){
+                                          $('#falhaendereco').css('display','none');
+                                          $('#sucessoendereco').css('display','block');
+                                          $('#sucessoendereco').html("O endereco foi editado com sucesso!");
+                                    }
+                                    else{
+                                          $('#sucessoendereco').css('display','none');
+                                          $('#falhaendereco').css('display','block');
+                                          $('#falhaendereco').text("Ocorreu uma falha: " + xhr.responseText);
+                                    }
+                              }
+                        );     
+                        CrudCliente();                   
+                  }
+            }
+            else
+            {
+                  if($('#idendereco').val() != '0' && $('#idendereco').val() != '')
+                  {
+                        $('#idendereco').val('');
+                        CrudCliente();
+                  }
+                  else
+                  {
+                        $('#idendereco').val('');
+                        CrudCliente();
+                  }
+            }
+
+      }
+
+
+      function ValidarEndereco(){
+
+            var result = true;
+
+            //if ($('#base_CLI_END').is(':visible'))
+            if ($('#base_CLI_END').css('display') == 'block')
+            {
+
+                  if ($("#cep").val().length < 8){
+                        $("#cep").addClass("is-invalid");
+                        result = false;
+                  } else {
+                        $("#cep").removeClass("is-invalid");
+                  }
+
+                  if ($("#logradouro").val() == ''){
+                        $("#logradouro").addClass("is-invalid");
+                        result = false;
+                  } else {
+                        $("#logradouro").removeClass("is-invalid");
+                  }
+            
+                  if (!($("#numero").val() > 0)){
+                        $("#numero").addClass("is-invalid");
+                        result = false;
+                  } else {
+                        $("#numero").removeClass("is-invalid");
+                  }
+
+                  if ($("#bairro").val() == ''){
+                        $("#bairro").addClass("is-invalid");
+                        result = false;
+                  } else {
+                        $("#bairro").removeClass("is-invalid");
+                  }
+
+                  if ($("#cidade").val() == ''){
+                        $("#cidade").addClass("is-invalid");
+                        result = false;
+                  } else {
+                        $("#cidade").removeClass("is-invalid");
+                  }
+            
+            }
+
+            return result;
+
+      }
+
+</script>

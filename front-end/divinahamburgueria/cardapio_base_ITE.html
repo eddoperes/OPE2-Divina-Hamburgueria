@@ -1,0 +1,197 @@
+<div class="accordion" id="accordionExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingOne">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        Itens
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+          				
+            <label class="form-label-inline widthtrintaporcento heighttrintapixel asterisk">Item</label>
+            <label class="form-label-inline widthvintecincoporcento heighttrintapixel asterisk">Preço</label>
+            <label class="form-label-inline widthvinteporcento heighttrintapixel asterisk">Estado</label>
+
+            <div id="item_container">
+            </div>
+
+            <input type="button" id="addItemOne" class="btn btn-link heighttrintapixel" onclick="AdicionarItem()" value='Adicionar Item' />
+                       	
+      </div>
+    </div>
+  </div>  
+</div>
+<br/>
+
+<script>
+
+      function CrudCardapioItemDoCardapio(i)
+      {	
+
+            if (i > incrementar_id)
+                  return;
+
+            //if ($('#item' + i).is(':visible')){
+            if ($('#item' + i).css('display') == 'block'){
+
+                  if($('#id' + i).val() == '0'){			
+
+                        WebApi_POST_CardapioItemDoCardapio
+                        (
+                              {cardapio : $('#id').val(), itemdocardapio : $('#itemdocardapio' + i).val(), preco : $('#preco'+ i).val(), estado : $('#estado' + i).val() }, 
+                              function success(data) {
+                                    console.log(data);
+                                    $('#id' + i).val(data.id);
+                                    CrudCardapioItemDoCardapio(i + 1);
+                              }, 
+                              function complete(xhr, text) {
+                                    console.log(xhr.status);
+                                    console.log(xhr.responseText);
+                                    if (xhr.status == 201){
+                                          $('#falha' + i).css('display','none');
+                                          $('#sucesso' + i).css('display','block');
+                                          $('#sucesso' + i).html("O item foi criado com sucesso!");
+                                    }
+                                    else{
+                                          $('#sucesso' + i).css('display','none');
+                                          $('#falha' + i).css('display','block');
+                                          $('#falha' + i).text("Ocorreu uma falha: " + xhr.responseText);
+                                    }					
+                              } 
+                        );
+
+                  }
+                  else
+                  {
+                  
+                        WebApi_PUT_CardapioItemDoCardapio
+                        (
+                              $('#id' + i).val(),
+                              {cardapio : $('#id').val(), itemdocardapio : $('#itemdocardapio' + i).val(), preco : $('#preco'+ i).val(), estado : $('#estado' + i).val() }, 
+                              function success(data) {
+                                    console.log(data);					
+                                    CrudCardapioItemDoCardapio(i + 1);
+                              }, 
+                              function complete(xhr, text) {
+                                    console.log(xhr.status);
+                                    console.log(xhr.responseText);
+                                    if (xhr.status == 200){
+                                          $('#falha' + i).css('display','none');
+                                          $('#sucesso' + i).css('display','block');
+                                          $('#sucesso' + i).html("O item foi editado com sucesso!");
+                                    }
+                                    else{
+                                          $('#sucesso' + i).css('display','none');
+                                          $('#falha' + i).css('display','block');
+                                          $('#falha' + i).text("Ocorreu uma falha: " + xhr.responseText);
+                                    }				
+                              } 
+                        );
+
+                  }
+            }
+            else
+            {
+                  
+                  if($('#id' + i).val() != '0'){
+
+                        WebApi_DELETE_CardapioItemDoCardapio
+                        (
+                              $('#id' + i).val(),                              
+                              function success(data) {
+                                    console.log(data);					
+                                    CrudCardapioItemDoCardapio(i + 1);
+                              }, 
+                              function complete(xhr, text) {
+                                    console.log(xhr.status);
+                                    console.log(xhr.responseText);
+                                    if (xhr.status == 204){
+                                          $('#falha' + i).css('display','none');
+                                          $('#sucesso' + i).css('display','block');	                                          
+                                    }
+                                    else{
+                                          $('#sucesso' + i).css('display','none');
+                                          $('#falha' + i).css('display','block');
+                                          $('#falha' + i).text("Ocorreu uma falha: " + xhr.responseText);
+                                    }				
+                              } 
+                        );
+
+                  }
+                  else
+                  {
+                        CrudCardapioItemDoCardapio(i + 1);
+                  }
+
+            }
+
+      }
+
+      var incrementar_id = 0;
+
+      function AdicionarItem()
+      {
+            
+            incrementar_id += 1;            
+            var local_id = incrementar_id;
+        
+            var textData = $("#cardapio_base_ITE_LIN").html();
+
+            textData = textData.replace('itemN', "item" + local_id); 
+            textData = textData.replace('idN', "id" + local_id); 
+            textData = textData.replace('itemdocardapioN', "itemdocardapio" + local_id); 
+            textData = textData.replace('precoN', "preco" + local_id);
+            textData = textData.replace('estadoN', "estado" + local_id);
+            textData = textData.replace('sucessoN', "sucesso" + local_id); 
+            textData = textData.replace('falhaN', "falha" + local_id); 
+            textData = textData.replace('excluirN', "excluir" + local_id);
+            
+            textData = textData.replace('feedN', "feed" + local_id);
+
+            $('#item_container').append(textData);                  
+
+            $('#excluir' + local_id).click(function() {                        
+                  $('#item' + local_id).css('display','none');
+                  $('#sucesso' + local_id).remove();
+                  $('#falha' + local_id).remove();
+            });
+
+            var i;	                       
+            for (i=0; i < itemdocardapio_list.length; i++){
+                  $("#itemdocardapio" + local_id).append('<option value="' + itemdocardapio_list[i].id + '">' + itemdocardapio_list[i].nome + '</option>');
+            } 
+
+            $("#preco"  + local_id).on('keyup focusout change', function(e) {
+                  // e.type is the type of event fired
+                  if ($("#preco"  + local_id).val() <= 0)
+				$("#preco"  + local_id).addClass("is-invalid");
+			else
+				$("#preco"  + local_id).removeClass("is-invalid");
+            });           
+
+            $("#item"  + local_id).on('keyup focusout change', function(e) {
+
+                  var dictItemdocardapio = {};
+
+                  var i;
+                  for(i=0; i <= incrementar_id; i++){
+                        
+                        //if ($('#item' + i).is(':visible')){
+                        if ($('#item' + i).css('display') == 'block'){
+
+                              if (dictItemdocardapio[$("#itemdocardapio"  + i).val()] == true){
+                                    $("#itemdocardapio"  + i).addClass("is-invalid");
+                              } else {
+                                    $("#itemdocardapio"  + i).removeClass("is-invalid");
+                                    dictItemdocardapio[$("#itemdocardapio"  + i).val()] = true;                                        
+                              }
+                        
+                        }
+
+                  }
+
+            }); 
+                  
+      }
+
+</script>

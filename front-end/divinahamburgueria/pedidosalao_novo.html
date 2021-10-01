@@ -1,0 +1,175 @@
+<html>
+
+	<head>
+		<meta charset="utf8"/>
+		<script src="jquery/jquery3.6.js"></script>
+		<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
+		<script src="bootstrap/dist/js/bootstrap.js"></script>
+		<link rel="stylesheet" href="css/sistema.css" >
+		<script src="js/sistema.js"></script>
+	</head>
+
+	<body>        
+
+		<div class="setecincoporcento">
+
+			<input type="hidden" id="idusuario" value="0">
+
+			<br/>
+			<a href="home.html">Home</a>		
+			<br/>
+
+			<br/>
+			<h1 class="floatleft">Novo pedido salão</h1>
+			<label class="floatright widthvintecincoporcento"><label class="asterisk"></label>
+				Campos obrigatórios
+			</label>
+			<br/>
+			<div class="clearboth">
+			</div>
+			<br/>
+
+		</div>
+
+		<div id="base_PDS" class="setecincoporcento">
+		</div>
+
+		<div id="base_ITE" class="setecincoporcento">
+		</div>
+
+		<div id="base_ITE_LIN" class="displaynone">
+		</div>
+
+		<div id="base_LOC" class="setecincoporcento">
+		</div>
+
+		<div id="base_CLI" class="setecincoporcento">
+		</div>
+
+		<div id="base_ENV" class="setecincoporcento">
+		</div>
+
+	</body>
+
+	<script>
+
+		$(function(){
+			$("#base_PDS").load("pedidosalao_base_PDS.html"); 
+			$("#base_ITE").load("pedidosalao_base_ITE.html", function (){
+				$('#total').prop('disabled', true);							
+			}); 
+			$("#base_ITE_LIN").load("pedidosalao_base_ITE_LIN.html"); 
+			$("#base_LOC").load("pedidosalao_base_LOC.html"); 
+			$("#base_CLI").load("pedidosalao_base_CLI.html", function (){
+				$("#base_CLI_CLI").load("pedidosalao_base_CLI_CLI.html", function (){
+					$("#base_CLI_CLI_END").load("pedidosalao_base_CLI_CLI_END.html"); 
+					$("#base_CLI_CLI_TEL").load("pedidosalao_base_CLI_CLI_TEL.html"); 
+				});
+			}); 	
+			if (CheckLogin() == false)
+				return;	
+			$("#base_ENV").load("pedidosalao_base_ENV.html", function (){
+				LoadLists();
+			});						
+		});		
+
+		function CheckLogin(){
+			var idusuario = getLoggedUserId();
+			if (idusuario == -1)
+			{
+				var page =  window.location.pathname.split("/").pop();
+				window.location.href = window.location.href.replace(page,'login.html');	
+				return false;					
+			}								
+			else
+			{
+				$('#idusuario').val(idusuario);
+				return true;
+			}
+		}
+		
+		var itemdocardapio_list;
+
+		function LoadLists(){
+
+			WebApi_GET_LIST_ItemDoCardapio
+			(
+				'', 
+				function success(data) {			
+					console.log(data);
+					itemdocardapio_list = data;					
+				},
+				function complete(xhr, text) {
+					console.log(xhr.status);
+					console.log(xhr.responseText);			
+				}   
+			)			
+
+		}
+
+		function Enviar_Click()
+		{						
+			if (ValidarPedidoSalao()==false)
+				return;			
+			CrudTelefone();						
+		}
+
+		function CrudPedidoSalao()
+		{						
+			if ($('#id').val() == '0'){
+				WebApi_POST_PedidoSalao
+				(
+					{usuario : $('#idusuario').val() , estado : $('#estado').val(), observacao : $('#observacao').val(), total: $('#total').val(), cliente : $('#idcliente').val()}, 
+					function success(data) {
+						console.log(data);
+						$('#id').val(data.id);
+						CrudPedidoSalaoItemDoCardapio(1);
+					},
+					function complete(xhr, text) {
+						console.log(xhr.status);
+						console.log(xhr.responseText);
+						if (xhr.status == 201){
+							$('#falha').css('display','none');
+							$('#sucesso').css('display','block');
+							$('#sucesso').html("O pedido salão foi criado com sucesso! <a href='pedidosalao_listar.html'>Seguir para a lista de pedidos salão</a>");
+						}
+						else{
+							$('#sucesso').css('display','none');
+							$('#falha').css('display','block');
+							$('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+						}
+					} 
+				);
+			}
+			else
+			{
+				WebApi_PUT_PedidoSalao
+				(
+					$('#id').val(), 
+					{usuario : $('#idusuario').val() , estado : $('#estado').val(), observacao : $('#observacao').val(), total: $('#total').val(), cliente : $('#idcliente').val()}, 
+					function success(data) {
+						console.log(data);						
+					},
+					function complete(xhr, text) {
+						console.log(xhr.status);
+						console.log(xhr.responseText);
+						if (xhr.status == 200){
+							$('#falha').css('display','none');
+							$('#sucesso').css('display','block');
+							$('#sucesso').html("O pedido salão foi editado com sucesso! <a href='pedidosalao_listar.html'>Seguir para a lista de pedidos salão</a>");
+						}
+						else{
+							$('#sucesso').css('display','none');
+							$('#falha').css('display','block');
+							$('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+						}
+					}     
+				);
+				CrudPedidoSalaoItemDoCardapio(1);
+			}
+
+		}
+
+	</script>
+
+</html>
