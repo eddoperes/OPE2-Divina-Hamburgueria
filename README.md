@@ -1,4 +1,2 @@
 # OPE2-Divina-Hamburgueria
-Trabalho de conclusão de curso da equipe Virtualsoft
-
-teste
+Estudo para o trabalho de conclusão de curso da equipe Virtualsoft
