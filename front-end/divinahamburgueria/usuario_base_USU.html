@@ -37,7 +37,7 @@
 </div>
 
 <div class="col-auto">
-   	<input type='button' class="btn btn-primary mb-3" value='Enviar' onclick="Enviar_Click()" />    
+   	<input id="enviar" type='button' class="btn btn-primary mb-3" value='Enviar' />    
 </div>
 
 <div id="sucesso" class="alert alert-success displaynone" role="alert" >	
@@ -48,62 +48,43 @@
 
 <script>
 
-	$(function(){
+	$(document).ready(function() {	
 
-		$("#nome").keyup(function (){
+		$("#nome").on(" keyup focusout change ", function (){
 			if ($("#nome").val() == "")
 				$("#nome").addClass("is-invalid");
 			else
 				$("#nome").removeClass("is-invalid");
 		}); 
 
-		$("#nome").focusout(function (){
-			if ($("#nome").val() == "")
-				$("#nome").addClass("is-invalid");
-			else
-				$("#nome").removeClass("is-invalid");
-		});
-
-		$("#tipo").change(function (){
+		$("#tipo").on(" keyup focusout change ", function (){
 			if ($("#tipo").val() == null)
 				$("#tipo").addClass("is-invalid");
 			else
 				$("#tipo").removeClass("is-invalid");
 		});
 
-		$("#tipo").focusout(function (){
-			if ($("#tipo").val() == null)
-				$("#tipo").addClass("is-invalid");
-			else
-				$("#tipo").removeClass("is-invalid");
-		}); 
-
-		$("#email").keyup(function (){
+		$("#email").on(" keyup focusout change ",function (){
 			if ($("#email").val() == "")
 				$("#email").addClass("is-invalid");
 			else
 				$("#email").removeClass("is-invalid");
 		}); 
 
-		$("#email").focusout(function (){
-			if ($("#email").val() == "")
-				$("#email").addClass("is-invalid");
-			else
-				$("#email").removeClass("is-invalid");
-		}); 
-
-		$("#senha").keyup(function (){
+		$("#senha").on(" keyup focusout change ", function (){
 			if ($("#senha").val() == "")
 				$("#senha").addClass("is-invalid");
 			else
 				$("#senha").removeClass("is-invalid");
 		}); 
 
-		$("#senha").focusout(function (){
-			if ($("#senha").val() == "")
-				$("#senha").addClass("is-invalid");
-			else
-				$("#senha").removeClass("is-invalid");
+		$("#enviar").on(" click ", function (){
+			EnviarClick();
+		});
+
+		$(document).on(" keypress ", function (e){
+			if (e.keyCode == 13);
+				EnviarClick();
 		});
 
 	});

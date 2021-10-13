@@ -1,0 +1,59 @@
+<input type="hidden" id="id" value="0">
+
+<div class="mb-3">
+      <label for="fornecedor" class="form-label asterisk">Fornecedor</label>
+      <select id="fornecedor" class="form-control">
+      </select>
+</div>
+
+<div class="mb-3">
+      <label for="estado" class="form-label asterisk">Estado</label>
+      <select id="estado" class="form-control">
+            <option value="1">Cotação</option>
+            <option value="2">Emitido</option>
+            <option value="3">Cancelado</option>
+            <option value="4">Entregue</option>
+            <option value="5">Estocado</option>
+      </select>
+</div>
+
+<div class="mb-3">
+      <label for="observacao" class="form-label">Observação</label>
+      <textarea id="observacao" class="form-control" rows="3" value="" ></textarea>
+</div>
+
+<script>
+
+      $(document).ready(function() {
+            WebApi_GET_LIST_Fornecedor
+            (
+                  '', 
+                  function success(data) 	
+                  {		
+                        var i;	                       
+                        for (i=0; i < data.length; i++){
+                              $("#fornecedor").append('<option value="' + data[i].id + '">' + data[i].nome + '</option>');
+                        }	
+                  },
+                  function complete(xhr, text) 
+                  {
+                        console.log(xhr.status);
+                        console.log(xhr.responseText);			
+                  } 	
+            );           				
+      });	
+
+      function ValidarPedidoDeCompra(){
+
+            var result = true;
+
+            var resultItem = ValidarItemEstoque();
+
+            if (result == true)
+                  result = resultItem;          
+
+            return result;
+
+      }
+
+</script>

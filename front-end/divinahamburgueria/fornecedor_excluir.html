@@ -5,8 +5,9 @@
 		<script src="jquery/jquery3.6.js"></script>
 		<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
 		<script src="bootstrap/dist/js/bootstrap.js"></script>
-			<link rel="stylesheet" href="css/sistema.css" >
-			<script src="js/sistema.js"></script>
+		<link rel="stylesheet" href="css/sistema.css" >
+		<script src="js/sistema.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 
 	<body>        
@@ -27,9 +28,20 @@
 				Atenção! Esta operação não poderá ser desfeita!
 			</div>
 
-		</div>
+			<input type="hidden" id="idfornecedor" value="0">
 
-		<div id="base_FOR" class="setecincoporcento">
+			<div class="mb-3">
+				<label for="nome" class="form-label asterisk">Nome</label>                                                            
+				<input id="nome" class="form-control" type='text' value="" />
+				<label id="feedNome" class="invalid-feedback">O nome precisa ser informado</label>  
+			</div>
+			
+			<div class="mb-3 ">
+					<label for="cnpj" class="form-labelb asterisk">CNPJ</label>
+					<input id="cnpj" class="form-control" type='number' value="" />   
+					<label id="feedCpf" class="invalid-feedback">O CNPJ precisa ser válido, não use pontos ou traços</label>  
+			</div>
+
 		</div>
 
 		<div id="base_ENV" class="setecincoporcento">				
@@ -39,34 +51,12 @@
 
 	<script>
 
-		$(function(){
+		$(document).ready(function() {
 			if (CheckLogin() == false)
 				return;
-			$("#base_FOR").load("fornecedor_base_FOR.html", function (){
-				$("#base_FOR_TEL").load("fornecedor_base_FOR_TEL.html"); 
-				$("#base_FOR_END").load("fornecedor_base_FOR_END.html", function (){
-					$("#headingEndereco button").addClass('collapsed'); 
-					$("#collapseEndereco").removeClass('show');
-					$("#headingTelefone button").addClass('collapsed'); 
-					$("#collapseTelefone").removeClass('show');
-					LoadData();
-					$("#nome").attr('disabled', true);
-					$("#cnpj").attr('disabled', true);
-					$("#cep").attr('disabled', true);
-					$("#logradouro").attr('disabled', true);
-					$("#numero").attr('disabled', true);
-					$("#complemento").attr('disabled', true);
-					$("#bairro").attr('disabled', true);
-					$("#cidade").attr('disabled', true);
-					$("#uf").attr('disabled', true);
-					$("#adicionarEndereco").css('display', 'none');
-					$("#retirarEndereco").css('display', 'none');
-					$("#ddd").attr('disabled', true);
-					$("#telefone").attr('disabled', true);
-					$("#adicionarTelefone").css('display', 'none');
-					$("#retirarTelefone").css('display', 'none');
-				});	
-			});		
+			LoadData();
+			$("#nome").attr('disabled', true);
+			$("#cnpj").attr('disabled', true);
 			$("#base_ENV").load("cliente_base_ENV.html"); 					
 		});
 
@@ -87,10 +77,23 @@
 
 		function LoadData(){
 			var query = queryObj();
-			LoadFornecedor(query.id);
+			WebApi_GET_Fornecedor
+            (
+                  query.id, 
+                  function success(data) {			
+                        console.log(data);	                                             
+                        $('#idfornecedor').val(data.id);		
+                        $('#nome').val(data.nome);
+                        $('#cnpj').val(data.cnpj);                       
+                  },
+                  function complete(xhr, text) {
+                        console.log(xhr.status);
+                        console.log(xhr.responseText);			
+                  }
+            );
 		}
 
-		function Enviar_Click()
+		function EnviarClick()
 		{	
 			WebApi_DELETE_Fornecedor
 			(

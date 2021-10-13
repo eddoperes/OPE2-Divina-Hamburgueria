@@ -1,0 +1,289 @@
+<html>
+
+	<head>
+		<meta charset="utf8"/>
+		<script src="jquery/jquery3.6.js"></script>
+		<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
+		<script src="bootstrap/dist/js/bootstrap.js"></script>
+		<link rel="stylesheet" href="css/sistema.css" >
+		<script src="js/sistema.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+
+	<body> 
+        
+        <div class="setecincoporcento">
+
+			<input type="hidden" id="idusuario" value="0">
+
+			<br/>
+			<a href="home.html">Home</a>		
+			<br/>
+
+			<br/>
+			<h1 class="floatleft">Entrada do estoque</h1>
+			<label class="floatright widthvintecincoporcento"><label class="asterisk"></label>
+				Campos obrigatórios
+			</label>
+			<br/>
+			<div class="clearboth"></div>
+			<br/>
+
+            <div class="mb-3">
+                <label for="pedidodecompra" class="form-label asterisk">Pedido de compra entregues</label>
+                <select id="pedidodecompra" class="form-control">
+                </select>
+                <label class="invalid-feedback">O pedido de compra precisa ser informado</label>
+            </div>
+
+            <div class="col-auto">
+                <input id="enviar" type="button" class="btn btn-primary mb-3" value='Enviar' />    
+            </div>
+            
+            <div id="sucesso" class="alert alert-success displaynone" role="alert" >
+            </div>
+            
+            <div id="falha" class="alert alert-danger displaynone" role="alert" >  			
+            </div>
+
+            <div id="engrenagem" class="textaligncenter displaynone" >  			
+                <img src="image\engrenagem.png" >
+            </div>
+            
+            <div id="XdeN" class="textaligncenter displaynone">
+            </div>
+
+		</div>
+
+    </body>
+
+	<script>
+
+		$(document).ready(function() {		
+			if (CheckLogin() == false)
+				return;
+
+            $("#pedidodecompra").focusout(function (){
+			    if ($("#pedidodecompra").val() == null)
+				    $("#pedidodecompra").addClass("is-invalid");
+			    else
+				    $("#pedidodecompra").removeClass("is-invalid");
+		    });
+
+            WebApi_GET_LIST_PedidoDeCompra
+            (
+                  '?estado=4', 
+                  function success(data) 	
+                  {		
+                        var i;	                       
+                        for (i=0; i < data.length; i++){
+                              $("#pedidodecompra").append('<option value="' + data[i].id + '">'  + data[i].id + ' - ' + data[i].observacao + '</option>');
+                        }	
+                  },
+                  function complete(xhr, text) 
+                  {
+                        console.log(xhr.status);
+                        console.log(xhr.responseText);			
+                  } 	
+            );
+
+
+            $("#enviar").on(" click ", function (){
+                  EnviarClick();
+            });
+
+            $(document).on(" keypress ", function (e){
+                  if (e.keyCode == 13);
+                        EnviarClick();
+            });
+		
+		});		
+
+		function CheckLogin(){
+			var idusuario = getLoggedUserId();
+			if (idusuario == -1)
+			{
+				var page =  window.location.pathname.split("/").pop();
+				window.location.href = window.location.href.replace(page,'login.html');	
+				return false;					
+			}								
+			else
+			{
+				$('#idusuario').val(idusuario);
+				return true;
+			}
+		}
+
+        function EnviarClick(){
+
+            if (ValidarEntrada() == false)
+				return;
+
+            $("#engrenagem").css("display","block");
+            $("#XdeN").css("display","block");     
+            $("#XdeN").css("font-weight","bold");
+            $("#XdeN").css("font-size","xx-large");       
+
+            WebApi_GET_LIST_PedidoDeCompraItemDoEstoque
+            (
+                '?pedidodecompra=' + $("#pedidodecompra").val() + '&estocado=False', 
+                function success(data) 	
+                {		
+                    console.log(data);
+                    EntrarEstoque(0, data);
+                },
+                function complete(xhr, text) 
+                {
+                    console.log(xhr.status);
+                    console.log(xhr.responseText);			
+                 } 	
+            );
+
+        }
+
+        function EntrarEstoque(i, pedidodecompraitemdoestoquelist){
+
+            if (i >= pedidodecompraitemdoestoquelist.length)
+            {
+                if (i==0)                
+                    $("#XdeN").text("0 de 0");                                    
+                PUT_PedidoDeCompra();
+                return;
+            }
+                
+            $("#XdeN").text((i+1) + " de " + pedidodecompraitemdoestoquelist.length);
+
+            WebApi_GET_LIST_Estoque
+            (
+                '?itemdoestoque=' + pedidodecompraitemdoestoquelist[i].itemdoestoque, 
+                function success(data) 	
+                {		
+                    console.log(data);
+                    if (data.length == 0)
+                        POST_Estoque(pedidodecompraitemdoestoquelist[i]);                                          
+                    else
+                        PUT_Estoque(data[0], pedidodecompraitemdoestoquelist[i]);                    
+                    setTimeout(function(){EntrarEstoque(i+1, pedidodecompraitemdoestoquelist);}, 1000);
+                },
+                function complete(xhr, text) 
+                {
+                    console.log(xhr.status);
+                    console.log(xhr.responseText);			
+                } 	
+            );
+            
+        }
+
+        function  POST_Estoque(pedidodecompraitemdoestoque){
+
+            WebApi_POST_Estoque
+            (
+                {itemdoestoque: pedidodecompraitemdoestoque.itemdoestoque, quantidade: pedidodecompraitemdoestoque.quantidade}, 
+                function success(data){
+                    console.log(data);
+                    PUT_PedidoDeCompraItemDoEstoque(pedidodecompraitemdoestoque);
+                },
+                function complete(xhr, text) 
+                {
+                    console.log(xhr.status);
+                    console.log(xhr.responseText);		
+                    if (xhr.status != 201){
+                        $('#falha').css('display','block');
+                        $('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+                    }	
+                }
+            );
+
+        }
+
+        function  PUT_Estoque(estoque, pedidodecompraitemdoestoque){
+
+            WebApi_PUT_Estoque
+            (
+                estoque.id,
+                {itemdoestoque: estoque.itemdoestoque, quantidade: estoque.quantidade + pedidodecompraitemdoestoque.quantidade}, 
+                function success(data){
+                    console.log(data);
+                    PUT_PedidoDeCompraItemDoEstoque(pedidodecompraitemdoestoque);
+                },
+                function complete(xhr, text) 
+                {
+                    console.log(xhr.status);
+                    console.log(xhr.responseText);	
+                    if (xhr.status != 200){
+                        $('#falha').css('display','block');
+                        $('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+                    }	
+                }
+            );
+
+        }
+
+        function  PUT_PedidoDeCompraItemDoEstoque(pedidodecompraitemdoestoque){
+
+            WebApi_PUT_PedidoDeCompraItemDoEstoque
+            (
+                pedidodecompraitemdoestoque.id, 
+                {
+                    estocado : true
+                }, 
+                function success(data) {
+                    console.log(data);					
+                },
+                function complete(xhr, text) {
+                    console.log(xhr.status);
+                    console.log(xhr.responseText);
+                    if (xhr.status != 200){
+                        $('#falha').css('display','block');
+                        $('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+                    }
+                }
+            );
+        }
+
+        function PUT_PedidoDeCompra()
+        {
+            WebApi_PUT_PedidoDeCompra
+            (                            
+                $('#pedidodecompra').val(), 
+                {
+                    estado : 5                    
+                }, 
+                function success(data) {
+                    console.log(data);						
+                },
+                function complete(xhr, text) {
+                    console.log(xhr.status);
+                    console.log(xhr.responseText);
+                    if (xhr.status == 200)
+                    {
+                        $('#sucesso').css('display','block');
+						$('#sucesso').html("O pedido de compra foi estocado com sucesso! <a href='estoque_listar.html'>Seguir para a lista de estoque</a>");
+                    } 
+                    else 
+                    {
+                        $('#falha').css('display','block');
+                        $('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+                    }
+                }     
+            );
+        }
+
+        function ValidarEntrada (){
+
+            var result = true;
+
+            if ($("#pedidodecompra").val() == null){
+                $("#pedidodecompra").addClass("is-invalid");
+                result = false;
+            } else {
+                $("#pedidodecompra").removeClass("is-invalid");
+            }
+
+            return result;
+
+        }
+
+	</script>
+
+</html>

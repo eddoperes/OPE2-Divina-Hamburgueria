@@ -1,0 +1,62 @@
+<input type="hidden" id="id" value="0">
+
+<div class="mb-3">
+	<label for="itemdoestoque" class="form-label asterisk">Item do estoque</label>
+  	<select id="itemdoestoque" class="form-control">
+  	</select>
+</div>
+
+<div class="mb-3">
+ 	<label for="quantidade" class="form-label asterisk">Quantidade</label>
+  	<input id="quantidade" class="form-control" type='number' value='' />
+	<label class="invalid-feedback">A quantidade precisa ser pelo menos zero</label>
+</div>
+
+<div class="col-auto">
+   	<input id="enviar" type="button" class="btn btn-primary mb-3" value='Enviar' />    
+</div>
+
+<div id="sucesso" class="alert alert-success displaynone" role="alert" >	
+</div>
+
+<div id="falha" class="alert alert-danger displaynone" role="alert" >  			
+</div>
+
+<script>
+
+	$(document).ready(function() {	
+
+		$("#quantidade").on(" keyup focusout change ", function (){
+			if ($("#quantidade").val() < 0)
+				$("#quantidade").addClass("is-invalid");
+			else
+				$("#quantidade").removeClass("is-invalid");
+		}); 
+
+		$("#enviar").on(" click ", function (){
+				EnviarClick();
+		});
+
+		$(document).on(" keypress ", function (e){
+				if (e.keyCode == 13);
+					EnviarClick();
+		});
+
+	});
+
+	function ValidarEstoque (){
+
+		var result = true;
+
+		if ($("#quantidade").val() < 0){
+			$("#quantidade").addClass("is-invalid");
+			result = false;
+		} else {
+			$("#quantidade").removeClass("is-invalid");
+		}
+
+		return result;
+
+	}
+	
+</script>

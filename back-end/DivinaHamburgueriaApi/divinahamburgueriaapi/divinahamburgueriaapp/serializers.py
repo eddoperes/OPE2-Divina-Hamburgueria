@@ -1,9 +1,10 @@
 from rest_framework import serializers
-from .models import Usuario, Cardapio, ItemDoCardapio, CardapioItemDoCardapio
+from .models import Usuario, Cliente, Fornecedor, Endereco, Telefone 
+from .models import ItemDoCardapio, Cardapio, CardapioItemDoCardapio
 from .models import PedidoSalao, PedidoSalaoItemDoCardapio
 from .models import PedidoDelivery, PedidoDeliveryItemDoCardapio
-from .models import Telefone, Endereco, Cliente, Fornecedor
-from .models import ItemDoEstoque
+from .models import ItemDoEstoque, Estoque
+from .models import PedidoDeCompra, PedidoDeCompraItemDoEstoque
 
 class UsuarioSerializer(serializers.ModelSerializer):
 
@@ -95,4 +96,25 @@ class ItemDoEstoqueSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = ItemDoEstoque
+        fields = '__all__'
+
+class PedidoDeCompraSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = PedidoDeCompra
+        fields = '__all__'
+
+class PedidoDeCompraItemDoEstoqueSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = PedidoDeCompraItemDoEstoque
+        fields = '__all__'
+
+class EstoqueSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = Estoque
         fields = '__all__'

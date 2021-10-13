@@ -192,6 +192,8 @@ class ItemDoEstoque(models.Model):
 
     nome = models.CharField(max_length=200)
     descricao = models.CharField(max_length=400)
+    conteudo = models.IntegerField(default=1)
+    unidade =  models.CharField(max_length=10, default='')
     estoqueminimo = models.IntegerField(default=1)
 
     def __str__(self):
@@ -204,26 +206,30 @@ class PedidoDeCompra(models.Model):
 
     fornecedor = models.ForeignKey('Fornecedor', default=1, related_name='fornecedores', on_delete=models.CASCADE)
     estado = models.IntegerField(default=1)
-    descricao = models.CharField(max_length=400)
-    dataemitido = models.DateTimeField(auto_now_add=True)
+    observacao = models.CharField(max_length=400, null=True)
+    datacotacao = models.DateTimeField(auto_now_add=True)
+    dataemitido = models.DateTimeField(null=True)
     datacancelado = models.DateTimeField(null=True)
     dataentregue = models.DateTimeField(null=True)
     dataestocado = models.DateTimeField(null=True)
-    estadopagamento = models.IntegerField(default=1)
+    estadopagamento = models.IntegerField(default=0)
     datapagamento = models.DateTimeField(null=True)
+    total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):
         return self.id
 
-class ItemDoEstoquePedidoDeCompra(models.Model):
+class PedidoDeCompraItemDoEstoque(models.Model):
 
     class Meta:
         db_table = 'itemdoestoquepedidodecompra'
 
     itemdoestoque = models.ForeignKey('ItemDoEstoque', default=1, related_name='itensdoestoque', on_delete=models.CASCADE)
     pedidodecompra = models.ForeignKey('PedidoDeCompra', default=1, related_name='pedidosdecompra', on_delete=models.CASCADE)
-    preco = models.DecimalField(max_digits=10, decimal_places=2)
+    precounitario = models.DecimalField(max_digits=10, decimal_places=2, default=1)
     quantidade = models.IntegerField(default=1)
+    precototal = models.DecimalField(max_digits=10, decimal_places=2, default=1)
+    estocado = models.BooleanField(default=False)
 
     def __str__(self):
         return self.id

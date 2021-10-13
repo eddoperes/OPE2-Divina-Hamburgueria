@@ -7,6 +7,7 @@
 		<script src="bootstrap/dist/js/bootstrap.js"></script>
         <link rel="stylesheet" href="css/sistema.css" >
         <script src="js/sistema.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 
 	<body class="setecincoporcento" > 
@@ -89,11 +90,11 @@
 			</div>
 
 			<div id="pedidosdecompra" class="duzentospixelsfundoazul">
-				<h3><a class="linkbranco" href="login.html">Pedidos de<br/>Compra</a></h3>
+				<h3><a class="linkbranco" href="pedidodecompra_listar.html">Pedidos de<br/>Compra</a></h3>
 			</div>
 
 			<div id="estoque" class="duzentospixelsfundoazul">
-				<h3><a class="linkbranco" href="login.html">Estoque</a></h3>
+				<h3><a class="linkbranco" href="estoque_listar.html">Estoque</a></h3>
 			</div>
 
 			<div style="clear: both;">
@@ -106,7 +107,7 @@
 
 	<script>
 
-		$(function(){
+		$(function(){	
 			var idusuario = getLoggedUserId();
 			if (idusuario == -1){
 				$('#login').css('display','block');
@@ -146,8 +147,7 @@
 		});
 
 		function Logout(){
-			var userId=getCookie("user_id");
-			setCookie("user_id", userId, -1); //cancel "user_id" cookie, using -1 days			
+			doLogout();									
 		}
 
 	</script>

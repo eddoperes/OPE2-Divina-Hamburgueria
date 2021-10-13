@@ -7,6 +7,7 @@
 		<script src="bootstrap/dist/js/bootstrap.js"></script>
         <link rel="stylesheet" href="css/sistema.css" >
         <script src="js/sistema.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 
 	<body>        
@@ -39,7 +40,7 @@
 
 	<script>
 
-		$(function(){
+		$(document).ready(function() {
 			$("#base_CDP").load("cardapio_base_CDP.html"); 
 			if (CheckLogin() == false)
 				return;
@@ -88,7 +89,7 @@
 
 		}
 
-		function Enviar_Click()
+		function EnviarClick()
 		{
 				
 			WebApi_DELETE_Cardapio

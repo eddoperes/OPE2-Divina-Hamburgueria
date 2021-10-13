@@ -1,16 +1,17 @@
 from django.shortcuts import render
 from rest_framework import generics
-from .models import Usuario, Cardapio, ItemDoCardapio
-from .models import CardapioItemDoCardapio, Cliente, Fornecedor
+from .models import Usuario, Cliente, Fornecedor, Endereco, Telefone 
+from .models import ItemDoCardapio, Cardapio, CardapioItemDoCardapio
 from .models import PedidoSalao, PedidoSalaoItemDoCardapio
 from .models import PedidoDelivery, PedidoDeliveryItemDoCardapio
-from .models import Endereco, Telefone, ItemDoEstoque
-from .serializers import UsuarioSerializer, CardapioSerializer, ItemDoCardapioSerializer
-from .serializers import CardapioItemDoCardapioSerializer 
+from .models import ItemDoEstoque, Estoque
+from .models import PedidoDeCompra, PedidoDeCompraItemDoEstoque
+from .serializers import UsuarioSerializer, ClienteSerializer, FornecedorSerializer, EnderecoSerializer, TelefoneSerializer
+from .serializers import ItemDoCardapioSerializer, CardapioSerializer, CardapioItemDoCardapioSerializer 
 from .serializers import PedidoSalaoSerializer, PedidoSalaoItemDoCardapioSerializer
 from .serializers import PedidoDeliverySerializer, PedidoDeliveryItemDoCardapioSerializer
-from .serializers import ClienteSerializer, TelefoneSerializer, FornecedorSerializer
-from .serializers import EnderecoSerializer, ItemDoEstoqueSerializer
+from .serializers import ItemDoEstoqueSerializer, EstoqueSerializer
+from .serializers import PedidoDeCompraSerializer, PedidoDeCompraItemDoEstoqueSerializer
 
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -612,3 +613,147 @@ def fornecedor_detail(request, pk):
 #---------------------------------------------------------------------------
 # Fornecedor - fim
 #---------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------
+# Pedido De Compra - inicio
+#---------------------------------------------------------------------------
+
+@api_view(['GET', 'POST'])
+def pedidodecompra_list (request):
+    if request.method == 'GET':
+        filtro = request.GET.get('estado', '')
+        if (filtro == ''):
+            pedidodecompra = PedidoDeCompra.objects.all()
+        else:
+            pedidodecompra = PedidoDeCompra.objects.filter(estado=filtro)		
+        serializer = PedidoDeCompraSerializer(pedidodecompra, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = PedidoDeCompraSerializer(data = request.data)
+        if serializer.is_valid():          
+            serializer.save()
+            return Response(serializer.data, status = status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def pedidodecompra_detail(request, pk):
+    try:
+        pedidodecompra = PedidoDeCompra.objects.get(id=pk)
+    except PedidoDeCompra.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        serializer = PedidoDeCompraSerializer(pedidodecompra)
+        return Response(serializer.data)
+    elif request.method == 'PUT':
+        serializer = PedidoDeCompraSerializer(pedidodecompra, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        pedidodecompra.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+#---------------------------------------------------------------------------
+# Pedido De Compra - fim
+#---------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------
+# Pedido De Compra Item do Estoque - inicio
+#---------------------------------------------------------------------------
+
+@api_view(['GET', 'POST'])
+def pedidodecompraitemdoestoque_list (request):
+    if request.method == 'GET':
+        filtroA = request.GET.get('pedidodecompra', '')        
+        pedidodecompraitemdoestoque =  PedidoDeCompraItemDoEstoque.objects.filter(pedidodecompra=filtroA)		
+
+        filtroB = request.GET.get('estocado', '')
+        if (filtroB != ''):
+           pedidodecompraitemdoestoque = pedidodecompraitemdoestoque.filter(estocado=filtroB)
+ 
+
+        serializer = PedidoDeCompraItemDoEstoqueSerializer(pedidodecompraitemdoestoque, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = PedidoDeCompraItemDoEstoqueSerializer(data = request.data)
+        if serializer.is_valid():          
+            serializer.save()
+            return Response(serializer.data, status = status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def pedidodecompraitemdoestoque_detail(request, pk):
+    try:
+        pedidodecompraitemdoestoque = PedidoDeCompraItemDoEstoque.objects.get(id=pk)
+    except PedidoDeCompraItemDoEstoque.DoesNotExist:
+        return Response('id não encontrado', status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        serializer = PedidoDeCompraItemDoEstoqueSerializer(pedidodecompraitemdoestoque)
+        return Response(serializer.data)
+    elif request.method == 'PUT':
+        serializer = PedidoDeCompraItemDoEstoqueSerializer(pedidodecompraitemdoestoque, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        pedidodecompraitemdoestoque.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+#---------------------------------------------------------------------------
+# Pedido De Compra Item do Estoque - fim
+#---------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------
+# Estoque - inicio
+#---------------------------------------------------------------------------
+
+@api_view(['GET', 'POST'])
+def estoque_list (request):
+    if request.method == 'GET':
+        filtro = request.GET.get('quantidade', -1)
+        if (filtro != -1):
+           estoque =  Estoque.objects.filter(quantidade__range=(0, filtro))
+        filtro = request.GET.get('itemdoestoque', 0)		
+        if (filtro != 0):
+           estoque =  Estoque.objects.filter(itemdoestoque=filtro)		
+        serializer = EstoqueSerializer(estoque, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = EstoqueSerializer(data = request.data)
+        if serializer.is_valid():            
+            serializer.save()
+            return Response(serializer.data, status = status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def estoque_detail(request, pk):
+    try:
+        estoque = Estoque.objects.get(id=pk)
+    except Estoque.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        serializer = EstoqueSerializer(estoque)
+        return Response(serializer.data)
+    elif request.method == 'PUT':
+        serializer = EstoqueSerializer(estoque, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        estoque.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+#---------------------------------------------------------------------------
+# Estoque - fim
+#---------------------------------------------------------------------------
+

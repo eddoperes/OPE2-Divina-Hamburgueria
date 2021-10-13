@@ -7,6 +7,7 @@
 		<script src="bootstrap/dist/js/bootstrap.js"></script>
 		<link rel="stylesheet" href="css/sistema.css" >
 		<script src="js/sistema.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 
 	<body>        
@@ -39,7 +40,7 @@
 
 	<script>
 
-		$(function(){
+		$(document).ready(function() {
 			$("#base_PDD").load("pedidodelivery_base_PDD.html"); 	
 			if (CheckLogin() == false)
 				return;	
@@ -67,27 +68,30 @@
 
 			var query = queryObj();
 
-			$.ajax({
-					url: 'http://127.0.0.1:8000/pedidodelivery_detail/' + query.id,
-					data: {},
-					type: 'GET',
-					crossDomain: true,
-					success: function(data) {
-						console.log(data);
-						$('#id').val(data.id);
-						$('#estado').val(data.estado);
-						$('#observacao').val(data.observacao);
-						$('#total').val(data.total);
-					},
-					complete: function(xhr, text) {
-						console.log(xhr.status);
-						console.log(xhr.responseText);
-					}     
-			});						
+			WebApi_GET_PedidoDelivery
+			(
+				query.id, 
+				function success(data) {
+					console.log(data);
+					$('#id').val(data.id);
+					$('#estado').val(data.estado);
+					$('#observacao').val(data.observacao);
+					$('#pago').val(data.estadopagamento);
+					if (data.estadopagamento == 1)
+						$('#pago').prop('checked', true);
+					$('#estado').prop('disabled', true);
+					$('#observacao').prop('disabled', true);
+					$('#pago').prop('disabled', true);						
+				},
+				function complete(xhr, text) {
+					console.log(xhr.status);
+					console.log(xhr.responseText);
+				} 
+			);
 
 		}
 
-		function Enviar_Click()
+		function EnviarClick()
 		{	
 
 			WebApi_DELETE_PedidoDelivery

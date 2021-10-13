@@ -7,6 +7,7 @@
 		<script src="bootstrap/dist/js/bootstrap.js"></script>
 		<link rel="stylesheet" href="css/sistema.css" >
 		<script src="js/sistema.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 
 	<body>        
@@ -53,7 +54,7 @@
 
 	<script>
 
-		$(function(){
+		$(document).ready(function() {
 			$("#base_PDD").load("pedidodelivery_base_PDD.html"); 
 			$("#base_ITE").load("pedidodelivery_base_ITE.html", function (){
 				$('#total').prop('disabled', true);							
@@ -122,13 +123,8 @@
 
 		}
 
-		function Enviar_Click()
+		function EnviarClick()
 		{				
-			
-			//alert($('#base_CLI_CLI').css("display"));
-
-			//alert($('#base_CLI_CLI').is(':hidden'));
-			
 			if (ValidarPedidoDelivery()==false)
 				return;			
 			CrudTelefone();						

@@ -21,17 +21,16 @@
 			<br/>
 
 			<br/>
-			<h1 class="floatleft">Novo usuário</h1>
-			<label class="floatright widthvintecincoporcento"><label class="asterisk"></label>
-				Campos obrigatórios
-			</label>
+			<h1>Excluir estoque</h1>
 			<br/>
-			<div class="clearboth"></div>
-			<br/>
+
+			<div class="alert alert-warning" role="alert">
+				Atenção! Esta operação não poderá ser desfeita!
+			</div>
 
 		</div>
 
-		<div id="base_USU" class="setecincoporcento">				
+		<div id="base_EST" class="setecincoporcento">
 		</div>
 
 	</body>
@@ -41,7 +40,11 @@
 		$(document).ready(function() {
 			if (CheckLogin() == false)
 				return;
-			$("#base_USU").load("usuario_base_USU.html"); 			
+			$("#base_EST").load("estoque_base_EST.html",function (){
+				$("#itemdoestoque").attr('disabled','true');
+				$("#quantidade").attr('disabled','true');
+				LoadLists();
+			});			
 		});
 
 		function CheckLogin(){
@@ -59,25 +62,58 @@
 			}
 		}
 
+		function LoadLists(){
+			WebApi_GET_LIST_ItemDoEstoque
+			(
+				"",
+				function success(data) {	
+					console.log(data);
+					var i;
+					for (i=0; i < data.length; i++){									
+						$("#itemdoestoque").append('<option value="' + data[i].id + '">' + data[i].nome + ' ' + data[i].conteudo + ' ' + data[i].unidade + '</option>');
+					}
+					LoadData();
+				},
+				function complete(xhr, text) {
+					console.log(xhr.status);
+					console.log(xhr.responseText);			
+				}	
+			);				
+		}
+
+		function LoadData(){
+			var query = queryObj();
+			WebApi_GET_Estoque
+			(
+				query.id,
+				function sucess(data) {
+					console.log(data);
+					$('#id').val(data.id);
+					$('#itemdoestoque').val(data.itemdoestoque);						
+					$('#quantidade').val(data.quantidade);
+				},
+				function complete(xhr, text) {
+					console.log(xhr.status);
+					console.log(xhr.responseText);
+				}
+			);
+		}
+
 		function EnviarClick()
 		{	
-			
-			if (ValidarUsuario() == false)
-				return;
-
-			WebApi_POST_Usuario
+			WebApi_DELETE_Estoque
 			(
-				{nome : $('#nome').val() , tipo : $('#tipo').val(), email : $('#email').val(), senha : $('#senha').val(), token : '', estado : $('#estado').val()},
+				$('#id').val(),
 				function success(data){
 					console.log(data);
 				},
 				function complete(xhr, text){
 					console.log(xhr.status);
 					console.log(xhr.responseText);
-					if (xhr.status == 201){
+					if (xhr.status == 204){
 						$('#falha').css('display','none');
 						$('#sucesso').css('display','block');
-						$('#sucesso').html("O usuário foi criado com sucesso! <a href='usuario_listar.html'>Seguir para a lista de usuários</a>");
+						$('#sucesso').html("O estoque foi excluido com sucesso! <a href='estoque_listar.html'>Seguir para a lista de estoque</a>");				
 					}
 					else{
 						$('#sucesso').css('display','none');
@@ -86,8 +122,7 @@
 					}
 				}
 			);
-
-		}		
+		}
 
 	</script>
 

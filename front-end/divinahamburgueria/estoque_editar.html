@@ -21,42 +21,31 @@
 			<br/>
 
 			<br/>
-			<h1 class="floatleft">Editar cardápio</h1>
+			<h1 class="floatleft">Editar estoque</h1>
 			<label class="floatright widthvintecincoporcento"><label class="asterisk"></label>
 				Campos obrigatórios
 			</label>
 			<br/>
 			<div class="clearboth"></div>
-			<br/>		
+			<br/>
 
 		</div>
 
-		<div id="base_CDP" class="setecincoporcento">
-		</div>
-
-		<div id="base_ITE" class="setecincoporcento">
-		</div>
-
-		<div id="cardapio_base_ITE_LIN" class="displaynone">
-		</div>
-
-		<div id="base_ENV" class="setecincoporcento">
+		<div id="base_EST" class="setecincoporcento">
 		</div>
 
 	</body>
 
 	<script>
 
-		$(document).ready(function() {
-    		$("#base_CDP").load("cardapio_base_CDP.html"); 						 								
-			$("#cardapio_base_ITE_LIN").load("cardapio_base_ITE_LIN.html");			
+		$(document).ready(function() {	
 			if (CheckLogin() == false)
 				return;
-			$("#base_ITE").load("cardapio_base_ITE.html",function (){
+			$("#base_EST").load("estoque_base_EST.html",function (){
+				$("#itemdoestoque").attr('disabled','true');
 				LoadLists();
-			});			
-			$("#base_ENV").load("cardapio_base_ENV.html");
-		});
+			});	 										
+		});		
 
 		function CheckLogin(){
 			var idusuario = getLoggedUserId();
@@ -73,87 +62,63 @@
 			}
 		}
 
-		var itemdocardapio_list;
-
 		function LoadLists(){
-
-			WebApi_GET_LIST_ItemDoCardapio
+			WebApi_GET_LIST_ItemDoEstoque
 			(
-				'', 
-				function success(data) {			
+				"",
+				function success(data) {	
 					console.log(data);
-					itemdocardapio_list = data;
+					var i;
+					for (i=0; i < data.length; i++){									
+						$("#itemdoestoque").append('<option value="' + data[i].id + '">' + data[i].nome + ' ' + data[i].conteudo + ' ' + data[i].unidade + '</option>');
+					}
 					LoadData();
 				},
 				function complete(xhr, text) {
 					console.log(xhr.status);
 					console.log(xhr.responseText);			
-				}   
-			)
-
+				}	
+			);				
 		}
 
 		function LoadData(){
-
 			var query = queryObj();
-
-			WebApi_GET_Cardapio
+			WebApi_GET_Estoque
 			(
-				query.id, 
-				function success(data) {
+				query.id,
+				function sucess(data) {
 					console.log(data);
 					$('#id').val(data.id);
-					$('#nome').val(data.nome);
-					$('#descricao').val(data.descricao);
-					$('#estado').val(data.estado);
+					$('#itemdoestoque').val(data.itemdoestoque);						
+					$('#quantidade').val(data.quantidade);
 				},
 				function complete(xhr, text) {
 					console.log(xhr.status);
 					console.log(xhr.responseText);
 				}
 			);
-
-			WebApi_GET_LIST_CardapioItemDoCardapio
-			(
-				'?cardapio=' + query.id, 
-				function success(data) {
-					console.log(data);																		
-					for (i=0; i < data.length; i++){
-						AdicionarItem();
-						$('#id' + (i + 1)).val(data[i].id);				
-						$('#itemdocardapio' + (i + 1)).val(data[i].itemdocardapio);
-						$('#preco' + (i + 1)).val(data[i].preco);
-						$('#estado' + (i + 1)).val(data[i].estado);															
-					}												
-				},
-				function complete(xhr, text) {
-					console.log(xhr.status);
-					console.log(xhr.responseText);					
-				}     
-			);
-
 		}
 
 		function EnviarClick()
-		{
+		{	
 
-			if (ValidarCardapio() == false)
+			if (ValidarEstoque() == false)
 				return;
-			
-			WebApi_PUT_Cardapio
+
+			WebApi_PUT_Estoque
 			(
-				$('#id').val(), 
-				{nome : $('#nome').val() , descricao : $('#descricao').val(), estado : $('#estado').val() }, 
-				function success(data) {
+				$('#id').val(),
+				{itemdoestoque : $('#itemdoestoque').val() , quantidade : $('#quantidade').val() },
+				function success(data){
 					console.log(data);
 				},
-				function complete(xhr, text) {
+				function complete(xhr, text){
 					console.log(xhr.status);
 					console.log(xhr.responseText);
 					if (xhr.status == 200){
 						$('#falha').css('display','none');
 						$('#sucesso').css('display','block');
-						$('#sucesso').html("O cardápio foi editado com sucesso! <a href='cardapio_listar.html'>Seguir para a lista de cardápios</a>");
+						$('#sucesso').html("O estoque foi editado com sucesso! <a href='estoque_listar.html'>Seguir para a lista de estoque</a>");
 					}
 					else{
 						$('#sucesso').css('display','none');
@@ -162,7 +127,6 @@
 					}
 				}
 			);
-			CrudCardapioItemDoCardapio(1);
 
 		}
 

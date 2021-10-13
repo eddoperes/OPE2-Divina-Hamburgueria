@@ -14,22 +14,31 @@
 
 		<div class="setecincoporcento">
 
+			<input type="hidden" id="idusuario" value="0">
+
 			<br/>
 			<a href="home.html">Home</a>		
 			<br/>
 
 			<br/>
-			<h1>Listar cardápios</h1>
+			<h1>Listar pedidos de compra</h1>
 			<br/>
 
-			<a href="cardapio_novo.html">Novo</a>
+			<a href="pedidodecompra_novo.html">Novo</a>
 			<br/>
 			<br/>
 
 			<div class="borderumpixelpaddingvintepixel">
 				<div class="mb-3">
-					<label for="nome" class="form-label">Nome</label>
-					<input id="nome" class="form-control" type='text' value='' />
+					<label for="estado" class="form-label">Estado</label>
+					<select id="estado" class="form-control">
+						<option value="">Qualquer</option>
+                        <option value="1">Cotacao</option>
+						<option value="2">Emitido</option>
+						<option value="3">Cancelado</option>
+						<option value="4">Entregue</option>
+						<option value="5">Estocado</option>
+					</select>
 				</div>
 
 				<div class="col-auto">
@@ -46,10 +55,10 @@
 
 	<script>
 
-		$(document).ready(function() {					
+		$(document).ready(function() {
 			if (CheckLogin() == false)
-				return;							
-		});		
+				return; 				
+		});	
 
 		function CheckLogin(){
 			var idusuario = getLoggedUserId();
@@ -68,9 +77,9 @@
 		function Busca()
 		{
 
-			WebApi_GET_LIST_Cardapio
+			WebApi_GET_LIST_PedidoDeCompra
 			(
-				'?nome=' + $('#nome').val(), 
+				'?estado=' + $('#estado').val(), 
 				function success(data) {			
 					console.log(data);			
 					var textData = '<table class="table">';
@@ -82,11 +91,7 @@
 					textData += '</th>';
 
 					textData += '<th>';
-					textData += 'Nome';
-					textData += '</th>';
-
-					textData += '<th>';
-					textData += 'Descricao';
+					textData += 'Observacao';
 					textData += '</th>';
 
 					textData += '<th>';
@@ -112,26 +117,31 @@
 						textData += '</td>';
 
 						textData += '<td>';
-						textData += data[i].nome;
-						textData += '</td>';
-
-						textData += '<td>';
-						textData += data[i].descricao;
+						if (data[i].observacao == null)
+							textData += '-- em branco --';
+						else
+							textData += data[i].observacao;
 						textData += '</td>';
 
 						textData += '<td>';
 						if (data[i].estado == 1)
-							textData += 'Ativo';
+							textData += 'Cotacao';
+						else if (data[i].estado == 2)
+							textData += 'Emitido';
+						else if (data[i].estado == 3)
+							textData += 'Cancelado';
+						else if (data[i].estado == 4)
+							textData += 'Entregue';						
 						else
-							textData += 'Inativo';
+							textData += 'Estocado';
 						textData += '</td>';
 
 						textData += '<td>';
-						textData += '<a href="cardapio_editar.html?id=' + data[i].id + '">Editar</a>';
+						textData += '<a href="pedidodecompra_editar.html?id=' + data[i].id + '">Editar</a>';
 						textData += '</td>';
 
 						textData += '<td>';
-						textData += '<a href="cardapio_excluir.html?id=' + data[i].id + '">Excluir</a>';
+						textData += '<a href="pedidodecompra_excluir.html?id=' + data[i].id + '">Excluir</a>';
 						textData += '</td>';
 
 						textData += '</tr>';
@@ -142,7 +152,7 @@
 				function complete(xhr, text) {
 					console.log(xhr.status);
 					console.log(xhr.responseText);			
-				}
+				}     
 			);
 
 		}

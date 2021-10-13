@@ -5,8 +5,9 @@
 	<script src="jquery/jquery3.6.js"></script>
 	<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
 	<script src="bootstrap/dist/js/bootstrap.js"></script>
-        <link rel="stylesheet" href="css/sistema.css" >
-        <script src="js/sistema.js"></script>
+    <link rel="stylesheet" href="css/sistema.css" >
+    <script src="js/sistema.js"></script>	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
@@ -51,6 +52,29 @@
 function Login()
 {
 
+	WebApi_POST_Login
+	(
+		{email : $('#email').val(), senha : $('#senha').val()}, 
+		function success (data) {
+            console.log(data);
+			doLogin(data['id']);					
+    	}, 
+		function complete(xhr, text) {
+			console.log(xhr.status);
+			console.log(xhr.responseText);
+			if (xhr.status == 200){
+				$('#falha').css('display','none');
+				$('#sucesso').css('display','block');				
+			}
+			else{
+				$('#sucesso').css('display','none');
+				$('#falha').css('display','block');
+				$('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+			}
+		}     
+	)
+
+	/*
 	$.ajax({
     		url: 'http://127.0.0.1:8000/usuario_login/',
     		data: {email : $('#email').val(), senha : $('#senha').val()},
@@ -77,6 +101,7 @@ function Login()
 				}
     		}     
 	});
+	*/
 
 }
 

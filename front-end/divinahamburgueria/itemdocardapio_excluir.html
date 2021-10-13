@@ -7,6 +7,7 @@
 		<script src="bootstrap/dist/js/bootstrap.js"></script>
 		<link rel="stylesheet" href="css/sistema.css" >
 		<script src="js/sistema.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 
 	<body>        
@@ -36,7 +37,7 @@
 
 	<script>
 
-		$(function(){
+		$(document).ready(function() {
 			if (CheckLogin() == false)
 				return;
 			$("#base_ITE").load("itemdocardapio_base_ITE.html",function (){
@@ -81,7 +82,7 @@
 			);
 		}
 
-		function Enviar_Click()
+		function EnviarClick()
 		{			
 			WebApi_DELETE_ItemDoCardapio
 			(

@@ -5,8 +5,8 @@
 		<script src="jquery/jquery3.6.js"></script>
 		<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
 		<script src="bootstrap/dist/js/bootstrap.js"></script>
-		<link rel="stylesheet" href="css/sistema.css" >
-		<script src="js/sistema.js"></script>
+        <link rel="stylesheet" href="css/sistema.css" >
+        <script src="js/sistema.js"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 
@@ -19,17 +19,17 @@
 			<br/>
 
 			<br/>
-			<h1>Listar cardápios</h1>
+			<h1>Listar estoque</h1>
 			<br/>
 
-			<a href="cardapio_novo.html">Novo</a>
+			<a href="estoque_entrada.html">Entrada</a>
 			<br/>
 			<br/>
 
 			<div class="borderumpixelpaddingvintepixel">
 				<div class="mb-3">
-					<label for="nome" class="form-label">Nome</label>
-					<input id="nome" class="form-control" type='text' value='' />
+					<label for="quantidade" class="form-label">Quantidade abaixo de</label>
+					<input id="quantidade" class="form-control" type='number' value='100' />
 				</div>
 
 				<div class="col-auto">
@@ -45,11 +45,29 @@
 	</body>
 
 	<script>
-
+		
 		$(document).ready(function() {					
 			if (CheckLogin() == false)
-				return;							
+				return;						
+			LoadLists();
 		});		
+
+		var itemdoestoquelist;
+
+		function LoadLists(){
+			WebApi_GET_LIST_ItemDoEstoque
+			(
+				"",
+				function success(data) {	
+					console.log(data);
+					itemdoestoquelist = data;
+				},
+				function complete(xhr, text) {
+					console.log(xhr.status);
+					console.log(xhr.responseText);			
+				}	
+			);	
+		}
 
 		function CheckLogin(){
 			var idusuario = getLoggedUserId();
@@ -68,9 +86,9 @@
 		function Busca()
 		{
 
-			WebApi_GET_LIST_Cardapio
+			WebApi_GET_LIST_Estoque
 			(
-				'?nome=' + $('#nome').val(), 
+				'?quantidade=' + $('#quantidade').val(),
 				function success(data) {			
 					console.log(data);			
 					var textData = '<table class="table">';
@@ -82,17 +100,13 @@
 					textData += '</th>';
 
 					textData += '<th>';
-					textData += 'Nome';
+					textData += 'Item';
 					textData += '</th>';
 
 					textData += '<th>';
-					textData += 'Descricao';
+					textData += 'Qtde';
 					textData += '</th>';
-
-					textData += '<th>';
-					textData += 'Estado';
-					textData += '</th>';
-
+		
 					textData += '<th>';
 					textData += '';
 					textData += '</th>';
@@ -109,29 +123,32 @@
 
 						textData += '<td>';
 						textData += data[i].id;
+						textData += '</td>';								
+						
+						var k;
+						for (k=0; k < itemdoestoquelist.length; k++){
+							if (itemdoestoquelist[k].id ==  data[i].itemdoestoque){
+								textData += '<td>';
+								textData += itemdoestoquelist[k].nome +
+											" " +
+											itemdoestoquelist[k].conteudo +
+											" " +
+											itemdoestoquelist[k].unidade;
+								textData += '</td>';
+								break;
+							}
+						}
+
+						textData += '<td>';
+						textData += data[i].quantidade;
 						textData += '</td>';
 
 						textData += '<td>';
-						textData += data[i].nome;
+						textData += '<a href="estoque_editar.html?id=' + data[i].id + '">Editar</a>';
 						textData += '</td>';
 
 						textData += '<td>';
-						textData += data[i].descricao;
-						textData += '</td>';
-
-						textData += '<td>';
-						if (data[i].estado == 1)
-							textData += 'Ativo';
-						else
-							textData += 'Inativo';
-						textData += '</td>';
-
-						textData += '<td>';
-						textData += '<a href="cardapio_editar.html?id=' + data[i].id + '">Editar</a>';
-						textData += '</td>';
-
-						textData += '<td>';
-						textData += '<a href="cardapio_excluir.html?id=' + data[i].id + '">Excluir</a>';
+						textData += '<a href="estoque_excluir.html?id=' + data[i].id + '">Excluir</a>';
 						textData += '</td>';
 
 						textData += '</tr>';
@@ -142,7 +159,7 @@
 				function complete(xhr, text) {
 					console.log(xhr.status);
 					console.log(xhr.responseText);			
-				}
+				}				
 			);
 
 		}

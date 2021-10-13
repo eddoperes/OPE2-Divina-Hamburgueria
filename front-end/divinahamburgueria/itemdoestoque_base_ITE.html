@@ -13,13 +13,30 @@
 </div>
 
 <div class="mb-3">
+	<label for="conteudo" class="form-label asterisk">Conteúdo</label>
+	<input id="conteudo" class="form-control" type="number" value='' />
+	<label class="invalid-feedback">O conteúdo precisa ser maior que zero</label>
+</div>
+
+<div class="mb-3">
+	<label for="unidade" class="form-label asterisk">Unidade</label>
+	<select id="unidade" class="form-control">
+		  <option value="ml">Mililitro</option>
+		  <option value="l">Litro</option>
+		  <option value="g">Grama</option>
+		  <option value="kg">Kilograma</option>
+		  <option value="un">Unidade</option>
+	</select>
+</div>
+
+<div class="mb-3">
 	<label for="estoqueminimo" class="form-label asterisk">Estoque mínimo</label>
 	<input id="estoqueminimo" class="form-control" type="number" value='' />
 	<label class="invalid-feedback">O estoque mínimo precisa ser maior que zero</label>
 </div>
 
 <div class="col-auto">
-	<input type='button' class="btn btn-primary mb-3" value='Enviar' onclick="Enviar_Click()" />    
+	<input id="enviar" type="button" class="btn btn-primary mb-3" value='Enviar' />    
 </div>
 
 <div id="sucesso" class="alert alert-success displaynone" role="alert" >  			
@@ -30,51 +47,28 @@
 
 <script>
 
-	$(function(){
+	$(document).ready(function() {	
 
-		$("#nome").keyup(function (){
+		$("#nome").on('keyup focusout change', function (){
 			if ($("#nome").val() == "")
 				$("#nome").addClass("is-invalid");
 			else
 				$("#nome").removeClass("is-invalid");
 		}); 
 
-		$("#nome").focusout(function (){
-			if ($("#nome").val() == "")
-				$("#nome").addClass("is-invalid");
-			else
-				$("#nome").removeClass("is-invalid");
-		});
-
-		$("#descricao").keyup(function (){
+		$("#descricao").on('keyup focusout change', function (){
 			if ($("#descricao").val() == "")
 				$("#descricao").addClass("is-invalid");
 			else
 				$("#descricao").removeClass("is-invalid");
 		}); 
 
-		$("#descricao").focusout(function (){
-			if ($("#descricao").val() == "")
-				$("#descricao").addClass("is-invalid");
+		$("#conteudo").on('keyup focusout change', function (){
+			if ($("#conteudo").val() <= 0)
+				$("#conteudo").addClass("is-invalid");
 			else
-				$("#descricao").removeClass("is-invalid");
+				$("#conteudo").removeClass("is-invalid");
 		}); 
-
-		/*
-		$("#estoqueminimo").keyup(function (){
-			if ($("#estoqueminimo").val() <= 0)
-				$("#estoqueminimo").addClass("is-invalid");
-			else
-				$("#estoqueminimo").removeClass("is-invalid");
-		}); 
-
-		$("#estoqueminimo").focusout(function (){
-			if ($("#estoqueminimo").val() <= 0)
-				$("#estoqueminimo").addClass("is-invalid");
-			else
-				$("#estoqueminimo").removeClass("is-invalid");
-		});
-		*/
 
 		$("#estoqueminimo").on('keyup focusout change', function (){
 			if ($("#estoqueminimo").val() <= 0)
@@ -83,6 +77,14 @@
 				$("#estoqueminimo").removeClass("is-invalid");
 		}); 
 
+		$("#enviar").on(" click ", function (){
+			EnviarClick();
+		});
+
+		$(document).on(" keypress ", function (e){
+			if (e.keyCode == 13);
+				EnviarClick();
+		});
 
 	});
 
@@ -104,12 +106,21 @@
 			$("#descricao").removeClass("is-invalid");
 		}
 
+		if ($("#conteudo").val() <= 0){
+			$("#conteudo").addClass("is-invalid");
+			result = false;
+		}
+		else{
+			$("#conteudo").removeClass("is-invalid");
+		}
+
 		if ($("#estoqueminimo").val() <= 0){
 			$("#estoqueminimo").addClass("is-invalid");
 			result = false;
 		}
-			else
-		$("#estoqueminimo").removeClass("is-invalid");
+		else{
+			$("#estoqueminimo").removeClass("is-invalid");
+		}
 
 		return result;
 

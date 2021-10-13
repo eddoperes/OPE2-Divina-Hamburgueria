@@ -1,5 +1,5 @@
 <div class="col-auto">
-      <input type='button' class="btn btn-primary mb-3" value='Enviar' onclick="Enviar_Click()" />    
+      <input id="enviar" type="button" class="btn btn-primary mb-3" value='Enviar' />    
 </div>
 
 <div id="sucesso" class="alert alert-success displaynone" role="alert" >
@@ -7,3 +7,21 @@
 
 <div id="falha" class="alert alert-danger displaynone" role="alert" >  			
 </div>
+
+
+<script>
+
+      $(document).ready(function() {	
+
+            $("#enviar").on(" click ", function (){
+                  EnviarClick();
+            });
+
+            $(document).on(" keypress ", function (e){
+                  if (e.keyCode == 13);
+                        EnviarClick();
+            });
+
+      });
+
+</script>

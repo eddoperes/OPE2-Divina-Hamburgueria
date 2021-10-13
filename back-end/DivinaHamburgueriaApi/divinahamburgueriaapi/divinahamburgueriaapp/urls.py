@@ -47,4 +47,13 @@ urlpatterns = [
     url(r'^fornecedor_list/$', views.fornecedor_list, name='fornecedor_list'),
     path('fornecedor_detail/<int:pk>', views.fornecedor_detail),
 
+    url(r'^pedidodecompra_list/$', views.pedidodecompra_list, name='pedidodecompra_list'),
+    path('pedidodecompra_detail/<int:pk>', views.pedidodecompra_detail),
+
+    url(r'^pedidodecompraitemdoestoque_list/$', views.pedidodecompraitemdoestoque_list, name='pedidodecompraitemdoestoque_list'),
+    path('pedidodecompraitemdoestoque_detail/<int:pk>', views.pedidodecompraitemdoestoque_detail),
+
+    url(r'^estoque_list/$', views.estoque_list, name='estoque_list'),
+    path('estoque_detail/<int:pk>', views.estoque_detail),
+
 ]

@@ -121,7 +121,7 @@
             var total = 0;	                       
             for (i=0; i <= incrementar_id; i++){
                   //if ($('#preco' + i).is(':visible')){
-                  if ($('#preco' + i).css('display') == 'block'){
+                  if ($('#item' + i).css('display') == 'block'){
                         total += parseFloat($('#preco' + i).val());
                   }                        
             }
@@ -132,7 +132,6 @@
             } else {
                   $("#total").removeClass("is-invalid");
             }          
-
       }
 
       function CrudPedidoDeliveryItemDoCardapio(i)

@@ -7,6 +7,7 @@
 		<script src="bootstrap/dist/js/bootstrap.js"></script>
 		<link rel="stylesheet" href="css/sistema.css" >
 		<script src="js/sistema.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 
 	<body>        
@@ -50,8 +51,7 @@
 
 	<script>
 
-		$(function(){
-
+		$(document).ready(function() {
 			$("#base_PDD").load("pedidodelivery_base_PDD.html"); 
 			$("#base_ITE").load("pedidodelivery_base_ITE.html", function (){
 				$('#adicionar').css('display', 'none');	
@@ -144,6 +144,9 @@
 					$('#estado').val(data.estado);
 					$('#observacao').val(data.observacao);
 					$('#total').val(data.total);
+					$('#pago').val(data.estadopagamento);
+					if (data.estadopagamento == 1)
+						$('#pago').prop('checked', true);
 					LoadCliente(data.cliente);
 					//$('#observacao').prop('disabled', true);
 					//$('#observacao').prop('disabled', false);						
@@ -180,7 +183,7 @@
 
 		}
 
-		function Enviar_Click()
+		function EnviarClick()
 		{		
 
 			if (!$('#base_CLI_CLI').is(':visible')){
@@ -190,7 +193,7 @@
 			WebApi_PUT_PedidoDelivery
 			(
 				$('#id').val(), 
-				{usuario : $('#idusuario').val() , estado : $('#estado').val(), observacao : $('#observacao').val(), total: $('#total').val(), cliente : $('#idcliente').val()}, 
+				{usuario : $('#idusuario').val() , estado : $('#estado').val(), observacao : $('#observacao').val(), total: $('#total').val(), cliente : $('#idcliente').val(), estadopagamento : $('#pago').val()}, 
 				function success(data) {
 					console.log(data);						
 				},

@@ -5,8 +5,9 @@
 		<script src="jquery/jquery3.6.js"></script>
 		<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
 		<script src="bootstrap/dist/js/bootstrap.js"></script>
-			<link rel="stylesheet" href="css/sistema.css" >
-			<script src="js/sistema.js"></script>
+		<link rel="stylesheet" href="css/sistema.css" >
+		<script src="js/sistema.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 
 	<body>     
@@ -53,7 +54,7 @@
 
 	<script>
 
-		$(function(){
+		$(document).ready(function() {
 			if (CheckLogin() == false)
 				return; 				
 		});	
@@ -101,6 +102,10 @@
 					textData += '</th>';
 
 					textData += '<th>';
+					textData += 'Pago';
+					textData += '</th>';
+
+					textData += '<th>';
 					textData += '';
 					textData += '</th>';
 
@@ -138,6 +143,13 @@
 							textData += 'Embalado';
 						else
 							textData += 'Entregue';
+						textData += '</td>';
+
+						textData += '<td>';
+						if (data[i].estadopagamento == 1)
+							textData += 'Sim';
+						else
+							textData += 'Não';
 						textData += '</td>';
 
 						textData += '<td>';
