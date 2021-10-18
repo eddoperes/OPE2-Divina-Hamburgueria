@@ -23,27 +23,11 @@
 </div>
 
 <div class="mb-3">
- 	<label for="senha" class="form-label asterisk">Senha</label>
-  	<input id="senha" class="form-control" type='password' value='' />
-	<label class="invalid-feedback">A senha precisa ser informada</label>
-</div>
-
-<div class="mb-3">
 	<label for="estado" class="form-label asterisk">Estado</label>
   	<select id="estado" class="form-control">
    		<option value="1">Ativo</option>
    		<option value="0">Inativo</option>
   	</select>
-</div>
-
-<div class="col-auto">
-   	<input id="enviar" type='button' class="btn btn-primary mb-3" value='Enviar' />    
-</div>
-
-<div id="sucesso" class="alert alert-success displaynone" role="alert" >	
-</div>
-
-<div id="falha" class="alert alert-danger displaynone" role="alert" >  			
 </div>
 
 <script>
@@ -63,30 +47,14 @@
 			else
 				$("#tipo").removeClass("is-invalid");
 		});
-
+		
 		$("#email").on(" keyup focusout change ",function (){
 			if ($("#email").val() == "")
 				$("#email").addClass("is-invalid");
 			else
 				$("#email").removeClass("is-invalid");
 		}); 
-
-		$("#senha").on(" keyup focusout change ", function (){
-			if ($("#senha").val() == "")
-				$("#senha").addClass("is-invalid");
-			else
-				$("#senha").removeClass("is-invalid");
-		}); 
-
-		$("#enviar").on(" click ", function (){
-			EnviarClick();
-		});
-
-		$(document).on(" keypress ", function (e){
-			if (e.keyCode == 13);
-				EnviarClick();
-		});
-
+			
 	});
 
 	function ValidarUsuario (){
@@ -114,11 +82,22 @@
 			$("#email").removeClass("is-invalid");
 		}
 
-		if ($("#senha").val() == ""){
-			$("#senha").addClass("is-invalid");
-			result = false;
-		}else{
-			$("#senha").removeClass("is-invalid");
+		if ($("#senha") != null){
+			if ($("#senha").val() == ""){
+				$("#senha").addClass("is-invalid");
+				result = false;
+			}else{
+				$("#senha").removeClass("is-invalid");
+			}
+		}
+
+		if ($("#senhadenovo") != null){
+			if ($("#senhadenovo").val() != $("#senha").val()){
+				$("#senhadenovo").addClass("is-invalid");
+				result = false;
+			}else{
+				$("#senhadenovo").removeClass("is-invalid");
+			}
 		}
 
 		return result;

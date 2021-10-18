@@ -80,12 +80,12 @@
 			(
 				'', 
 				function success(data) {			
-					console.log(data);
+					//console.log(data);
 					itemdocardapio_list = data;
 				},
 				function complete(xhr, text) {
 					console.log(xhr.status);
-					console.log(xhr.responseText);			
+					//console.log(xhr.responseText);			
 				}   
 			)
 
@@ -102,13 +102,13 @@
 				WebApi_POST_Cardapio(
 					{nome : $('#nome').val() , descricao : $('#descricao').val(), estado : $('#estado').val() }, 
 					function success(data) {
-						console.log(data);
+						//console.log(data);
 						$('#id').val(data.id);
 						CrudCardapioItemDoCardapio(1);
 					},
 					function complete(xhr, text) {
 						console.log(xhr.status);
-						console.log(xhr.responseText);
+						//console.log(xhr.responseText);
 						if (xhr.status == 201){
 							$('#falha').css('display','none');
 							$('#sucesso').css('display','block');

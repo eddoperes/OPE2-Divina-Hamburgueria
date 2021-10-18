@@ -1,0 +1,203 @@
+<div class="accordion" id="accordionExample">
+	<div class="accordion-item">
+	  <h2 class="accordion-header" id="headingOne">
+		<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+		  Receita
+		</button>
+	  </h2>
+	  <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+		<div class="accordion-body">
+							
+			  <label class="form-label-inline widthtrintacincoporcento heighttrintapixel asterisk">Item</label>
+			  <label class="form-label-inline widthquinzeporcento heighttrintapixel asterisk">Qtde</label>
+			  <label class="form-label-inline widthvinteporcento heighttrintapixel asterisk">Unid</label>
+  
+			  <div id="item_container">
+			  </div>
+  
+			  <input type="button" id="addItem" class="btn btn-link heighttrintapixel" onclick="AdicionarItem()" value='Adicionar Item' />
+							 
+		</div>
+	  </div>
+	</div>  
+  </div>
+  <br/>
+
+<script>
+
+	$(document).ready(function() {	
+	
+	});
+
+	var incrementar_id = 0;
+
+	function AdicionarItem(){
+
+		incrementar_id += 1;
+
+		//alert(incrementar_id);
+
+
+		var local_id = incrementar_id;
+				
+		var textData = $("#base_REC_LIN").html();
+
+		textData = textData.replace('itemN', "item" + local_id); 
+		textData = textData.replace('idN', "id" + local_id); 
+		textData = textData.replace('nomeN', "nome" + local_id); 
+		textData = textData.replace('feedNomeN', "feedNome" + local_id);
+		textData = textData.replace('quantidadeN', "quantidade" + local_id);
+		textData = textData.replace('feedQuantidadeN', "feedQuantidade" + local_id);
+		textData = textData.replace('unidadeN', "unidade" + local_id);
+		textData = textData.replace('feedUnidadeN', "feedUnidade" + local_id);
+		textData = textData.replace('sucessoN', "sucesso" + local_id); 
+		textData = textData.replace('falhaN', "falha" + local_id); 
+		textData = textData.replace('excluirN', "excluir" + local_id); 
+
+		$('#item_container').append(textData);                  
+
+		$('#excluir' + local_id).click(function() {                        
+			$('#item' + local_id).css('display','none');
+			$('#sucesso' + local_id).remove();
+			$('#falha' + local_id).remove();
+		});
+
+		var i;	                       
+		for (i=0; i < _itemdoestoque_receita_list.length; i++){
+			$("#nome" + local_id).append('<option value="' + _itemdoestoque_receita_list[i].nome + '">' + _itemdoestoque_receita_list[i].nome + '</option>');
+		}            
+
+	}
+
+	function LoadReceita(){
+		WebApi_GET_LIST_Receita
+		(
+			"?itemdocardapio=" + $('#id').val(),
+			function sucess(data) {
+				//console.log(data);
+				for (k=0; k < data.length;k++){										
+					AdicionarItem();
+					$('#id' + (k + 1)).val(data[k].id);				
+					$('#nome' + (k + 1)).val(data[k].nome);
+					$('#quantidade' + (k + 1)).val(data[k].quantidade);
+					$('#unidade' + (k + 1)).val(data[k].unidade);												
+				}		
+							
+			},
+			function complete(xhr, text) {
+				console.log(xhr.status);
+				//console.log(xhr.responseText);
+			}
+		);		
+	}
+
+	function CrudReceita(i)
+	{	
+
+		if (i > incrementar_id)
+			return;
+
+		//if ($('#item' + i).is(':visible'))
+		if ($('#item' + i).css('display') == 'block')
+		{			
+
+			if($('#id' + i).val() == '0'){			
+				
+				WebApi_POST_Receita
+				(
+					{
+						itemdocardapio : $('#id').val(), nome : $('#nome' + i).val(), 
+						quantidade : $('#quantidade'+ i).val(), unidade : $('#unidade' + i).val() 
+					}, 
+					function success(data) {
+						//console.log(data);
+						$('#id' + i).val(data.id);
+						CrudReceita(i + 1);
+					},
+					function complete(xhr, text) {
+						console.log(xhr.status);
+						//console.log(xhr.responseText);
+						if (xhr.status == 201){
+							$('#falha' + i).css('display','none');
+							$('#sucesso' + i).css('display','block');
+							$('#sucesso' + i).html("O item foi criado com sucesso!");
+						}
+						else{
+							$('#sucesso' + i).css('display','none');
+							$('#falha' + i).css('display','block');
+							$('#falha' + i).text("Ocorreu uma falha: " + xhr.responseText);
+						}					
+					}     
+				);
+
+			}
+			else
+			{
+			
+				WebApi_PUT_Receita
+				(
+					$('#id' + i).val(), 
+					{
+						itemdocardapio : $('#id').val(), nome : $('#nome' + i).val(), 
+						quantidade : $('#quantidade'+ i).val(), unidade : $('#unidade' + i).val() 
+					}, 
+					function success(data) {
+						//console.log(data);					
+						CrudReceita(i + 1);
+					},
+					function complete(xhr, text) {
+						console.log(xhr.status);
+						//console.log(xhr.responseText);
+						if (xhr.status == 200){
+							$('#falha' + i).css('display','none');
+							$('#sucesso' + i).css('display','block');
+							$('#sucesso' + i).html("O item foi editado com sucesso!");
+						}
+						else{
+							$('#sucesso' + i).css('display','none');
+							$('#falha' + i).css('display','block');
+							$('#falha' + i).text("Ocorreu uma falha: " + xhr.responseText);
+						}
+					}
+				);
+
+			}
+		}
+		else
+		{
+				
+			if($('#id' + i).val() != '0'){
+
+				WebApi_DELETE_Receita
+				(
+					$('#id' + i).val(), 
+					function success(data) {
+						//console.log(data);
+						CrudReceita(i + 1);
+					},
+					function complete(xhr, text) {
+						console.log(xhr.status);
+						//console.log(xhr.responseText);
+						if (xhr.status == 204){
+							$('#falha' + i).css('display','none');
+							$('#sucesso' + i).css('display','block');	                                          
+						}
+						else{
+							$('#sucesso' + i).css('display','none');
+							$('#falha' + i).css('display','block');
+							$('#falha' + i).text("Ocorreu uma falha: " + xhr.responseText);
+						}
+					} 
+				);                     
+
+			}
+			else
+			{
+				CrudReceita(i + 1);
+			}
+
+		}
+
+	}
+	
+</script>

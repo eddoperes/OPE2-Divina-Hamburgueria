@@ -1,0 +1,105 @@
+<input type="hidden" id="idRevenda" value="0">
+
+<div class="mb-3">
+	<label for="itemdoestoque" class="form-label asterisk">Item do estoque para revenda</label>
+  	<select id="itemdoestoque" class="form-control">
+  	</select>
+</div>
+
+<div id="sucessoRevenda" class="alert alert-success displaynone" role="alert" >  			
+</div>
+
+<div id="falhaRevenda" class="alert alert-danger displaynone" role="alert" >  			
+</div>
+
+<script>
+
+	$(document).ready(function() {	
+	
+		if ($('#itemdoestoque').children('option').length == 0) {
+
+			for (i=0; i < _itemdoestoque_revenda_list.length; i++)
+			{				
+				$("#itemdoestoque").append('<option value="' + _itemdoestoque_revenda_list[i].id + '">' + 
+												_itemdoestoque_revenda_list[i].nome + " " +
+												_itemdoestoque_revenda_list[i].marca + " " +
+												_itemdoestoque_revenda_list[i].conteudo + " " +
+												_itemdoestoque_revenda_list[i].unidade + 
+											'</option>');
+			}		
+
+		}
+								
+	});
+	
+	function LoadRevenda(){
+		WebApi_GET_LIST_Revenda
+		(
+			"?itemdocardapio = " + $('#id').val(),
+			function sucess(data) {
+				//console.log(data);
+				$('#idRevenda').val(data[0].id);
+				$('#itemdoestoque').val(data[0].itemdoestoque);				
+			},
+			function complete(xhr, text) {
+				console.log(xhr.status);
+				//console.log(xhr.responseText);
+			}
+		);		
+	}
+
+	function CrudRevenda()
+	{		
+		if ($('#idRevenda').val() == 0)
+		{
+			WebApi_POST_Revenda
+			(
+				{itemdocardapio : $('#id').val() , itemdoestoque : $('#itemdoestoque').val()},
+				function success(data){
+					//console.log(data);
+					$('#idRevenda').val(data.id);
+				},
+				function complete(xhr, text){
+					console.log(xhr.status);
+					//console.log(xhr.responseText);
+					if (xhr.status == 201){
+						$('#falhaRevenda').css('display','none');
+						$('#sucessoRevenda').css('display','block');
+						$('#sucessoRevenda').html("O item de revenda foi criado com sucesso!");			
+					}
+					else{
+						$('#sucessoRevenda').css('display','none');
+						$('#falhaRevenda').css('display','block');
+						$('#falhaRevenda').text("Ocorreu uma falha: " + xhr.responseText);
+					}
+				}
+			);
+		}
+		else
+		{
+			WebApi_PUT_Revenda
+			(
+				$('#idRevenda').val(),
+				{itemdocardapio :$('#id').val() , itemdoestoque : $('#itemdoestoque').val()},
+				function success(data){
+					//console.log(data);								
+				},
+				function complete(xhr, text){
+					console.log(xhr.status);
+					//console.log(xhr.responseText);
+					if (xhr.status == 200){
+						$('#falhaRevenda').css('display','none');
+						$('#sucessoRevenda').css('display','block');
+						$('#sucessoRevenda').html("O item de revenda foi editado com sucesso!");			
+					}
+					else{
+						$('#sucessoRevenda').css('display','none');
+						$('#falhaRevenda').css('display','block');
+						$('#falhaRevenda').text("Ocorreu uma falha: " + xhr.responseText);
+					}
+				}
+			);
+		}
+	}
+
+</script>

@@ -26,22 +26,31 @@ function setCookie(name,value,days) {
         date.setTime(date.getTime() + (days*24*60*60*1000));
         expires = "; expires=" + date.toUTCString();
     }
-    document.cookie = name + "=" + (value || "")  + expires + "; path=/" + ";secure";
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/" //+ ";secure";    
 }
 
 function getCookie(name) {
     var nameEQ = name + "=";
     var ca = document.cookie.split(';');
-    for(var i=0;i < ca.length;i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    for(var i=0;i < ca.length;i++) {        
+       var c = ca[i];
+       while (c.charAt(0)==' ') c = c.substring(1,c.length);
+       if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
     }
     return null;
 }
 
+function doLogin(userId){
+    setCookie("user_id_", userId, 1); //set "user_id" cookie, expires in 1 days
+}
+
+function doLogout(){
+    var userId = getCookie("user_id_");
+    setCookie("user_id_", userId, -1); //cancel "user_id" cookie, using -1 days
+}
+
 function getLoggedUserId(){
-    var userId = getCookie("user_id");			
+    var userId = getCookie("user_id_");			
     if (userId == null)			
         return -1; 			
     else
@@ -147,7 +156,7 @@ function ValidarCNPJ(cnpj) {
 // Acesso web api - inicio
 //-------------------------------------------------------------------------------------------
 
-var urlWebApi = 'http://127.0.0.1:8000';
+var urlWebApi = 'http://192.168.0.26:8000';
 
 // Generico
 //-------------------------------------------------------------------------------------------
@@ -205,6 +214,21 @@ function WebApi_GET_LIST_Generico(filter, callbackSucess, callbackComplete, url)
         success: callbackSucess,
         complete: callbackComplete     
     });
+}
+
+// Login
+//-------------------------------------------------------------------------------------------
+
+function WebApi_POST_Login(data, callbackSucess, callbackComplete){
+    WebApi_POST_Generico(data, callbackSucess, callbackComplete, 'usuario_login');
+}
+
+function WebApi_POST_EnviarToken(data, callbackSucess, callbackComplete){
+    WebApi_POST_Generico(data, callbackSucess, callbackComplete, 'usuario_enviar_token');
+}
+
+function WebApi_POST_AlterarSenha(data, callbackSucess, callbackComplete){
+    WebApi_POST_Generico(data, callbackSucess, callbackComplete, 'usuario_alterar_senha');
 }
 
 // Usuario
@@ -504,6 +528,121 @@ function WebApi_GET_Fornecedor(id, callbackSucess, callbackComplete){
 
 function WebApi_GET_LIST_Fornecedor(filter, callbackSucess, callbackComplete){
     WebApi_GET_LIST_Generico(filter, callbackSucess, callbackComplete, 'fornecedor_list');   
+}
+
+// Pedido De Compra
+//-------------------------------------------------------------------------------------------
+
+function WebApi_POST_PedidoDeCompra(data, callbackSucess, callbackComplete){
+    WebApi_POST_Generico(data, callbackSucess, callbackComplete, 'pedidodecompra_list'); 
+}
+
+function WebApi_PUT_PedidoDeCompra(id, data, callbackSucess, callbackComplete){
+    WebApi_PUT_Generico(id, data, callbackSucess, callbackComplete, 'pedidodecompra_detail');   
+}
+
+function WebApi_DELETE_PedidoDeCompra(id, callbackSucess, callbackComplete){
+    WebApi_DELETE_Generico(id, callbackSucess, callbackComplete, 'pedidodecompra_detail');    
+}
+
+function WebApi_GET_PedidoDeCompra(id, callbackSucess, callbackComplete){
+    WebApi_GET_Generico(id, callbackSucess, callbackComplete, 'pedidodecompra_detail');      
+}
+
+function WebApi_GET_LIST_PedidoDeCompra(filter, callbackSucess, callbackComplete){
+    WebApi_GET_LIST_Generico(filter, callbackSucess, callbackComplete, 'pedidodecompra_list'); 
+}
+
+// Pedido de Compra Item do Estoque
+//-------------------------------------------------------------------------------------------
+
+function WebApi_POST_PedidoDeCompraItemDoEstoque(data, callbackSucess, callbackComplete){
+    WebApi_POST_Generico(data, callbackSucess, callbackComplete, 'pedidodecompraitemdoestoque_list');    
+}
+
+function WebApi_PUT_PedidoDeCompraItemDoEstoque(id, data, callbackSucess, callbackComplete){
+    WebApi_PUT_Generico(id, data, callbackSucess, callbackComplete, 'pedidodecompraitemdoestoque_detail');
+}
+
+function WebApi_DELETE_PedidoDeCompraItemDoEstoque(id, callbackSucess, callbackComplete){
+    WebApi_DELETE_Generico(id, callbackSucess, callbackComplete, 'pedidodecompraitemdoestoque_detail');    
+}
+
+function WebApi_GET_PedidoDeCompraItemDoEstoque(id, callbackSucess, callbackComplete){
+    WebApi_GET_Generico(id, callbackSucess, callbackComplete, 'pedidodecompraitemdoestoque_detail');       
+}
+
+function WebApi_GET_LIST_PedidoDeCompraItemDoEstoque(filter, callbackSucess, callbackComplete){
+    WebApi_GET_LIST_Generico(filter, callbackSucess, callbackComplete, 'pedidodecompraitemdoestoque_list');
+}
+
+// Estoque
+//-------------------------------------------------------------------------------------------
+
+function WebApi_POST_Estoque(data, callbackSucess, callbackComplete){
+    WebApi_POST_Generico(data, callbackSucess, callbackComplete, 'estoque_list');    
+}
+
+function WebApi_PUT_Estoque(id, data, callbackSucess, callbackComplete){
+    WebApi_PUT_Generico(id, data, callbackSucess, callbackComplete, 'estoque_detail');
+}
+
+function WebApi_DELETE_Estoque(id, callbackSucess, callbackComplete){
+    WebApi_DELETE_Generico(id, callbackSucess, callbackComplete, 'estoque_detail');    
+}
+
+function WebApi_GET_Estoque(id, callbackSucess, callbackComplete){
+    WebApi_GET_Generico(id, callbackSucess, callbackComplete, 'estoque_detail');       
+}
+
+function WebApi_GET_LIST_Estoque(filter, callbackSucess, callbackComplete){
+    WebApi_GET_LIST_Generico(filter, callbackSucess, callbackComplete, 'estoque_list');
+}
+
+// Revenda
+//-------------------------------------------------------------------------------------------
+
+function WebApi_POST_Revenda(data, callbackSucess, callbackComplete){
+    WebApi_POST_Generico(data, callbackSucess, callbackComplete, 'revenda_list');    
+}
+
+function WebApi_PUT_Revenda(id, data, callbackSucess, callbackComplete){
+    WebApi_PUT_Generico(id, data, callbackSucess, callbackComplete, 'revenda_detail');
+}
+
+function WebApi_DELETE_Revenda(id, callbackSucess, callbackComplete){
+    WebApi_DELETE_Generico(id, callbackSucess, callbackComplete, 'revenda_detail');    
+}
+
+function WebApi_GET_Revenda(id, callbackSucess, callbackComplete){
+    WebApi_GET_Generico(id, callbackSucess, callbackComplete, 'revenda_detail');       
+}
+
+function WebApi_GET_LIST_Revenda(filter, callbackSucess, callbackComplete){
+    WebApi_GET_LIST_Generico(filter, callbackSucess, callbackComplete, 'revenda_list');
+}
+
+// Receita
+//-------------------------------------------------------------------------------------------
+
+function WebApi_POST_Receita(data, callbackSucess, callbackComplete){
+    WebApi_POST_Generico(data, callbackSucess, callbackComplete, 'receita_list');    
+}
+
+function WebApi_PUT_Receita(id, data, callbackSucess, callbackComplete){
+    WebApi_PUT_Generico(id, data, callbackSucess, callbackComplete, 'receita_detail');
+}
+
+function WebApi_DELETE_Receita(id, callbackSucess, callbackComplete){
+    WebApi_DELETE_Generico(id, callbackSucess, callbackComplete, 'receita_detail');    
+}
+
+function WebApi_GET_Receita(id, callbackSucess, callbackComplete){
+    WebApi_GET_Generico(id, callbackSucess, callbackComplete, 'receita_detail');       
+}
+
+function WebApi_GET_LIST_Receita(filter, callbackSucess, callbackComplete){
+    WebApi_GET_LIST_Generico(filter, callbackSucess, callbackComplete, 'receita_list');
 }
 
 //-------------------------------------------------------------------------------------------

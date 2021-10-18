@@ -67,14 +67,17 @@
 
 			WebApi_POST_ItemDoEstoque
 			(
-				{nome : $('#nome').val() , descricao : $('#descricao').val(), estoqueminimo : $('#estoqueminimo').val()
-				,conteudo : $('#conteudo').val(),  unidade : $('#unidade').val()},
+				{
+					nome : $('#nome').val(), marca : $('#marca').val(), 
+					tipo : $('#tipo').val(), conteudo : $('#conteudo').val(),  
+					unidade : $('#unidade').val()
+				},
 				function success(data){
-					console.log(data);
+					//console.log(data);
 				},
 				function complete(xhr, text){
 					console.log(xhr.status);
-					console.log(xhr.responseText);
+					//console.log(xhr.responseText);
 					if (xhr.status == 201){
 						$('#falha').css('display','none');
 						$('#sucesso').css('display','block');

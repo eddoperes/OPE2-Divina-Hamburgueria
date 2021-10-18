@@ -86,6 +86,8 @@
                   var precototal = parseFloat($("#precounitario"  + local_id).val() * $("#quantidade"  + local_id).val()).toFixed(2);
                   $("#precototal"  + local_id).val(precototal);
 
+                  PrecoChange();
+
             });
 
             $('#quantidade' + local_id).on(' change keyup focusout ', function() {
@@ -129,7 +131,7 @@
 
             var i;	                       
             for (i=0; i < itemdoestoque_list.length; i++){
-                  $("#itemdoestoque" + local_id).append('<option value="' + itemdoestoque_list[i].id + '">' + itemdoestoque_list[i].nome + ' ' +  itemdoestoque_list[i].conteudo + ' ' +   itemdoestoque_list[i].unidade + '</option>');
+                  $("#itemdoestoque" + local_id).append('<option value="' + itemdoestoque_list[i].id + '">' + itemdoestoque_list[i].nome + ' ' + itemdoestoque_list[i].marca + ' ' +  itemdoestoque_list[i].conteudo + ' ' +   itemdoestoque_list[i].unidade + '</option>');
             }            
 
             $('#itemdoestoque' + local_id).val(0);

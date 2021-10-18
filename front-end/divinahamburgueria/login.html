@@ -23,17 +23,25 @@
 		<br/>
 
 		<div class="mb-3">
-  			<label for="email" class="form-label">Email</label>
+  			<label for="email" class="form-label asterisk">Email</label>
   			<input id="email" class="form-control" type='text' value='' />
+			<label class="invalid-feedback">O email precisa ser informado</label>
 		</div>
 
 		<div class="mb-3">
-  			<label for="senha" class="form-label">Senha</label>
+  			<label for="senha" class="form-label asterisk">Senha</label>
   			<input id="senha" class="form-control" type='password' value='' />
+			<label class="invalid-feedback">A senha precisa ser informada</label>
 		</div>
 
-		<div class="col-auto">
-    			<input type='button' class="btn btn-primary mb-3" value='Enviar' onclick="Login()" />    
+		<div>
+			<div class="col-auto">
+    			<input id="enviar" type="button" class="btn btn-primary mb-3 floatleft" value='Enviar' />    
+			</div>
+
+			<a href="login_esqueci.html" class="floatright" >Esqueci a senha</a>
+
+			<div class="clearboth"></div>
 		</div>
 
 		<div id="sucesso" class="alert alert-success displaynone" role="alert" >
@@ -49,61 +57,85 @@
 
 <script>
 
-function Login()
-{
 
-	WebApi_POST_Login
-	(
-		{email : $('#email').val(), senha : $('#senha').val()}, 
-		function success (data) {
-            console.log(data);
-			doLogin(data['id']);					
-    	}, 
-		function complete(xhr, text) {
-			console.log(xhr.status);
-			console.log(xhr.responseText);
-			if (xhr.status == 200){
-				$('#falha').css('display','none');
-				$('#sucesso').css('display','block');				
-			}
-			else{
-				$('#sucesso').css('display','none');
-				$('#falha').css('display','block');
-				$('#falha').text("Ocorreu uma falha: " + xhr.responseText);
-			}
-		}     
-	)
+	$(document).ready(function() {	
 
-	/*
-	$.ajax({
-    		url: 'http://127.0.0.1:8000/usuario_login/',
-    		data: {email : $('#email').val(), senha : $('#senha').val()},
-    		type: 'POST',
-    		crossDomain: true,
-    		success: function(data) {
-            	console.log(data);
-				setCookie("user_id", data['id'], 1); //set "user_id" cookie, expires in 1 days					
-    		},
-    		complete: function(xhr, text) {
-        		console.log(xhr.status);
+		$("#email").on(" keyup focusout change ", function (){
+			if ($("#email").val() == "")
+				$("#email").addClass("is-invalid");
+			else
+				$("#email").removeClass("is-invalid");
+		}); 
+
+		$("#senha").on(" keyup focusout change ", function (){
+			if ($("#senha").val() == "")
+				$("#senha").addClass("is-invalid");
+			else
+				$("#senha").removeClass("is-invalid");
+		});
+
+		$("#enviar").on(" click ", function (){
+			EnviarClick();
+		});
+
+		$(document).on(" keypress ", function (e){			
+			if (e.keyCode == 13)
+				EnviarClick();
+		});
+
+	});
+
+	function ValidarLogin (){
+
+		var result = true;
+
+		if ($("#email").val() == ""){
+			$("#email").addClass("is-invalid");
+			result = false;
+		} else {
+			$("#email").removeClass("is-invalid");
+		}
+
+		if ($("#senha").val() == ""){
+			$("#senha").addClass("is-invalid");
+			result = false;
+		} else {
+			$("#senha").removeClass("is-invalid");
+		}
+
+		return result;
+
+	}
+
+	function EnviarClick()
+	{
+
+		if (ValidarLogin() == false)
+			return;
+
+		WebApi_POST_Login
+		(
+			{email : $('#email').val(), senha : $('#senha').val()}, 
+			function success (data) {
+				console.log(data);
+				doLogin(data['id']);					
+			}, 
+			function complete(xhr, text) {
+				console.log(xhr.status);
 				console.log(xhr.responseText);
 				if (xhr.status == 200){
 					$('#falha').css('display','none');
-					$('#sucesso').css('display','block');
-					//setTimeout(function(){ 							
-					//			window.location.href = window.location.href.replace('login','home'); 
-					//		     }, 1000);				
+					$('#sucesso').css('display','block');				
 				}
 				else{
 					$('#sucesso').css('display','none');
 					$('#falha').css('display','block');
 					$('#falha').text("Ocorreu uma falha: " + xhr.responseText);
 				}
-    		}     
-	});
-	*/
+			}     
+		)
 
-}
+	}
 
 </script>
 

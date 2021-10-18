@@ -7,9 +7,17 @@
 </div>
 
 <div class="mb-3">
-	<label for="descricao" class="form-label asterisk">Descrição</label>
-	<textarea id="descricao" class="form-control" rows="3" value="" ></textarea>
-	<label class="invalid-feedback">A descrição precisa ser informada</label>
+	<label for="marca" class="form-label asterisk">Marca</label>
+	<input id="marca" class="form-control" type="text" value='' />
+	<label class="invalid-feedback">A marca precisa ser informada</label>
+</div>
+
+<div class="mb-3">
+	<label for="tipo" class="form-label asterisk">Tipo</label>
+	<select id="tipo" class="form-control">
+		<option value="1">Receita</option>
+		<option value="2">Revenda</option>
+    </select>
 </div>
 
 <div class="mb-3">
@@ -27,12 +35,6 @@
 		  <option value="kg">Kilograma</option>
 		  <option value="un">Unidade</option>
 	</select>
-</div>
-
-<div class="mb-3">
-	<label for="estoqueminimo" class="form-label asterisk">Estoque mínimo</label>
-	<input id="estoqueminimo" class="form-control" type="number" value='' />
-	<label class="invalid-feedback">O estoque mínimo precisa ser maior que zero</label>
 </div>
 
 <div class="col-auto">
@@ -56,11 +58,11 @@
 				$("#nome").removeClass("is-invalid");
 		}); 
 
-		$("#descricao").on('keyup focusout change', function (){
-			if ($("#descricao").val() == "")
-				$("#descricao").addClass("is-invalid");
+		$("#marca").on('keyup focusout change', function (){
+			if ($("#marca").val() == "")
+				$("#marca").addClass("is-invalid");
 			else
-				$("#descricao").removeClass("is-invalid");
+				$("#marca").removeClass("is-invalid");
 		}); 
 
 		$("#conteudo").on('keyup focusout change', function (){
@@ -70,19 +72,12 @@
 				$("#conteudo").removeClass("is-invalid");
 		}); 
 
-		$("#estoqueminimo").on('keyup focusout change', function (){
-			if ($("#estoqueminimo").val() <= 0)
-				$("#estoqueminimo").addClass("is-invalid");
-			else
-				$("#estoqueminimo").removeClass("is-invalid");
-		}); 
-
 		$("#enviar").on(" click ", function (){
 			EnviarClick();
 		});
 
 		$(document).on(" keypress ", function (e){
-			if (e.keyCode == 13);
+			if (e.keyCode == 13)
 				EnviarClick();
 		});
 
@@ -99,11 +94,12 @@
 			$("#nome").removeClass("is-invalid");
 		}
 
-		if ($("#descricao").val() == ""){
-			$("#descricao").addClass("is-invalid");
+		if ($("#marca").val() == ""){
+			$("#marca").addClass("is-invalid");
 			result = false;
-		} else {
-			$("#descricao").removeClass("is-invalid");
+		}
+		else{
+			$("#marca").removeClass("is-invalid");
 		}
 
 		if ($("#conteudo").val() <= 0){
@@ -112,14 +108,6 @@
 		}
 		else{
 			$("#conteudo").removeClass("is-invalid");
-		}
-
-		if ($("#estoqueminimo").val() <= 0){
-			$("#estoqueminimo").addClass("is-invalid");
-			result = false;
-		}
-		else{
-			$("#estoqueminimo").removeClass("is-invalid");
 		}
 
 		return result;

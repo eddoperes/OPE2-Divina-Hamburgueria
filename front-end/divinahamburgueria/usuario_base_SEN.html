@@ -1,0 +1,33 @@
+<div class="mb-3">
+ 	<label id="senhalabel" for="senha" class="form-label asterisk">Senha</label>
+  	<input id="senha" class="form-control" type='password' value='' />
+	<label class="invalid-feedback">A senha precisa ser informada</label>
+</div>
+
+<div class="mb-3">
+	<label id="senhadenovolabel" for="senhadenovo" class="form-label asterisk">Senha de novo</label>
+	<input id="senhadenovo" class="form-control" type='password' value='' />
+   <label class="invalid-feedback">A senha informada de novo precisa ser igual a senha</label>
+</div>
+
+<script>
+
+	$(document).ready(function() {	
+		
+		$("#senha").on(" keyup focusout change ", function (){
+			if ($("#senha").val() == "")
+				$("#senha").addClass("is-invalid");
+			else
+				$("#senha").removeClass("is-invalid");
+		}); 
+		
+		$("#senhadenovo").on(" keyup focusout change ", function (){
+			if ($("#senhadenovo").val() != $("#senha").val())
+				$("#senhadenovo").addClass("is-invalid");
+			else
+				$("#senhadenovo").removeClass("is-invalid");		
+		}); 		
+
+	});
+	
+</script>

@@ -1,0 +1,103 @@
+<div id="itemN">
+
+    <input type="hidden" id="idN" value="0">
+
+    <div class="widthtrintacincoporcento floatleft paddingdoispixel">
+        <select id="nomeN" class="form-control heighttrintapixel">
+        </select>
+        <label id="feedNomeN" class="invalid-feedback">O item precisa ser informado</label>        
+    </div>    
+
+    <div class="widthquinzeporcento floatleft paddingdoispixel">
+        <input id="quantidadeN" class="form-control heighttrintapixel text-center" type="number" min="0" value="0" step="1.0"/>
+        <label id="feedQuantidadeN" class="invalid-feedback">A quantidade precisa ser informada</label>
+    </div>
+
+    <div class="widthvinteporcento floatleft paddingdoispixel">
+        <select id="unidadeN" class="form-control heighttrintapixel">
+            <option value="gr">Gramas</option>
+   		    <option value="ml">Mililitros</option>
+            <option value="un">Unidade</option>
+        </select>        
+        <label id="feedUnidadeN" class="invalid-feedback">A unidade precisa ser informada</label>
+    </div>
+
+    <div class="widthdezporcento floatleft paddingdoispixel">
+        <input type="button" id="excluirN" class="btn btn-link heighttrintapixel paddingtopzeropixel" value="Retirar" />
+    </div>
+
+    <div class="clearboth">        
+    </div>
+
+</div>
+
+<div id="sucessoN" class="alert alert-success displaynone" role="alert" >
+</div>
+
+<div id="falhaN" class="alert alert-danger displaynone" role="alert" >
+</div>
+
+<script>
+
+    /*
+
+    function ValidarItemEstoque(){
+
+        var result = true;
+
+        var total = 0;
+
+        var i;
+        for(i=0; i <= incrementar_id; i++){
+
+            if ($('#item' + i).css('display') == 'block')
+            {
+
+                if ($("#itemdoestoque"  + i).val() == null){
+                    $("#itemdoestoque"  + i).addClass("is-invalid");
+                    result = false;
+                } else {
+                    $("#itemdoestoque"  + i).removeClass("is-invalid");
+                }
+
+                if ($("#precounitario"  + i).val() <= 0){
+                    $("#precounitario"  + i).addClass("is-invalid");
+                    result = false;
+                } else {
+                    $("#preco"  + i).removeClass("is-invalid");
+                }
+
+                if ($("#quantidade"  + i).val() <= 0){
+                    $("#quantidade"  + i).addClass("is-invalid");
+                    result = false;
+                } else {
+                    $("#quantidade"  + i).removeClass("is-invalid");
+                }
+
+                if ($("#precototal"  + i).val() <= 0){
+                    $("#precototal"  + i).addClass("is-invalid");
+                    result = false;
+                } else {
+                    $("#precototal"  + i).removeClass("is-invalid");
+                }
+
+                total += parseFloat($('#precototal' + i).val());
+            
+            }
+        
+        }
+
+        if (total <= 0){
+            $("#total").addClass("is-invalid");
+            result = false;
+        } else {
+            $("#total").removeClass("is-invalid");
+        }
+
+        return result;
+
+    }
+
+    */
+
+</script>

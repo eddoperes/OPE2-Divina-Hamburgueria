@@ -34,6 +34,12 @@
 		<div id="base_USU" class="setecincoporcento">				
 		</div>
 
+		<div id="base_SEN" class="setecincoporcento">				
+		</div>
+
+		<div id="base_ENV" class="setecincoporcento">				
+		</div>
+
 	</body>
 
 	<script>
@@ -41,7 +47,9 @@
 		$(document).ready(function() {
 			if (CheckLogin() == false)
 				return;
-			$("#base_USU").load("usuario_base_USU.html"); 			
+			$("#base_USU").load("usuario_base_USU.html"); 
+			$("#base_SEN").load("usuario_base_SEN.html"); 
+			$("#base_ENV").load("usuario_base_ENV.html"); 			
 		});
 
 		function CheckLogin(){
@@ -67,13 +75,17 @@
 
 			WebApi_POST_Usuario
 			(
-				{nome : $('#nome').val() , tipo : $('#tipo').val(), email : $('#email').val(), senha : $('#senha').val(), token : '', estado : $('#estado').val()},
+				{
+					nome : $('#nome').val(), tipo : $('#tipo').val(), 
+					email : $('#email').val(), senha : $('#senha').val(), 
+					token : '', estado : $('#estado').val()					
+				},
 				function success(data){
-					console.log(data);
+					//console.log(data);
 				},
 				function complete(xhr, text){
 					console.log(xhr.status);
-					console.log(xhr.responseText);
+					//console.log(xhr.responseText);
 					if (xhr.status == 201){
 						$('#falha').css('display','none');
 						$('#sucesso').css('display','block');

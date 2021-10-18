@@ -119,13 +119,13 @@
 			(
 				'', 
 				function success(data) {			
-					console.log(data);
+					//console.log(data);
 					itemdocardapio_list = data;
 					LoadData();
 				},
 				function complete(xhr, text) {
 					console.log(xhr.status);
-					console.log(xhr.responseText);			
+					//console.log(xhr.responseText);			
 				}   
 			)					
 
@@ -139,7 +139,7 @@
 			(
 				query.id, 
 				function success(data) {
-					console.log(data);
+					//console.log(data);
 					$('#id').val(data.id);
 					$('#estado').val(data.estado);
 					$('#observacao').val(data.observacao);
@@ -153,7 +153,7 @@
 				},
 				function complete(xhr, text) {
 					console.log(xhr.status);
-					console.log(xhr.responseText);
+					//console.log(xhr.responseText);
 				} 
 			);
 
@@ -161,7 +161,7 @@
 			(
 				'?pedidodelivery=' + query.id, 
 				function success(data) {
-					console.log(data);		
+					//console.log(data);		
 					for (i=0; i < data.length; i++){
 						AdicionarItem();
 						$('#id' + (i + 1)).val(data[i].id);				
@@ -177,7 +177,7 @@
 				},
 				function complete(xhr, text) {
 					console.log(xhr.status);
-					console.log(xhr.responseText);					
+					//console.log(xhr.responseText);					
 				}     
 			);			
 
@@ -195,11 +195,11 @@
 				$('#id').val(), 
 				{usuario : $('#idusuario').val() , estado : $('#estado').val(), observacao : $('#observacao').val(), total: $('#total').val(), cliente : $('#idcliente').val(), estadopagamento : $('#pago').val()}, 
 				function success(data) {
-					console.log(data);						
+					//console.log(data);						
 				},
 				function complete(xhr, text) {
 					console.log(xhr.status);
-					console.log(xhr.responseText);
+					//console.log(xhr.responseText);
 					if (xhr.status == 200){
 						$('#falha').css('display','none');
 						$('#sucesso').css('display','block');

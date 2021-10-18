@@ -231,7 +231,7 @@
             (
                   id, 
                   function success(data) {			
-                        console.log(data);	                                             
+                        //console.log(data);	                                             
                         $('#idfornecedor').val(data.id);		
                         $('#nome').val(data.nome);
                         $('#cnpj').val(data.cnpj);                       
@@ -263,7 +263,7 @@
                   },
                   function complete(xhr, text) {
                         console.log(xhr.status);
-                        console.log(xhr.responseText);			
+                        //console.log(xhr.responseText);			
                   }
             );
 
@@ -319,12 +319,12 @@
                               endereco : $('#idendereco').val() , telefone : $('#idtelefone').val()
                         }, 
                         function success(data) {
-                              console.log(data);
+                              //console.log(data);
                               $('#idfornecedor').val(data.id);
                         },
                         function complete(xhr, text) {
                               console.log(xhr.status);
-                              console.log(xhr.responseText);
+                              //console.log(xhr.responseText);
                               if (xhr.status == 201){
                                     $('#falha').css('display','none');
                                     $('#sucesso').css('display','block');
@@ -350,11 +350,11 @@
                               endereco : $('#idendereco').val() , telefone : $('#idtelefone').val()
                         }, 
                         function success(data) {
-                              console.log(data);
+                              //console.log(data);
                         },
                         function complete(xhr, text) {
                               console.log(xhr.status);
-                              console.log(xhr.responseText);
+                              //console.log(xhr.responseText);
                               if (xhr.status == 200){
                                     $('#falha').css('display','none');
                                     $('#sucesso').css('display','block');

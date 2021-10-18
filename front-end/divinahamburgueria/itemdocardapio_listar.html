@@ -73,7 +73,7 @@
 		(
 			'?nome=' + $('#nome').val(), 
 			function success(data) {			
-				console.log(data);			
+				//console.log(data);			
 				var textData = '<table class="table">';
 
 				textData += '<tr>';
@@ -86,11 +86,11 @@
 				textData += 'Nome';
 				textData += '</th>';
 
-				textData += '<th>';
+				textData += '<th class="coluna_oculta_cel">';
 				textData += 'Descricao';
 				textData += '</th>';
 
-				textData += '<th>';
+				textData += '<th class="coluna_oculta_cel">';
 				textData += 'Fotografia';
 				textData += '</th>';
 
@@ -116,11 +116,11 @@
 					textData += data[i].nome;
 					textData += '</td>';
 
-					textData += '<td>';
+					textData += '<td class="coluna_oculta_cel">';
 					textData += data[i].descricao;
 					textData += '</td>';
 
-					textData += '<td>';
+					textData += '<td class="coluna_oculta_cel">';
 					textData += data[i].fotografia;
 					textData += '</td>';
 
@@ -139,7 +139,7 @@
 			},
 			function complete(xhr, text) {
 				console.log(xhr.status);
-				console.log(xhr.responseText);			
+				//console.log(xhr.responseText);			
 			}     
 		);
 

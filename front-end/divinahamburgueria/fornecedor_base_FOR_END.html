@@ -68,7 +68,7 @@
             (
                   id, 
                   function success(data) {			
-                        console.log(data);	
+                        //console.log(data);	
                         $('#idendereco').val(data.id);		
                         $('#cep').val(data.cep);
                         $('#logradouro').val(data.logradouro);
@@ -80,7 +80,7 @@
                   },
                   function complete(xhr, text) {
                         console.log(xhr.status);
-                        console.log(xhr.responseText);			
+                        //console.log(xhr.responseText);			
                   }
             );
 
@@ -102,13 +102,13 @@
                                     bairro : $('#bairro').val() , cidade : $('#cidade').val() , uf : $('#uf').val()                  
                               }, 
                               function success(data) {
-                                    console.log(data);
+                                    //console.log(data);
                                     $('#idendereco').val(data.id);
                                     CrudFornecedor();
                               },
                               function complete(xhr, text) {
                                     console.log(xhr.status);
-                                    console.log(xhr.responseText);
+                                    //console.log(xhr.responseText);
                                     if (xhr.status == 201){
                                           $('#falhaendereco').css('display','none');
                                           $('#sucessoendereco').css('display','block');
@@ -135,11 +135,11 @@
                                     bairro : $('#bairro').val() , cidade : $('#cidade').val() , uf : $('#uf').val()                  
                               }, 
                               function success(data) {
-                                    console.log(data);
+                                    //console.log(data);
                               },
                               function complete(xhr, text) {
                                     console.log(xhr.status);
-                                    console.log(xhr.responseText);
+                                    //console.log(xhr.responseText);
                                     if (xhr.status == 200){
                                           $('#falhaendereco').css('display','none');
                                           $('#sucessoendereco').css('display','block');

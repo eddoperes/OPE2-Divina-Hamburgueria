@@ -34,15 +34,37 @@
 		<div id="base_ITE" class="setecincoporcento">
 		</div>
 
+		<div id="base_REC" class="setecincoporcento">
+		</div>
+
+		<div id="base_REC_LIN" class="setecincoporcento displaynone">
+		</div>
+
+		<div id="base_REV" class="setecincoporcento">
+		</div>
+
+		<div id="base_ENV" class="setecincoporcento">
+		</div>
+
 	</body>
 
 	<script>
+
+		var _loadITECompleted = false;
+		var _loadEnvCompleted = false;
 
 		$(document).ready(function() {
 			if (CheckLogin() == false)
 				return;
 			$("#base_ITE").load("itemdocardapio_base_ITE.html",function (){
-				LoadData();
+				_loadITECompleted = true;
+				$("#adicionarRevenda").prop("disabled", true);
+				$("#adicionarReceita").prop("disabled", true);
+				StartLoadLists();
+			});	 
+			$("#base_ENV").load("itemdocardapio_base_ENV.html",function (){
+				_loadEnvCompleted = true;
+				StartLoadLists();
 			});	 				
 		});	
 
@@ -61,21 +83,85 @@
 			}
 		}
 
+		function StartLoadLists(){
+			if (!_loadITECompleted)
+				return;
+			if (!_loadEnvCompleted)
+				return;
+			LoadLists();
+		}
+
+		var _itemdoestoque_revenda_list;
+		var _itemdoestoque_receita_list = [];
+
+		function LoadLists(){
+			WebApi_GET_LIST_ItemDoEstoque
+			(
+				'?tipo=2', 
+				function success(data) {
+					//console.log(data);	
+					_itemdoestoque_revenda_list = data;	
+					StartLoadData();															
+				},
+				function complete(xhr, text) {
+					console.log(xhr.status);
+					//console.log(xhr.responseText);					
+				}     
+			);
+			WebApi_GET_LIST_ItemDoEstoque
+			(
+				'?tipo=1', 
+				function success(data) {
+					//console.log(data);	
+					data = data.sort((a, b) => (a.nome > b.nome) ? 1 : -1);	
+					var i, last;					
+					for (i=0; i<data.length; i++){					
+						if (data[i].nome != last)
+							_itemdoestoque_receita_list.push(data[i]);
+						last = data[i].nome;						
+					}	
+					StartLoadData();									
+				},
+				function complete(xhr, text) {
+					console.log(xhr.status);
+					//console.log(xhr.responseText);					
+				}     
+			);
+		}
+
+		function StartLoadData(){
+			if (_itemdoestoque_revenda_list == null)
+				return;
+			if (_itemdoestoque_receita_list.length == 0)
+				return;
+			LoadData();
+		}
+
 		function LoadData(){
 			var query = queryObj();
 			WebApi_GET_ItemDoCardapio
 			(
 				query.id,
 				function sucess(data) {
-					console.log(data);
+					//console.log(data);
 					$('#id').val(data.id);
 					$('#nome').val(data.nome);
 					$('#descricao').val(data.descricao);
 					$('#fotografia').val(data.fotografia);
+					if (data.tipo == 1){
+						$('#adicionarReceita').val(1);
+						$('#adicionarReceita').prop('checked',true);	
+						AdicionarReceita();					
+					}
+					if (data.tipo == 2){
+						$('#adicionarRevenda').val(1);
+						$('#adicionarRevenda').prop('checked',true);
+						AdicionarRevenda();
+					}
 				},
 				function complete(xhr, text) {
 					console.log(xhr.status);
-					console.log(xhr.responseText);
+					//console.log(xhr.responseText);
 				}
 			);
 		}
@@ -86,16 +172,24 @@
 			if (ValidarItemDoCardapio() == false)
 				return;
 
+			var tipo;
+			if ($("#adicionarReceita").val() == 1){
+				tipo = 1;
+			}
+			if ($("#adicionarRevenda").val() == 1){
+				tipo = 2;
+			}
+
 			WebApi_PUT_ItemDoCardapio
 			(
 				$('#id').val(),
 				{nome : $('#nome').val() , descricao : $('#descricao').val(), fotografia : $('#fotografia').val() },
 				function success(data){
-					console.log(data);
+					//console.log(data);
 				},
 				function complete(xhr, text){
 					console.log(xhr.status);
-					console.log(xhr.responseText);
+					//console.log(xhr.responseText);
 					if (xhr.status == 200){
 						$('#falha').css('display','none');
 						$('#sucesso').css('display','block');
@@ -107,7 +201,11 @@
 						$('#falha').text("Ocorreu uma falha: " + xhr.responseText);
 					}
 				}
-			);			
+			);		
+			if (tipo == 1)
+				CrudReceita(1);
+			if (tipo == 2)
+				CrudRevenda();
 		}
 
 	</script>

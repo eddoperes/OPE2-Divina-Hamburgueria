@@ -41,16 +41,27 @@
 
 	<script>
 
+		var _loadCliEndCompleted = false;
+		var _loadCliTelCompleted = false;	
+		var _loadEnvCompleted = false;	
+
 		$(document).ready(function() {		
 			if (CheckLogin() == false)
 				return;
-			$("#base_CLI").load("cliente_base_CLI.html", function (){
-				$("#base_CLI_TEL").load("cliente_base_CLI_TEL.html"); 
+			$("#base_CLI").load("cliente_base_CLI.html", function (){				 
 				$("#base_CLI_END").load("cliente_base_CLI_END.html", function (){
-					LoadData();
-				});				
+					_loadCliEndCompleted = true;
+					StartLoadData();
+				});	
+				$("#base_CLI_TEL").load("cliente_base_CLI_TEL.html", function (){
+					_loadCliTelCompleted = true;
+					StartLoadData();
+				});			
 			});			
-			$("#base_ENV").load("cliente_base_ENV.html"); 
+			$("#base_ENV").load("cliente_base_ENV.html", function (){
+				_loadEnvCompleted = true;
+				StartLoadData();
+			});
 		});		
 
 		function CheckLogin(){
@@ -66,6 +77,16 @@
 				$('#idusuario').val(idusuario);
 				return true;
 			}
+		}
+
+		function StartLoadData(){
+			if (!_loadCliEndCompleted)
+				return;
+			if (!_loadCliTelCompleted)
+				return;
+			if (!_loadEnvCompleted)
+				return;
+			LoadData();
 		}
 
 		function LoadData(){

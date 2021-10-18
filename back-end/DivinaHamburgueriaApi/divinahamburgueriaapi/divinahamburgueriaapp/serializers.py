@@ -5,13 +5,15 @@ from .models import PedidoSalao, PedidoSalaoItemDoCardapio
 from .models import PedidoDelivery, PedidoDeliveryItemDoCardapio
 from .models import ItemDoEstoque, Estoque
 from .models import PedidoDeCompra, PedidoDeCompraItemDoEstoque
+from .models import Receita, Revenda
 
 class UsuarioSerializer(serializers.ModelSerializer):
 
     class Meta:
 
         model = Usuario
-        fields = '__all__'
+        #fields = '__all__'
+        exclude = ('token', 'senha', )
 
 class CardapioSerializer(serializers.ModelSerializer):
 
@@ -117,4 +119,18 @@ class EstoqueSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = Estoque
+        fields = '__all__'
+
+class ReceitaSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = Receita
+        fields = '__all__'
+
+class RevendaSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = Revenda
         fields = '__all__'

@@ -67,17 +67,17 @@
 			(
 				query.id,
 				function sucess(data) {
-					console.log(data);
+					//console.log(data);
 					$('#id').val(data.id);
 					$('#nome').val(data.nome);
-					$('#descricao').val(data.descricao);
+					$('#marca').val(data.marca);
+					$('#tipo').val(data.tipo);
 					$('#conteudo').val(data.conteudo);
-					$('#unidade').val(data.unidade);
-					$('#estoqueminimo').val(data.estoqueminimo);
+					$('#unidade').val(data.unidade);					
 				},
 				function complete(xhr, text) {
 					console.log(xhr.status);
-					console.log(xhr.responseText);
+					//console.log(xhr.responseText);
 				}
 			);
 		}
@@ -91,14 +91,14 @@
 			WebApi_PUT_ItemDoEstoque
 			(
 				$('#id').val(),
-				{nome : $('#nome').val() , descricao : $('#descricao').val(), estoqueminimo : $('#estoqueminimo').val() 
+				{nome : $('#nome').val(), marca : $('#marca').val(), tipo : $('#tipo').val() 
 			    ,conteudo : $('#conteudo').val(),  unidade : $('#unidade').val()},
 				function success(data){
-					console.log(data);
+					//console.log(data);
 				},
 				function complete(xhr, text){
 					console.log(xhr.status);
-					console.log(xhr.responseText);
+					//console.log(xhr.responseText);
 					if (xhr.status == 200){
 						$('#falha').css('display','none');
 						$('#sucesso').css('display','block');

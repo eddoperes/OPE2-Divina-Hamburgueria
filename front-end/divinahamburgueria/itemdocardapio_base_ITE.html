@@ -18,14 +18,11 @@
 	<label class="invalid-feedback">A fotografia precisa ser informada</label>
 </div>
 
-<div class="col-auto">
-	<input id="enviar" type="button" class="btn btn-primary mb-3" value='Enviar' />    
-</div>
-
-<div id="sucesso" class="alert alert-success displaynone" role="alert" >  			
-</div>
-
-<div id="falha" class="alert alert-danger displaynone" role="alert" >  			
+<div class="mb-3">
+	<input id="adicionarReceita" type="radio" class="btn btn-link" onclick="AdicionarReceita()" value="0"><label for="adicionarReceita" >&nbsp;Tipo Receita</label></input>
+	&nbsp;&nbsp;&nbsp;
+	<input id="adicionarRevenda" type="radio" class="btn btn-link" onclick="AdicionarRevenda()" value="0"><label for="adicionarRevenda" >&nbsp;Tipo Revenda</label></input>
+	<label class="invalid-feedback">O tipo precisa ser informado</label>		
 </div>
 
 <script>
@@ -53,14 +50,21 @@
 				$("#fotografia").removeClass("is-invalid");
 		}); 
 
-		$("#enviar").on(" click ", function (){
-			EnviarClick();
-		});
+		$("#adicionarReceita").on(" change keyup focusout ",function (){
+			if ($("#adicionarReceita").val() == 0 && $("#adicionarRevenda").val() == 0){
+				$("#adicionarReceita").addClass("is-invalid");
+			}else{
+				$("#adicionarReceita").removeClass("is-invalid");
+			}
+		}); 
 
-		$(document).on(" keypress ", function (e){
-			if (e.keyCode == 13);
-				EnviarClick();
-		});
+		$("#adicionarRevenda").on(" change keyup focusout ",function (){
+			if ($("#adicionarReceita").val() == 0 && $("#adicionarRevenda").val() == 0){
+				$("#adicionarReceita").addClass("is-invalid");
+			}else{
+				$("#adicionarReceita").removeClass("is-invalid");
+			}
+		}); 
 
 	});
 
@@ -89,8 +93,39 @@
 			$("#fotografia").removeClass("is-invalid");
 		}
 
+		if ($("#adicionarReceita").val() == 0 && $("#adicionarRevenda").val() == 0){
+			$("#adicionarReceita").addClass("is-invalid");
+			result = false;
+		}else{
+			$("#adicionarReceita").removeClass("is-invalid");
+		}
+
 		return result;
 
 	}
 	
+	function AdicionarReceita(){
+		$("#base_REV").empty(); 		
+		$("#adicionarRevenda").val("0");
+		$("#adicionarRevenda").prop("checked", false);
+		$("#base_REC_LIN").load("itemdocardapio_base_REC_LIN.html");
+		$("#base_REC").load("itemdocardapio_base_REC.html", function (){
+			if ($("#id").val() != 0)
+				LoadReceita();
+		});
+		
+		$("#adicionarReceita").val("1");			
+	}
+
+	function AdicionarRevenda(){
+		$("#base_REC").empty(); 
+		$("#adicionarReceita").val("0");
+		$("#adicionarReceita").prop("checked", false);
+		$("#base_REV").load("itemdocardapio_base_REV.html", function (){
+			if ($("#id").val() != 0)
+				LoadRevenda();
+		}); 
+		$("#adicionarRevenda").val("1");			
+	}
+
 </script>

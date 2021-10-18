@@ -79,7 +79,7 @@
 			(
 				'?estado=' + $('#estado').val(), 
 				function success(data) {			
-					console.log(data);			
+					//console.log(data);			
 					var textData = '<table class="table">';
 
 					textData += '<tr>';
@@ -92,11 +92,11 @@
 					textData += 'Observação';
 					textData += '</th>';
 
-					textData += '<th>';
+					textData += '<th class="coluna_oculta_cel">';
 					textData += 'Total';
 					textData += '</th>';
 
-					textData += '<th>';
+					textData += '<th class="coluna_oculta_cel">';
 					textData += 'Estado';
 					textData += '</th>';
 
@@ -125,11 +125,11 @@
 							textData += data[i].observacao;
 						textData += '</td>';
 
-						textData += '<td>';
+						textData += '<td class="coluna_oculta_cel">';
 						textData += data[i].total;
 						textData += '</td>';
 
-						textData += '<td>';
+						textData += '<td class="coluna_oculta_cel">';
 						if (data[i].estado == 1)
 							textData += 'Emitido';
 						else if (data[i].estado == 2)
@@ -153,7 +153,7 @@
 				},
 				function complete(xhr, text) {
 					console.log(xhr.status);
-					console.log(xhr.responseText);			
+					//console.log(xhr.responseText);			
 				}     
 			);
 

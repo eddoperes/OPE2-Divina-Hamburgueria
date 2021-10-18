@@ -73,7 +73,7 @@
 		(
 			'?nome=' + $('#nome').val(), 
 			function success(data) {			
-				console.log(data);			
+				//console.log(data);			
 				var textData = '<table class="table">';
 
 				textData += '<tr>';
@@ -86,12 +86,8 @@
 				textData += 'Nome';
 				textData += '</th>';
 
-				textData += '<th>';
-				textData += 'Descricao';
-				textData += '</th>';
-
-				textData += '<th>';
-				textData += 'Mínimo';
+				textData += '<th class="coluna_oculta_cel">';
+				textData += 'Informação';
 				textData += '</th>';
 
 				textData += '<th>';
@@ -116,12 +112,12 @@
 					textData += data[i].nome;
 					textData += '</td>';
 
-					textData += '<td>';
-					textData += data[i].descricao;
-					textData += '</td>';
-
-					textData += '<td>';
-					textData += data[i].estoqueminimo;
+					textData += '<td class="coluna_oculta_cel">';
+					textData += data[i].marca;
+					textData += ' '
+					textData += data[i].conteudo;
+					textData += ' '
+					textData += data[i].unidade;
 					textData += '</td>';
 
 					textData += '<td>';
@@ -139,7 +135,7 @@
 			},
 			function complete(xhr, text) {
 				console.log(xhr.status);
-				console.log(xhr.responseText);			
+				//console.log(xhr.responseText);			
 			}     
 		);
 

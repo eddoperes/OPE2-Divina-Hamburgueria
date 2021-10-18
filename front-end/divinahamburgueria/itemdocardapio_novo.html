@@ -34,14 +34,38 @@
 		<div id="base_ITE" class="setecincoporcento">
 		</div>
 
+		<div id="base_REC" class="setecincoporcento">
+		</div>
+
+		<div id="base_REC_LIN" class="setecincoporcento displaynone">
+		</div>
+
+		<div id="base_REV" class="setecincoporcento">
+		</div>
+
+		<div id="base_ENV" class="setecincoporcento">
+		</div>
+
 	</body>
 
 	<script>
 
+		var _loadITECompleted = false;
+		var _loadEnvCompleted = false;
+
 		$(document).ready(function() {
 			if (CheckLogin() == false)
 				return;
-			$("#base_ITE").load("itemdocardapio_base_ITE.html"); 
+			$("#base_ITE").load("itemdocardapio_base_ITE.html", function (){
+				$("#adicionarReceita").prop("checked", false);
+				$("#adicionarRevenda").prop("checked", false);
+				_loadITECompleted = true;
+				StartLoadLists();
+			}); 
+			$("#base_ENV").load("itemdocardapio_base_ENV.html", function (){
+				_loadEnvCompleted = true;
+				StartLoadLists();
+			}); 
 		});
 
 		function CheckLogin(){
@@ -59,33 +83,121 @@
 			}
 		}
 
+		function StartLoadLists(){
+			if (!_loadITECompleted)
+				return;
+			if (!_loadEnvCompleted)
+				return;
+			LoadLists();
+		}
+
+		var _itemdoestoque_revenda_list;
+		var _itemdoestoque_receita_list = [];
+
+		function LoadLists(){
+			WebApi_GET_LIST_ItemDoEstoque
+			(
+				'?tipo=2', 
+				function success(data) {
+					//console.log(data);	
+					_itemdoestoque_revenda_list = data;																
+				},
+				function complete(xhr, text) {
+					console.log(xhr.status);
+					//console.log(xhr.responseText);					
+				}     
+			);
+			WebApi_GET_LIST_ItemDoEstoque
+			(
+				'?tipo=1', 
+				function success(data) {
+					//console.log(data);	
+					data = data.sort((a, b) => (a.nome > b.nome) ? 1 : -1);	
+					var i, last;					
+					for (i=0; i<data.length; i++){					
+						if (data[i].nome != last)
+							_itemdoestoque_receita_list.push(data[i]);
+						last = data[i].nome;						
+					}									
+				},
+				function complete(xhr, text) {
+					console.log(xhr.status);
+					//console.log(xhr.responseText);					
+				}     
+			);
+		}
+
 		function EnviarClick()
-		{		
-			
+		{	
+						
 			if (ValidarItemDoCardapio() == false)
 				return;
 
-			WebApi_POST_ItemDoCardapio
-			(
-				{nome : $('#nome').val() , descricao : $('#descricao').val(), fotografia : $('#fotografia').val() },
-				function success(data){
-					console.log(data);
-				},
-				function complete(xhr, text){
-					console.log(xhr.status);
-					console.log(xhr.responseText);
-					if (xhr.status == 201){
-						$('#falha').css('display','none');
-						$('#sucesso').css('display','block');
-						$('#sucesso').html("O item do cardápio foi criado com sucesso! <a href='itemdocardapio_listar.html'>Seguir para a lista de itens do cardápio</a>");			
+			var tipo;
+			if ($("#adicionarReceita").val() == 1){
+				tipo = 1;
+			}
+			if ($("#adicionarRevenda").val() == 1){
+				tipo = 2;
+			}
+
+			if ($('#id').val() == 0){
+				WebApi_POST_ItemDoCardapio
+				(
+					{nome : $('#nome').val() , descricao : $('#descricao').val(), fotografia : $('#fotografia').val(), tipo : tipo},
+					function success(data){
+						//console.log(data);
+						$('#id').val(data.id);
+						if (tipo == 1)
+							CrudReceita(1);
+						if (tipo == 2)
+							CrudRevenda();
+					},
+					function complete(xhr, text){
+						console.log(xhr.status);
+						//console.log(xhr.responseText);
+						if (xhr.status == 201){
+							$('#falha').css('display','none');
+							$('#sucesso').css('display','block');
+							$('#sucesso').html("O item do cardápio foi criado com sucesso! <a href='itemdocardapio_listar.html'>Seguir para a lista de itens do cardápio</a>");			
+						}
+						else{
+							$('#sucesso').css('display','none');
+							$('#falha').css('display','block');
+							$('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+						}
 					}
-					else{
-						$('#sucesso').css('display','none');
-						$('#falha').css('display','block');
-						$('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+				);
+			}
+			else{
+
+				WebApi_PUT_ItemDoCardapio
+				(
+					$('#id').val(),
+					{nome : $('#nome').val() , descricao : $('#descricao').val(), fotografia : $('#fotografia').val(), tipo : tipo },
+					function success(data){
+						//console.log(data);
+					},
+					function complete(xhr, text){
+						console.log(xhr.status);
+						//console.log(xhr.responseText);
+						if (xhr.status == 200){
+							$('#falha').css('display','none');
+							$('#sucesso').css('display','block');
+							$('#sucesso').html("O item do cardápio foi editado com sucesso! <a href='itemdocardapio_listar.html'>Seguir para a lista de itens do cardápio</a>");			
+						}
+						else{
+							$('#sucesso').css('display','none');
+							$('#falha').css('display','block');
+							$('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+						}
 					}
-				}
-			);
+				);
+				if (tipo == 1)
+					CrudReceita(1);
+				if (tipo == 2)
+					CrudRevenda();				
+			}		
 
 		}
 

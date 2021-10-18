@@ -44,9 +44,6 @@
 
 		</div>
 
-		<div id="base_CLI" class="setecincoporcento">
-		</div>
-
 		<div id="base_ENV" class="setecincoporcento">				
 		</div>
 
@@ -54,13 +51,17 @@
 
 	<script>
 
+		var _loadEnvCompleted = false;
+
 		$(document).ready(function() {
 			if (CheckLogin() == false)
 				return;
-			LoadData();
 			$("#nome").attr('disabled', true);
 			$("#cpf").attr('disabled', true);
-			$("#base_ENV").load("cliente_base_ENV.html"); 					
+			$("#base_ENV").load("cliente_base_ENV.html", function (){
+				_loadEnvCompleted = true;
+				StartLoadData();
+			});					
 		});
 
 		function CheckLogin(){
@@ -78,20 +79,26 @@
 			}
 		}
 
+		function StartLoadData(){
+			if (!_loadEnvCompleted)
+				return;
+			LoadData();
+		}
+
 		function LoadData(){
 			var query = queryObj();
 			WebApi_GET_Cliente
             (
 				query.id, 
 				function success(data) {			
-					console.log(data);	                                             
+					//console.log(data);	                                             
 					$('#idcliente').val(data.id);		
 					$('#nome').val(data.nome);
 					$('#cpf').val(data.cpf);                       
 				},
 				function complete(xhr, text) {
 					console.log(xhr.status);
-					console.log(xhr.responseText);			
+					//console.log(xhr.responseText);			
 				}
             );
 		}
@@ -102,11 +109,11 @@
 			(
 				$('#idcliente').val(),
 				function success(data){
-					console.log(data);
+					//console.log(data);
 				},
 				function complete(xhr, text){
 					console.log(xhr.status);
-					console.log(xhr.responseText);
+					//console.log(xhr.responseText);
 					if (xhr.status == 204){
 						$('#falha').css('display','none');
 						$('#sucesso').css('display','block');

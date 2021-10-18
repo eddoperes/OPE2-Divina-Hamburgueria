@@ -67,16 +67,16 @@
 			(
 				"",
 				function success(data) {	
-					console.log(data);
+					//console.log(data);
 					var i;
 					for (i=0; i < data.length; i++){									
-						$("#itemdoestoque").append('<option value="' + data[i].id + '">' + data[i].nome + ' ' + data[i].conteudo + ' ' + data[i].unidade + '</option>');
+						$("#itemdoestoque").append('<option value="' + data[i].id + '">' + data[i].nome + ' ' + data[i].marca + ' ' + data[i].conteudo + ' ' + data[i].unidade + '</option>');
 					}
 					LoadData();
 				},
 				function complete(xhr, text) {
 					console.log(xhr.status);
-					console.log(xhr.responseText);			
+					//console.log(xhr.responseText);			
 				}	
 			);				
 		}
@@ -87,14 +87,14 @@
 			(
 				query.id,
 				function sucess(data) {
-					console.log(data);
+					//console.log(data);
 					$('#id').val(data.id);
 					$('#itemdoestoque').val(data.itemdoestoque);						
 					$('#quantidade').val(data.quantidade);
 				},
 				function complete(xhr, text) {
 					console.log(xhr.status);
-					console.log(xhr.responseText);
+					//console.log(xhr.responseText);
 				}
 			);
 		}
@@ -110,11 +110,11 @@
 				$('#id').val(),
 				{itemdoestoque : $('#itemdoestoque').val() , quantidade : $('#quantidade').val() },
 				function success(data){
-					console.log(data);
+					//console.log(data);
 				},
 				function complete(xhr, text){
 					console.log(xhr.status);
-					console.log(xhr.responseText);
+					//console.log(xhr.responseText);
 					if (xhr.status == 200){
 						$('#falha').css('display','none');
 						$('#sucesso').css('display','block');

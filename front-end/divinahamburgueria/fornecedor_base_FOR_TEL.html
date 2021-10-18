@@ -36,14 +36,14 @@
             (
                   id, 
                   function success(data) {			
-                        console.log(data);	
+                        //console.log(data);	
                         $('#idtelefone').val(data.id);		
                         $('#ddd').val(data.ddd);
                         $('#telefone').val(data.numero);
                   },
                   function complete(xhr, text) {
                         console.log(xhr.status);
-                        console.log(xhr.responseText);			
+                        //console.log(xhr.responseText);			
                   }
             );
            
@@ -64,13 +64,13 @@
                                     ddd : $('#ddd').val() , numero : $('#telefone').val()
                               }, 
                               function success(data) {
-                                    console.log(data);
+                                    //console.log(data);
                                     $('#idtelefone').val(data.id);
                                     CrudEndereco();
                               },
                               function complete(xhr, text) {
                                     console.log(xhr.status);
-                                    console.log(xhr.responseText);
+                                    //console.log(xhr.responseText);
                                     if (xhr.status == 201){
                                           $('#falhatelefone').css('display','none');
                                           $('#sucessotelefone').css('display','block');
@@ -95,11 +95,11 @@
                                     ddd : $('#ddd').val() , numero : $('#telefone').val()
                               }, 
                               function success(data) {
-                                    console.log(data);
+                                    //console.log(data);
                               },
                               function complete(xhr, text) {
                                     console.log(xhr.status);
-                                    console.log(xhr.responseText);
+                                    //console.log(xhr.responseText);
                                     if (xhr.status == 200){
                                           $('#falhatelefone').css('display','none');
                                           $('#sucessotelefone').css('display','block');

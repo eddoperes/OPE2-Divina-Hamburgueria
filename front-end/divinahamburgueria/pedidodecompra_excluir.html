@@ -74,13 +74,13 @@
 			(
 				'', 
 				function success(data) {			
-					console.log(data);
+					//console.log(data);
 					itemdoestoque_list = data;
 					LoadData();					
 				},
 				function complete(xhr, text) {
 					console.log(xhr.status);
-					console.log(xhr.responseText);			
+					//console.log(xhr.responseText);			
 				}   
 			)		
 		
@@ -94,18 +94,22 @@
 			(
 				query.id, 
 				function success(data) {
-					console.log(data);
+					//console.log(data);
 					$('#id').val(data.id);
 					$('#fornecedor').val(data.fornecedor);
 					$('#estado').val(data.estado);					
 					$('#observacao').val(data.observacao);
+					$('#pago').val(data.estadopagamento);
+					if (data.estadopagamento == 1)
+						$('#pago').prop('checked', true);
 					$('#estado').prop('disabled', true);
 					$('#fornecedor').prop('disabled', true);
-					$('#observacao').prop('disabled', true);						
+					$('#observacao').prop('disabled', true);
+					$('#pago').prop('disabled', true);						
 				},
 				function complete(xhr, text) {
 					console.log(xhr.status);
-					console.log(xhr.responseText);
+					//console.log(xhr.responseText);
 				} 
 			);				
 
@@ -117,11 +121,11 @@
 			(
 				$('#id').val(), 
 				function success(data) {
-					console.log(data);
+					//console.log(data);
 				},
 				function complete(xhr, text) {
 					console.log(xhr.status);
-					console.log(xhr.responseText);
+					//console.log(xhr.responseText);
 					if (xhr.status == 204){
 						$('#falha').css('display','none');
 						$('#sucesso').css('display','block');

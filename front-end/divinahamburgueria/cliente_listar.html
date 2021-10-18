@@ -72,7 +72,7 @@
 			(
 				'?nome=' + $('#nome').val(),
 				function success(data) {			
-					console.log(data);			
+					//console.log(data);			
 					var textData = '<table class="table">';
 
 					textData += '<tr>';
@@ -85,7 +85,7 @@
 					textData += 'Nome';
 					textData += '</th>';
 
-					textData += '<th>';
+					textData += '<th class="coluna_oculta_cel">';
 					textData += 'CPF';
 					textData += '</th>';				
 
@@ -111,7 +111,7 @@
 						textData += data[i].nome;
 						textData += '</td>';
 
-						textData += '<td>';
+						textData += '<td class="coluna_oculta_cel">';
 						if (data[i].cpf == null)
 							textData += '--em branco--';
 						else
@@ -133,7 +133,7 @@
 				},
 				function complete(xhr, text) {
 					console.log(xhr.status);
-					console.log(xhr.responseText);			
+					//console.log(xhr.responseText);			
 				}				
 			);
 

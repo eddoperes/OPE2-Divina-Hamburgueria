@@ -3,6 +3,38 @@ from django.utils import timezone
 
 # Create your models here.
 
+class Usuario(models.Model):
+
+    class Meta:
+        db_table = 'usuario'
+
+    nome = models.CharField(max_length=200)
+    tipo = models.IntegerField()
+    email = models.CharField(max_length=200)
+    senha = models.CharField(max_length=200)
+    token = models.CharField(max_length=200, default='')
+    estado = models.IntegerField(default=1)  
+    datacriado = models.DateTimeField(auto_now_add=True)
+    dataativado = models.DateTimeField(auto_now_add=True)   
+    datainativado = models.DateTimeField(null=True)
+
+    def __str__(self):
+        return self.nome
+
+class Cliente(models.Model):
+
+    class Meta:
+        db_table = 'cliente'
+
+    nome = models.CharField(max_length=50)
+    cpf = models.CharField(max_length=11, null=True)
+    endereco = models.ForeignKey('Endereco', default=1, null=True ,related_name='enderecos_clientes', on_delete=models.CASCADE)
+    telefone = models.ForeignKey('Telefone', default=1, null=True ,related_name='telefones_clientes', on_delete=models.CASCADE)
+    datacriado = models.DateTimeField(auto_now_add=True, null=True)
+
+    def __str__(self):
+        return self.nome
+
 class Endereco(models.Model):
 
     class Meta:
@@ -30,20 +62,6 @@ class Telefone(models.Model):
     def __str__(self):
         return self.numero
 
-class Cliente(models.Model):
-
-    class Meta:
-        db_table = 'cliente'
-
-    nome = models.CharField(max_length=50)
-    cpf = models.CharField(max_length=11, null=True)
-    endereco = models.ForeignKey('Endereco', default=1, null=True ,related_name='enderecos_clientes', on_delete=models.CASCADE)
-    telefone = models.ForeignKey('Telefone', default=1, null=True ,related_name='telefones_clientes', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.nome
-
-
 class Fornecedor(models.Model):
 
     class Meta:
@@ -53,31 +71,41 @@ class Fornecedor(models.Model):
     cnpj = models.CharField(max_length=14)
     endereco = models.ForeignKey('Endereco', null=True, related_name='enderecos_fornecedores', on_delete=models.CASCADE)
     telefone = models.ForeignKey('Telefone', null=True, related_name='telefones_fornecedores', on_delete=models.CASCADE)
-    estado = models.IntegerField(default=1)  
     datacriado = models.DateTimeField(auto_now_add=True)
-    dataativado = models.DateTimeField(auto_now_add=True)   
-    datainativado = models.DateTimeField(null=True)
 
     def __str__(self):
         return self.nome
 
-class Usuario(models.Model):
+class ItemDoCardapio(models.Model):
 
     class Meta:
-        db_table = 'usuario'
+        db_table = 'itemdocardapio'
 
     nome = models.CharField(max_length=200)
-    tipo = models.IntegerField()
-    email = models.CharField(max_length=200)
-    senha = models.CharField(max_length=200)
-    token = models.CharField(max_length=200, default='')
-    estado = models.IntegerField(default=1)  
-    datacriado = models.DateTimeField(auto_now_add=True)
-    dataativado = models.DateTimeField(auto_now_add=True)   
-    datainativado = models.DateTimeField(null=True)
+    descricao = models.CharField(max_length=400)
+    fotografia = models.CharField(max_length=200)
+    tipo = models.IntegerField(default=1)  
 
     def __str__(self):
         return self.nome
+
+class Receita(models.Model):
+
+     class Meta:
+         db_table = 'receita'
+
+     itemdocardapio = models.ForeignKey('ItemDoCardapio', default=1, related_name='itensdocardapioreceita', on_delete=models.CASCADE)
+     nome = models.CharField(max_length=200)
+     quantidade = models.IntegerField(default=1)
+     unidade = models.CharField(max_length=10, default='')
+
+class Revenda(models.Model):
+
+     class Meta:
+         db_table = 'revenda'
+
+     itemdocardapio = models.ForeignKey('ItemDoCardapio', default=1, related_name='itensdocardapiorevenda', on_delete=models.CASCADE)
+     itemdoestoque = models.ForeignKey('ItemDoEstoque', default=1, related_name='itensdoestoquerevenda', on_delete=models.CASCADE)
 
 class Cardapio(models.Model):
 
@@ -91,18 +119,6 @@ class Cardapio(models.Model):
     dataativado = models.DateTimeField(auto_now_add=True)   
     datainativado = models.DateTimeField(null=True)
 	
-    def __str__(self):
-        return self.nome
-
-class ItemDoCardapio(models.Model):
-
-    class Meta:
-        db_table = 'itemdocardapio'
-
-    nome = models.CharField(max_length=200)
-    descricao = models.CharField(max_length=400)
-    fotografia = models.CharField(max_length=200)
-
     def __str__(self):
         return self.nome
 
@@ -191,10 +207,10 @@ class ItemDoEstoque(models.Model):
         db_table = 'itemdoestoque'
 
     nome = models.CharField(max_length=200)
-    descricao = models.CharField(max_length=400)
+    marca =  models.CharField(max_length=200, null=True)
+    tipo = models.IntegerField(default=1)
     conteudo = models.IntegerField(default=1)
     unidade =  models.CharField(max_length=10, default='')
-    estoqueminimo = models.IntegerField(default=1)
 
     def __str__(self):
         return self.nome

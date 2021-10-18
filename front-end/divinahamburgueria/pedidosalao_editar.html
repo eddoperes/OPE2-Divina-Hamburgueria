@@ -118,13 +118,13 @@
 			(
 				'', 
 				function success(data) {			
-					console.log(data);
+					//console.log(data);
 					itemdocardapio_list = data;
 					LoadData();
 				},
 				function complete(xhr, text) {
 					console.log(xhr.status);
-					console.log(xhr.responseText);			
+					//console.log(xhr.responseText);			
 				}   
 			)					
 
@@ -138,18 +138,19 @@
 			(
 				query.id, 
 				function success(data) {
-					console.log(data);
+					//console.log(data);
 					$('#id').val(data.id);
 					$('#estado').val(data.estado);
 					$('#observacao').val(data.observacao);
 					$('#total').val(data.total);
-					LoadCliente(data.cliente);
-					//$('#observacao').prop('disabled', true);
-					//$('#observacao').prop('disabled', false);						
+					if (data.cliente != null)
+					{
+						LoadCliente(data.cliente);						
+					}
 				},
 				function complete(xhr, text) {
 					console.log(xhr.status);
-					console.log(xhr.responseText);
+					//console.log(xhr.responseText);
 				} 
 			);
 
@@ -157,14 +158,13 @@
 			(
 				'?pedidosalao=' + query.id, 
 				function success(data) {
-					console.log(data);		
+					//console.log(data);		
 					for (i=0; i < data.length; i++){
 						AdicionarItem();
 						$('#id' + (i + 1)).val(data[i].id);				
 						$('#itemdocardapio' + (i + 1)).val(data[i].itemdocardapio);
 						$('#preco' + (i + 1)).val(data[i].preco);
-						$('#observacao' + (i + 1)).val(data[i].observacao);	
-						
+						$('#observacao' + (i + 1)).val(data[i].observacao);							
 						$('#itemdocardapio' + (i + 1)).prop('disabled', true);
 						$('#preco' + (i + 1)).prop('disabled', true);
 						$('#observacao' + (i + 1)).prop('disabled', true);
@@ -173,7 +173,7 @@
 				},
 				function complete(xhr, text) {
 					console.log(xhr.status);
-					console.log(xhr.responseText);					
+					//console.log(xhr.responseText);					
 				}     
 			);			
 
@@ -191,11 +191,11 @@
 				$('#id').val(), 
 				{usuario : $('#idusuario').val() , estado : $('#estado').val(), observacao : $('#observacao').val(), total: $('#total').val(), cliente : $('#idcliente').val()}, 
 				function success(data) {
-					console.log(data);						
+					//console.log(data);						
 				},
 				function complete(xhr, text) {
 					console.log(xhr.status);
-					console.log(xhr.responseText);
+					//console.log(xhr.responseText);
 					if (xhr.status == 200){
 						$('#falha').css('display','none');
 						$('#sucesso').css('display','block');

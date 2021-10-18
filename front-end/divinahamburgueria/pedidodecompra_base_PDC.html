@@ -13,8 +13,9 @@
             <option value="2">Emitido</option>
             <option value="3">Cancelado</option>
             <option value="4">Entregue</option>
-            <option value="5">Estocado</option>
+            <option value="5">Estocado</option>            
       </select>
+      <label class="invalid-feedback">Para o estado estocado use a entrada de estoque</label>
 </div>
 
 <div class="mb-3">
@@ -22,9 +23,31 @@
       <textarea id="observacao" class="form-control" rows="3" value="" ></textarea>
 </div>
 
+<div class="mb-3">
+      <input class="form-check-input" type="checkbox" value="0" id="pago">
+      <label class="form-check-label" for="pago">
+            Pago
+      </label>
+</div>
+
 <script>
 
       $(document).ready(function() {
+
+            $("#estado").on(" keyup focusout change ", function (){
+			if ($("#estado").val() == "5")
+				$("#estado").addClass("is-invalid");
+			else
+				$("#estado").removeClass("is-invalid");
+		}); 
+
+            $('#pago').on(' change ', function(){
+                  if ($('#pago').prop('checked') == true)
+                        $('#pago').val("1");
+                  else
+                        $('#pago').val("0");
+            });
+
             WebApi_GET_LIST_Fornecedor
             (
                   '', 
@@ -40,12 +63,23 @@
                         console.log(xhr.status);
                         console.log(xhr.responseText);			
                   } 	
-            );           				
+            );  
+
       });	
 
       function ValidarPedidoDeCompra(){
 
             var result = true;
+
+            //alert($("#estado").attr('disabled'));
+
+            if ($("#estado").val() == "5" && $("#estado").attr('disabled') != "disabled"){
+			$("#estado").addClass("is-invalid");
+                  result = false;
+            }
+		else{
+			$("#estado").removeClass("is-invalid");
+            }
 
             var resultItem = ValidarItemEstoque();
 

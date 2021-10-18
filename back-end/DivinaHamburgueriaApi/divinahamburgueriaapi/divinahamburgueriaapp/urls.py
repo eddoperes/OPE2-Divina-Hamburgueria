@@ -7,6 +7,8 @@ urlpatterns = [
     url(r'^usuario_list/$', views.usuario_list, name='usuario_list'),
     path('usuario_detail/<int:pk>', views.usuario_detail),
     path('usuario_login/', views.usuario_login),
+    path('usuario_enviar_token/', views.usuario_enviar_token),
+    path('usuario_alterar_senha/', views.usuario_alterar_senha),
 
     url(r'^itemdocardapio_list/$', views.itemdocardapio_list, name='itemdocardapio_list'),    
     path('itemdocardapio_detail/<int:pk>', views.itemdocardapio_detail),
@@ -55,5 +57,11 @@ urlpatterns = [
 
     url(r'^estoque_list/$', views.estoque_list, name='estoque_list'),
     path('estoque_detail/<int:pk>', views.estoque_detail),
+
+    url(r'^revenda_list/$', views.revenda_list, name='revenda_list'),
+    path('revenda_detail/<int:pk>', views.revenda_detail),
+
+    url(r'^receita_list/$', views.receita_list, name='receita_list'),
+    path('receita_detail/<int:pk>', views.receita_detail),
 
 ]

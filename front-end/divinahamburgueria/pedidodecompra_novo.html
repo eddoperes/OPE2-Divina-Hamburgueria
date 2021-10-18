@@ -84,12 +84,12 @@
 			(
 				'', 
 				function success(data) {			
-					console.log(data);
+					//console.log(data);
 					itemdoestoque_list = data;					
 				},
 				function complete(xhr, text) {
 					console.log(xhr.status);
-					console.log(xhr.responseText);			
+					//console.log(xhr.responseText);			
 				}   
 			)		
 		
@@ -103,23 +103,24 @@
 		}
 
 		function CrudPedidoDeCompra()
-		{						
+		{			
+
 			if ($('#id').val() == '0'){
 				WebApi_POST_PedidoDeCompra
 				(
 					{
 						usuario : $('#idusuario').val() , estado : $('#estado').val(), 
 						observacao : $('#observacao').val(), total: $('#total').val(), 
-						fornecedor : $('#fornecedor').val()
+						fornecedor : $('#fornecedor').val(), estadopagamento : $('#pago').val()
 					}, 
 					function success(data) {
-						console.log(data);
+						//console.log(data);
 						$('#id').val(data.id);
 						CrudPedidoDeCompraItemDoEstoque(1);
 					},
 					function complete(xhr, text) {
 						console.log(xhr.status);
-						console.log(xhr.responseText);
+						//console.log(xhr.responseText);
 						if (xhr.status == 201){
 							$('#falha').css('display','none');
 							$('#sucesso').css('display','block');
@@ -141,14 +142,14 @@
 					{
 						usuario : $('#idusuario').val() , estado : $('#estado').val(), 
 						observacao : $('#observacao').val(), total: $('#total').val(), 
-						fornecedor : $('#fornecedor').val()
+						fornecedor : $('#fornecedor').val(), estadopagamento : $('#pago').val()
 					}, 
 					function success(data) {
-						console.log(data);						
+						//console.log(data);						
 					},
 					function complete(xhr, text) {
 						console.log(xhr.status);
-						console.log(xhr.responseText);
+						//console.log(xhr.responseText);
 						if (xhr.status == 200){
 							$('#falha').css('display','none');
 							$('#sucesso').css('display','block');

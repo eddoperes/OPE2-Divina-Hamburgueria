@@ -40,6 +40,10 @@
 	margin-bottom:10px;
 }
 
+.widthtrintacincoporcento{
+	width: 35%;	
+}
+
 .widthtrintaporcento{
 	width: 30%;	
 }
@@ -50,6 +54,18 @@
 
 .widthvinteporcento{
 	width: 20%;	
+}
+
+.widthquinzeporcento{
+	width: 15%;	
+}
+
+.widthdezporcento{
+	width: 10%;	
+}
+
+.heightvintepixel{
+	height: 20px;
 }
 
 .heighttrintapixel{
@@ -104,4 +120,18 @@ select.form-control{
 .asterisk:after{
 	content:" * ";
 	color:red;
+}
+
+.textaligncenter
+{
+	text-align: center;
+}
+
+
+@media (max-width: 600px)
+{
+  .coluna_oculta_cel
+  {
+  	display: none;
+  }
 }
