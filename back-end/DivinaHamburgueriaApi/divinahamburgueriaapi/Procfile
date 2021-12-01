@@ -1,0 +1,1 @@
+web: gunicorn divinahamburgueriaapi.wsgi --log-file -

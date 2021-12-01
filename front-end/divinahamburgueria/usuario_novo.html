@@ -16,9 +16,8 @@
 
 			<input type="hidden" id="idusuario" value="0">
 
-			<br/>
-			<a href="home.html">Home</a>		
-			<br/>
+			<div id="menu">
+                	</div> 
 
 			<br/>
 			<h1 class="floatleft">Novo usuário</h1>
@@ -47,6 +46,7 @@
 		$(document).ready(function() {
 			if (CheckLogin() == false)
 				return;
+                        $("#menu").load("menu.html");
 			$("#base_USU").load("usuario_base_USU.html"); 
 			$("#base_SEN").load("usuario_base_SEN.html"); 
 			$("#base_ENV").load("usuario_base_ENV.html"); 			
@@ -74,10 +74,10 @@
 				return;
 
 			WebApi_POST_Usuario
-			(
+			(				
 				{
 					nome : $('#nome').val(), tipo : $('#tipo').val(), 
-					email : $('#email').val(), senha : $('#senha').val(), 
+					email : $('#email').val(), "senha" : $('#senha').val(), 
 					token : '', estado : $('#estado').val()					
 				},
 				function success(data){

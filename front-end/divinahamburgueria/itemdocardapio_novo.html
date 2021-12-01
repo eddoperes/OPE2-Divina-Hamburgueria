@@ -16,9 +16,8 @@
 
 			<input type="hidden" id="idusuario" value="0">
 
-			<br/>
-			<a href="home.html">Home</a>		
-			<br/>
+			<div id="menu">
+                	</div> 
 
 			<br/>
 			<h1 class="floatleft">Novo item do cardápio</h1>
@@ -56,6 +55,7 @@
 		$(document).ready(function() {
 			if (CheckLogin() == false)
 				return;
+			$("#menu").load("menu.html");
 			$("#base_ITE").load("itemdocardapio_base_ITE.html", function (){
 				$("#adicionarReceita").prop("checked", false);
 				$("#adicionarRevenda").prop("checked", false);

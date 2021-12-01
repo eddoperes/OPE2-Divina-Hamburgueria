@@ -14,9 +14,8 @@
 
 	<div class="setecincoporcento">
 
-		<br/>
-		<a href="home.html">Home</a>		
-		<br/>
+		<div id="menu">
+                </div> 
 
 		<br/>
 		<h1>Esqueci a senha</h1>
@@ -75,6 +74,8 @@
 <script>
 
 	$(document).ready(function() {	
+
+		$("#menu").load("menu.html");
 
 		$("#email").on(" keyup focusout change ", function (){
 			if ($("#email").val() == "")

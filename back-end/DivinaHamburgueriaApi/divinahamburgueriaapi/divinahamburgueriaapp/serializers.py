@@ -12,6 +12,14 @@ class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = Usuario
+        fields = '__all__'
+        #exclude = ('token', 'senha', )
+
+class UsuarioNoPasswordSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = Usuario
         #fields = '__all__'
         exclude = ('token', 'senha', )
 

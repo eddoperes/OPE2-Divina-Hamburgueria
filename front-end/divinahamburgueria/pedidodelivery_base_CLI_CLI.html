@@ -364,10 +364,18 @@
             
                   var resultEndereco = ValidarEndereco();
 
+		  if (!resultEndereco){
+		  	$("#collapseEndereco").addClass('show');
+		  }
+
                   if (result == true)
                         result = resultEndereco; 
 
                   var resultTelefone = ValidarTelefone();
+
+                  if (!resultTelefone){
+		  	$("#collapseTelefone").addClass('show');
+		  }
 
                   if (result == true)
                         result = resultTelefone; 

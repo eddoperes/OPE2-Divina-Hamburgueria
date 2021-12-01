@@ -1,0 +1,95 @@
+<h4>
+<nav class="navbar navbar-expand-sm navbar-light bg-light">
+  <div class="container-fluid">
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="home.html">Home</a>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Cadastros
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+	    <h4>
+            <li><a class="dropdown-item" href="usuario_listar.html">Usuários</a></li>
+	    <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="cliente_listar.html">Clientes</a></li>
+            <li><a class="dropdown-item" href="fornecedor_listar.html">Fornecedores</a></li>
+            </h4>
+          </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Vendas
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <h4>
+            <li><a class="dropdown-item" href="itemdocardapio_listar.html">Itens do Cardápio</a></li>
+            <li><a class="dropdown-item" href="cardapio_listar.html">Cardápio</a></li>
+	    <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="pedidosalao_listar.html">Pedidos Salão</a></li>
+            <li><a class="dropdown-item" href="pedidodelivery_listar.html">Pedidos Delivery</a></li>
+            </h4>
+          </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Compras
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <h4>
+            <li><a class="dropdown-item" href="itemdoestoque_listar.html">Itens do Estoque</a></li>	    
+            <li><a class="dropdown-item" href="pedidodecompra_listar.html">Pedidos de Compra</a></li>            
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="estoque_listar.html">Estoque</a></li>
+            </h4>
+          </ul>
+        </li>
+
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+<div style="margin-bottom:15px;">		
+	<a style="float:right;" id="login" href="login.html">Login</a>
+	<a style="float:right;" id="logout" href="" onclick="Logout()">Logout</a>	
+        <label id="ola" style="float:right;margin-right:10px;"></label>
+</div>
+
+</h4>
+
+<script>
+
+	$(function(){	
+		var idusuario = getLoggedUserId();
+		if (idusuario == -1){
+			$('#login').css('display','block');
+			$('#logout').css('display','none');
+			$('#ola').text('');
+		}
+		else
+		{
+			$('#login').css('display','none');
+			$('#logout').css('display','block');				
+			$('#ola').text('Olá ' + getLoggedUserName());
+		}
+	});	
+
+	function Logout(){
+		doLogout();	
+		$('#ola').text('');								
+	}
+
+</script>

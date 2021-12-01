@@ -16,9 +16,8 @@
 
 			<input type="hidden" id="idusuario" value="0">
 
-			<br/>
-			<a href="home.html">Home</a>		
-			<br/>
+			<div id="menu">
+                	</div>
 
 			<br/>
 			<h1 class="floatleft">Editar item do estoque</h1>
@@ -41,6 +40,7 @@
 		$(document).ready(function() {
 			if (CheckLogin() == false)
 				return;
+			$("#menu").load("menu.html");
 			$("#base_ITE").load("itemdoestoque_base_ITE.html",function (){
 				LoadData();
 			});	 				

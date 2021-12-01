@@ -16,9 +16,8 @@
 
 			<input type="hidden" id="idusuario" value="0">
 
-			<br/>
-			<a href="home.html">Home</a>		
-			<br/>
+			<div id="menu">
+                	</div> 
 
 			<br/>
 			<h1 class="floatleft">Editar usuário</h1>
@@ -47,6 +46,7 @@
 		$(document).ready(function() {	
 			if (CheckLogin() == false)
 				return;
+			$("#menu").load("menu.html");
 			$("#base_USU").load("usuario_base_USU.html", function (){
 				_loadUsuCompleted = true;
 				StartLoadData();
@@ -111,7 +111,7 @@
 				$('#id').val(),
 				{
 					nome : $('#nome').val() , tipo : $('#tipo').val(), 
-					email : $('#email').val(), estado : $('#estado').val()
+					email : $('#email').val(), estado : $('#estado').val()										
 				},
 				function success(data){
 					//console.log(data);

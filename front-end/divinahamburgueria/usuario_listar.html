@@ -5,8 +5,8 @@
 		<script src="jquery/jquery3.6.js"></script>
 		<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
 		<script src="bootstrap/dist/js/bootstrap.js"></script>
-        <link rel="stylesheet" href="css/sistema.css" >
-        <script src="js/sistema.js"></script>
+        	<link rel="stylesheet" href="css/sistema.css" >
+        	<script src="js/sistema.js"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 
@@ -14,9 +14,8 @@
 
 		<div class="setecincoporcento">
 
-			<br/>
-			<a href="home.html">Home</a>		
-			<br/>
+			<div id="menu">
+                	</div> 
 
 			<br/>
 			<h1>Listar usuários</h1>
@@ -46,9 +45,10 @@
 
 	<script>
 
-		$(document).ready(function() {					
+		$(document).ready(function() {				
 			if (CheckLogin() == false)
-				return;							
+				return;		
+			$("#menu").load("menu.html");									
 		});		
 
 		function CheckLogin(){

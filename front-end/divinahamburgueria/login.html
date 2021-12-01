@@ -14,9 +14,8 @@
 
 	<div class="setecincoporcento">
 
-		<br/>
-		<a href="home.html">Home</a>		
-		<br/>
+		<div id="menu">
+                </div> 
 
 		<br/>
 		<h1>Login</h1>
@@ -58,7 +57,9 @@
 <script>
 
 
-	$(document).ready(function() {	
+	$(document).ready( async function() {	
+
+		await $("#menu").load("menu.html");
 
 		$("#email").on(" keyup focusout change ", function (){
 			if ($("#email").val() == "")
@@ -118,7 +119,7 @@
 			{email : $('#email').val(), senha : $('#senha').val()}, 
 			function success (data) {
 				console.log(data);
-				doLogin(data['id']);					
+				doLogin(data['id'], data['tipo'], data['nome']);					
 			}, 
 			function complete(xhr, text) {
 				console.log(xhr.status);

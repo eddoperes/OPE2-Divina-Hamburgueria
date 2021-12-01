@@ -16,9 +16,8 @@
 
 			<input type="hidden" id="idusuario" value="0">
 
-			<br/>
-			<a href="home.html">Home</a>		
-			<br/>
+			<div id="menu">
+                	</div> 
 
 			<br/>
 			<h1>Excluir usuário</h1>
@@ -46,6 +45,7 @@
 		$(document).ready(function() {	
 			if (CheckLogin() == false)
 				return;
+			$("#menu").load("menu.html");
 			$("#base_USU").load("usuario_base_USU.html", function (){
 				_loadUsuCompleted = true;
 				StartLoadData();

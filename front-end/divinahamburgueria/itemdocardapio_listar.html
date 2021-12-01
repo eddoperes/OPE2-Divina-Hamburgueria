@@ -14,9 +14,8 @@
 
 	<div class="setecincoporcento">
 
-		<br/>
-		<a href="home.html">Home</a>		
-		<br/>
+		<div id="menu">
+                </div> 
 
 		<br/>
                 <h1>Listar itens do cardápio</h1>
@@ -49,6 +48,7 @@
 	$(document).ready(function() {
 		if (CheckLogin() == false)
 			return;
+		$("#menu").load("menu.html");
 	});
 	
 	function CheckLogin(){

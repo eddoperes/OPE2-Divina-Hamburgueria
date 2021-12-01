@@ -16,9 +16,8 @@
 
 			<input type="hidden" id="idusuario" value="0">
 
-			<br/>
-			<a href="home.html">Home</a>		
-			<br/>
+			<div id="menu">
+                	</div>
 
 			<br/>
 			<h1>Excluir fornecedor</h1>
@@ -56,6 +55,7 @@
 		$(document).ready(function() {
 			if (CheckLogin() == false)
 				return;
+			$("#menu").load("menu.html");
 			$("#nome").attr('disabled', true);
 			$("#cnpj").attr('disabled', true);
 			$("#base_ENV").load("fornecedor_base_ENV.html", function (){

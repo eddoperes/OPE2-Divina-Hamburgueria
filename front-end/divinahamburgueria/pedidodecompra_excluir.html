@@ -16,9 +16,8 @@
 
 			<input type="hidden" id="idusuario" value="0">
 
-			<br/>
-			<a href="home.html">Home</a>		
-			<br/>
+			<div id="menu">
+                	</div>
 
 			<br/>
 			<h1 class="floatleft">Excluir pedido de compra</h1>
@@ -43,6 +42,7 @@
 	<script>
 
 		$(document).ready(function() {
+			$("#menu").load("menu.html");
 			$("#base_ENV").load("pedidodecompra_base_ENV.html");		
 			if (CheckLogin() == false)
 				return;	

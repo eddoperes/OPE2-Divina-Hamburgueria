@@ -40,8 +40,10 @@ function getCookie(name) {
     return null;
 }
 
-function doLogin(userId){
+function doLogin(userId, userType, userName){
     setCookie("user_id_", userId, 1); //set "user_id" cookie, expires in 1 days
+    setCookie("user_type_", userType, 1); //set "user_type" cookie, expires in 1 days
+    setCookie("user_name_", userName, 1); //set "user_name" cookie, expires in 1 days
 }
 
 function doLogout(){
@@ -55,6 +57,22 @@ function getLoggedUserId(){
         return -1; 			
     else
         return userId;
+}
+
+function getLoggedUserType(){
+    var userType = getCookie("user_type_");			
+    if (userType == null)			
+        return -1; 			
+    else
+        return userType;
+}
+
+function getLoggedUserName(){
+    var userName = getCookie("user_name_");			
+    if (userName == null)			
+        return ''; 			
+    else
+        return userName;
 }
 
 //-------------------------------------------------------------------------------------------
@@ -157,11 +175,13 @@ function ValidarCNPJ(cnpj) {
 //-------------------------------------------------------------------------------------------
 
 var urlWebApi = 'http://192.168.0.26:8000';
+//var urlWebApi = 'https://divinahamburgueria.herokuapp.com';
 
 // Generico
 //-------------------------------------------------------------------------------------------
 
 function WebApi_POST_Generico(data, callbackSucess, callbackComplete, url){
+    data.tipousuario = getLoggedUserType();
     $.ajax({
         url: urlWebApi + '/' + url + '/',
         data: data,
@@ -170,23 +190,26 @@ function WebApi_POST_Generico(data, callbackSucess, callbackComplete, url){
         success: callbackSucess,
         complete: callbackComplete     
     });
-}
+} 
 
 function WebApi_PUT_Generico(id, data, callbackSucess, callbackComplete, url){
+    data.tipousuario = getLoggedUserType();
     $.ajax({
         url: urlWebApi + '/' + url + '/' + id,
         data: data,
         type: 'PUT',
         crossDomain: true,
         success: callbackSucess,
-        complete: callbackComplete     
+        complete: callbackComplete,
     });
 }
 
 function WebApi_DELETE_Generico(id, callbackSucess, callbackComplete, url){
+    data = {};
+    data.tipousuario = getLoggedUserType();
     $.ajax({
         url: urlWebApi + '/' + url + '/' + id,
-        data: {},
+        data: data,
         type: 'DELETE',
         crossDomain: true,
         success: callbackSucess,
@@ -195,9 +218,11 @@ function WebApi_DELETE_Generico(id, callbackSucess, callbackComplete, url){
 }
 
 function WebApi_GET_Generico(id, callbackSucess, callbackComplete, url){
+    data = {};
+    data.tipousuario = getLoggedUserType();
     $.ajax({
         url: urlWebApi + '/' + url + '/' + id,
-        data: {},
+        data: data,
         type: 'GET',
         crossDomain: true,
         success: callbackSucess,
@@ -206,9 +231,11 @@ function WebApi_GET_Generico(id, callbackSucess, callbackComplete, url){
 }
 
 function WebApi_GET_LIST_Generico(filter, callbackSucess, callbackComplete, url){
+    data = {};
+    data.tipousuario = getLoggedUserType();
     $.ajax({
         url: urlWebApi + '/' + url + '/' + filter,
-        data: {},
+        data: data,
         type: 'GET',
         crossDomain: true,
         success: callbackSucess,

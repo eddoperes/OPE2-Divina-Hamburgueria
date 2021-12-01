@@ -5,150 +5,28 @@
 		<script src="jquery/jquery3.6.js"></script>
 		<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
 		<script src="bootstrap/dist/js/bootstrap.js"></script>
-        <link rel="stylesheet" href="css/sistema.css" >
-        <script src="js/sistema.js"></script>
+        	<link rel="stylesheet" href="css/sistema.css" >
+        	<script src="js/sistema.js"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 
 	<body class="setecincoporcento" > 
 
-		<br/>
-		<div>
-
-			<div>
-				<h1>
-					Divina Hamburgueria
-					<a style="float:right;" id="login" href="login.html">Login</a>
-					<a style="float:right;" id="logout" href="" onclick="Logout()">Logout</a>
-				</h1>
-			</div>
+		<div id="menu">
+                </div> 
 		
-		</div>		
 		<br/>
-
-
-		<div >
-
-			<h2 id="titulosecaocadastros">
-				Cadastros
-			</h2>
-
-			<div id="usuarios" class="duzentospixelsfundoazul">
-				<h3><a class="linkbranco" href="usuario_listar.html">Usuários</a></h3>
-			</div>
-
-			<div id="clientes" class="duzentospixelsfundoazul">
-				<h3><a class="linkbranco" href="cliente_listar.html">Clientes</a></h3>
-			</div>
-
-			<div id="fornecedores" class="duzentospixelsfundoazul">
-				<h3><a class="linkbranco" href="fornecedor_listar.html">Fornecedores</a></h3>
-			</div>
-			
-			<div style="clear: both;">
-			</div>
-
-		</div>
-		<br/>	
-
-		<div >
-
-			<h2 id="titulosecaovendas">
-				Vendas
-			</h2>
-
-			<div id="itensdocardapio" class="duzentospixelsfundoazul">
-				<h3><a class="linkbranco" href="itemdocardapio_listar.html">Itens do<br/>Cardápio</a></h3>
-			</div>
-
-			<div id="cardapios" class="duzentospixelsfundoazul">
-				<h3><a class="linkbranco" href="cardapio_listar.html">Cardápios</a></h3>
-			</div>
-
-			<div id="pedidossalao" class="duzentospixelsfundoazul">
-				<h3><a class="linkbranco" href="pedidosalao_listar.html">Pedidos<br/>Salão</a></h3>
-			</div>
-
-			<div id="pedidosdelivery" class="duzentospixelsfundoazul">
-				<h3><a class="linkbranco" href="pedidodelivery_listar.html">Pedidos<br/>Delivery</a></h3>
-			</div>
-
-			<div style="clear: both;">
-			</div>
-
-		</div>
-		<br/>
-
-		<div >
-
-			<h2 id="titulosecaocompras">
-				Compras
-			</h2>
-
-			<div id="itensdoestoque" class="duzentospixelsfundoazul">
-				<h3><a class="linkbranco" href="itemdoestoque_listar.html">Itens do<br/>Estoque</a></h3>
-			</div>
-
-			<div id="pedidosdecompra" class="duzentospixelsfundoazul">
-				<h3><a class="linkbranco" href="pedidodecompra_listar.html">Pedidos de<br/>Compra</a></h3>
-			</div>
-
-			<div id="estoque" class="duzentospixelsfundoazul">
-				<h3><a class="linkbranco" href="estoque_listar.html">Estoque</a></h3>
-			</div>
-
-			<div style="clear: both;">
-			</div>
-
-		</div>
-		<br/>
+		
+ 		<img src="image/hamburguer.png" alt="hamburguer" class="center"> 
+		<h1 class="center">Divina Hamburgueria<h1>
 
 	</body>
 
 	<script>
 
-		$(function(){	
-			var idusuario = getLoggedUserId();
-			if (idusuario == -1){
-				$('#login').css('display','block');
-				$('#logout').css('display','none');
-				$('#usuarios').css('display','none');
-				$('#clientes').css('display','none');
-				$('#fornecedores').css('display','none');
-				$('#itensdocardapio').css('display','none');
-				$('#itensdoestoque').css('display','none');
-				$('#cardapios').css('display','none');
-				$('#pedidossalao').css('display','none');
-				$('#pedidosdelivery').css('display','none');
-				$('#pedidosdecompra').css('display','none');
-				$('#titulosecaocadastros').css('display','none');
-				$('#titulosecaovendas').css('display','none');
-				$('#titulosecaocompras').css('display','none');
-				$('#estoque').css('display','none');
-			}
-			else
-			{
-				$('#login').css('display','none');
-				$('#logout').css('display','block');
-				$('#usuarios').css('display','block');
-				$('#clientes').css('display','block');
-				$('#fornecedores').css('display','block');
-				$('#itensdocardapio').css('display','block');
-				$('#itensdoestoque').css('display','block');
-				$('#cardapios').css('display','block');
-				$('#pedidossalao').css('display','block');
-				$('#pedidosdelivery').css('display','block');
-				$('#pedidosdecompra').css('display','block');
-				$('#titulosecaocadastros').css('display','block');
-				$('#titulosecaovendas').css('display','block');
-				$('#titulosecaocompras').css('display','block');
-				$('#estoque').css('display','block');
-			}
+		$(document).ready(function() {
+			$("#menu").load("menu.html");	 	 				
 		});
-
-		function Logout(){
-			doLogout();									
-		}
 
 	</script>
 

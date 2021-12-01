@@ -16,9 +16,8 @@
 
 			<input type="hidden" id="idcliente" value="0">
 
-			<br/>
-			<a href="home.html">Home</a>		
-			<br/>
+			<div id="menu">
+                	</div> 
 
 			<br/>
 			<h1 class="floatleft">Novo cliente</h1>
@@ -44,6 +43,7 @@
 		$(document).ready(function() {
 			if (CheckLogin() == false)
 				return;
+			$("#menu").load("menu.html");
 			$("#base_CLI").load("cliente_base_CLI.html", function (){
 				$("#base_CLI_END").load("cliente_base_CLI_END.html"); 
 				$("#base_CLI_TEL").load("cliente_base_CLI_TEL.html"); 

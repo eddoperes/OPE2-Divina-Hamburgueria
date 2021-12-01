@@ -16,9 +16,8 @@
 
 			<input type="hidden" id="idusuario" value="0">
 
-			<br/>
-			<a href="home.html">Home</a>		
-			<br/>
+			<div id="menu">
+                	</div> 
 
 			<br/>
 			<h1 class="floatleft">Editar item do cardápio</h1>
@@ -56,6 +55,7 @@
 		$(document).ready(function() {
 			if (CheckLogin() == false)
 				return;
+			$("#menu").load("menu.html");
 			$("#base_ITE").load("itemdocardapio_base_ITE.html",function (){
 				_loadITECompleted = true;
 				$("#adicionarRevenda").prop("disabled", true);
@@ -92,7 +92,7 @@
 		}
 
 		var _itemdoestoque_revenda_list;
-		var _itemdoestoque_receita_list = [];
+		var _itemdoestoque_receita_list;
 
 		function LoadLists(){
 			WebApi_GET_LIST_ItemDoEstoque
@@ -112,7 +112,8 @@
 			(
 				'?tipo=1', 
 				function success(data) {
-					//console.log(data);	
+					//console.log(data);					
+					_itemdoestoque_receita_list = [];
 					data = data.sort((a, b) => (a.nome > b.nome) ? 1 : -1);	
 					var i, last;					
 					for (i=0; i<data.length; i++){					
@@ -129,11 +130,11 @@
 			);
 		}
 
-		function StartLoadData(){
+		function StartLoadData(){			
 			if (_itemdoestoque_revenda_list == null)
 				return;
-			if (_itemdoestoque_receita_list.length == 0)
-				return;
+			if (_itemdoestoque_receita_list == null)
+				return;			
 			LoadData();
 		}
 

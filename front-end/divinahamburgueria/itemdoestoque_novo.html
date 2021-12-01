@@ -16,9 +16,8 @@
 
 			<input type="hidden" id="idusuario" value="0">
 
-			<br/>
-			<a href="home.html">Home</a>		
-			<br/>
+			<div id="menu">
+                	</div>
 
 			<br/>
 			<h1 class="floatleft">Novo item do estoque</h1>
@@ -41,6 +40,7 @@
 		$(document).ready(function() {
 			if (CheckLogin() == false)
 				return;
+			$("#menu").load("menu.html");
 			$("#base_ITE").load("itemdoestoque_base_ITE.html"); 
 		});
 
@@ -81,7 +81,7 @@
 					if (xhr.status == 201){
 						$('#falha').css('display','none');
 						$('#sucesso').css('display','block');
-						$('#sucesso').html("O item do estoque foi criado com sucesso! <a href='itemdoEstoque_listar.html'>Seguir para a lista de itens do estoque</a>");			
+						$('#sucesso').html("O item do estoque foi criado com sucesso! <a href='itemdoestoque_listar.html'>Seguir para a lista de itens do estoque</a>");			
 					}
 					else{
 						$('#sucesso').css('display','none');

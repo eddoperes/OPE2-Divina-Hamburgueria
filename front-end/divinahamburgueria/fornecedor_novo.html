@@ -16,9 +16,8 @@
 
 			<input type="hidden" id="idcliente" value="0">
 
-			<br/>
-			<a href="home.html">Home</a>		
-			<br/>
+			<div id="menu">
+                	</div>
 
 			<br/>
 			<h1 class="floatleft">Novo fornecedor</h1>
@@ -44,6 +43,7 @@
 		$(document).ready(function() {
 			if (CheckLogin() == false)
 				return;
+			$("#menu").load("menu.html");
 			$("#base_FOR").load("fornecedor_base_FOR.html", function (){
 				$("#base_FOR_END").load("fornecedor_base_FOR_END.html"); 
 				$("#base_FOR_TEL").load("fornecedor_base_FOR_TEL.html", function (){

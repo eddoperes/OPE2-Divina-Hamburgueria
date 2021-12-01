@@ -16,9 +16,8 @@
 
 			<input type="hidden" id="idusuario" value="0">
 
-			<br/>
-			<a href="home.html">Home</a>		
-			<br/>
+			<div id="menu">
+                	</div> 
 
 			<br/>
 			<h1 class="floatleft">Editar cardápio</h1>
@@ -48,7 +47,8 @@
 	<script>
 
 		$(document).ready(function() {
-    		$("#base_CDP").load("cardapio_base_CDP.html"); 						 								
+			$("#menu").load("menu.html");
+	    		$("#base_CDP").load("cardapio_base_CDP.html"); 						 								
 			$("#cardapio_base_ITE_LIN").load("cardapio_base_ITE_LIN.html");			
 			if (CheckLogin() == false)
 				return;

@@ -16,9 +16,8 @@
 
 			<input type="hidden" id="idusuario" value="0">
 
-			<br/>
-			<a href="home.html">Home</a>		
-			<br/>
+			<div id="menu">
+                	</div>
 
 			<br/>
 			<h1>Listar pedidos delivery</h1>
@@ -56,7 +55,8 @@
 
 		$(document).ready(function() {
 			if (CheckLogin() == false)
-				return; 				
+				return; 
+			$("#menu").load("menu.html");				
 		});	
 
 		function CheckLogin(){

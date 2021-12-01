@@ -16,9 +16,8 @@
 
 			<input type="hidden" id="idusuario" value="0">
 
-			<br/>
-			<a href="home.html">Home</a>		
-			<br/>
+			<div id="menu">
+                	</div>
 
 			<br/>
 			<h1 class="floatleft">Entrada do estoque</h1>
@@ -62,8 +61,8 @@
 		$(document).ready(function() {		
 			if (CheckLogin() == false)
 				return;
-
-            $("#pedidodecompra").focusout(function (){
+			$("#menu").load("menu.html");
+		        $("#pedidodecompra").focusout(function (){
 			    if ($("#pedidodecompra").val() == null)
 				    $("#pedidodecompra").addClass("is-invalid");
 			    else

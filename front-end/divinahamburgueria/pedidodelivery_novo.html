@@ -16,9 +16,8 @@
 
 			<input type="hidden" id="idusuario" value="0">
 
-			<br/>
-			<a href="home.html">Home</a>		
-			<br/>
+			<div id="menu">
+                	</div>
 
 			<br/>
 			<h1 class="floatleft">Novo pedido delivery</h1>
@@ -55,6 +54,7 @@
 	<script>
 
 		$(document).ready(function() {
+			$("#menu").load("menu.html");
 			$("#base_PDD").load("pedidodelivery_base_PDD.html"); 
 			$("#base_ITE").load("pedidodelivery_base_ITE.html", function (){
 				$('#total').prop('disabled', true);							

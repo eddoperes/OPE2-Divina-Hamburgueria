@@ -7,7 +7,7 @@ from .models import PedidoSalao, PedidoSalaoItemDoCardapio
 from .models import PedidoDelivery, PedidoDeliveryItemDoCardapio
 from .models import ItemDoEstoque, Estoque
 from .models import PedidoDeCompra, PedidoDeCompraItemDoEstoque
-from .serializers import UsuarioSerializer, ClienteSerializer, FornecedorSerializer, EnderecoSerializer, TelefoneSerializer
+from .serializers import UsuarioSerializer, UsuarioNoPasswordSerializer, ClienteSerializer, FornecedorSerializer, EnderecoSerializer, TelefoneSerializer
 from .serializers import ItemDoCardapioSerializer, CardapioSerializer, CardapioItemDoCardapioSerializer 
 from .serializers import ReceitaSerializer, RevendaSerializer
 from .serializers import PedidoSalaoSerializer, PedidoSalaoItemDoCardapioSerializer
@@ -33,10 +33,14 @@ from datetime import datetime
 def usuario_list (request):
     if request.method == 'GET':
         filtro = request.GET.get('nome', '')
-        usuario =  Usuario.objects.filter(nome__contains=filtro)		
-        serializer = UsuarioSerializer(usuario, many=True)
+        usuario =  Usuario.objects.filter(nome__icontains=filtro)		
+        serializer = UsuarioNoPasswordSerializer(usuario, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode criar usuários', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         serializer = UsuarioSerializer(data = request.data)
         if serializer.is_valid():  
             if Usuario.objects.filter(nome=serializer.validated_data['nome']).exists():
@@ -53,10 +57,14 @@ def usuario_detail(request, pk):
     except Usuario.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     if request.method == 'GET':
-        serializer = UsuarioSerializer(usuario)
+        serializer = UsuarioNoPasswordSerializer(usuario)
         return Response(serializer.data)
     elif request.method == 'PUT':
-        serializer = UsuarioSerializer(usuario, data=request.data)
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode editar usuários', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
+        serializer = UsuarioNoPasswordSerializer(usuario, data=request.data)        
         if serializer.is_valid():
             if request.data["estado"] == "1":
                serializer.save(dataativado = datetime.today())
@@ -66,6 +74,10 @@ def usuario_detail(request, pk):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode excluir', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         usuario.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -130,7 +142,7 @@ def usuario_alterar_senha(request):
 def cliente_list (request):
     if request.method == 'GET':
         filtro = request.GET.get('nome', '')
-        cliente =  Cliente.objects.filter(nome__contains=filtro)		
+        cliente =  Cliente.objects.filter(nome__icontains=filtro)		
         serializer = ClienteSerializer(cliente, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
@@ -158,6 +170,10 @@ def cliente_detail(request, pk):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode excluir', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         cliente.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -173,7 +189,7 @@ def cliente_detail(request, pk):
 def endereco_list (request):
     if request.method == 'GET':
         filtro = request.GET.get('rua', '')
-        endereco =  Endereco.objects.filter(logradouro__contains=filtro)		
+        endereco =  Endereco.objects.filter(logradouro__icontains=filtro)		
         serializer = EnderecoSerializer(endereco, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
@@ -202,6 +218,10 @@ def endereco_detail(request, pk):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode excluir', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         endereco.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -217,7 +237,7 @@ def endereco_detail(request, pk):
 def telefone_list (request):
     if request.method == 'GET':
         filtro = request.GET.get('telefone', '')
-        telefone =  Telefone.objects.filter(numero__contains=filtro)		
+        telefone =  Telefone.objects.filter(numero__icontains=filtro)		
         serializer = TelefoneSerializer(telefone, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
@@ -246,6 +266,10 @@ def telefone_detail(request, pk):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode excluir', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         telefone.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -261,7 +285,7 @@ def telefone_detail(request, pk):
 def fornecedor_list (request):
     if request.method == 'GET':
         filtro = request.GET.get('nome', '')
-        fornecedor =  Fornecedor.objects.filter(nome__contains=filtro)		
+        fornecedor =  Fornecedor.objects.filter(nome__icontains=filtro)		
         serializer = FornecedorSerializer(fornecedor, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
@@ -289,6 +313,10 @@ def fornecedor_detail(request, pk):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode excluir', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         fornecedor.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -315,10 +343,14 @@ def itemdocardapio_list (request):
            return Response(serializer.data)
         else:
            filtro = request.GET.get('nome', '')
-           itemdocardapio =  ItemDoCardapio.objects.filter(nome__contains=filtro)		
+           itemdocardapio =  ItemDoCardapio.objects.filter(nome__icontains=filtro)		
            serializer = ItemDoCardapioSerializer(itemdocardapio, many=True)
            return Response(serializer.data)
     elif request.method == 'POST':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1' and request.data["tipousuario"] != '2':
+           return Response('Permissão negada. Somente um usuário do tipo chef ou auxiliar pode criar itens do cardápio', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         serializer = ItemDoCardapioSerializer(data = request.data)
         if serializer.is_valid():  
             if ItemDoCardapio.objects.filter(nome=serializer.validated_data['nome']).exists():
@@ -338,6 +370,10 @@ def itemdocardapio_detail(request, pk):
         serializer = ItemDoCardapioSerializer(itemdocardapio)
         return Response(serializer.data)
     elif request.method == 'PUT':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1' and request.data["tipousuario"] != '2':
+           return Response('Permissão negada. Somente um usuário do tipo chef ou auxiliar pode editar itens do cardápio', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         serializer = ItemDoCardapioSerializer(itemdocardapio, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -345,6 +381,10 @@ def itemdocardapio_detail(request, pk):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode excluir', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         itemdocardapio.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -367,6 +407,10 @@ def revenda_list (request):
         serializer = RevendaSerializer(revenda, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1' and request.data["tipousuario"] != '2':
+           return Response('Permissão negada. Somente um usuário do tipo chef ou auxiliar pode criar revendas', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         serializer = RevendaSerializer(data = request.data)
         if serializer.is_valid():            
             serializer.save()
@@ -385,6 +429,10 @@ def revenda_detail(request, pk):
         serializer = RevendaSerializer(revenda)
         return Response(serializer.data)
     elif request.method == 'PUT':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1' and request.data["tipousuario"] != '2':
+           return Response('Permissão negada. Somente um usuário do tipo chef ou auxiliar pode editar revendas', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         serializer = RevendaSerializer(revenda, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -392,6 +440,10 @@ def revenda_detail(request, pk):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode excluir', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         revenda.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -414,6 +466,10 @@ def receita_list (request):
         serializer = ReceitaSerializer(receita, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1' and request.data["tipousuario"] != '2':
+           return Response('Permissão negada. Somente um usuário do tipo chef ou auxiliar pode criar receitas', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         serializer = ReceitaSerializer(data = request.data)
         if serializer.is_valid():            
             serializer.save()
@@ -432,6 +488,10 @@ def receita_detail(request, pk):
         serializer = ReceitaSerializer(receita)
         return Response(serializer.data)
     elif request.method == 'PUT':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1' and request.data["tipousuario"] != '2':
+           return Response('Permissão negada. Somente um usuário do tipo chef ou auxiliar pode editar receitas', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         serializer = ReceitaSerializer(receita, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -439,6 +499,10 @@ def receita_detail(request, pk):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode excluir', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         receita.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -454,10 +518,14 @@ def receita_detail(request, pk):
 def cardapio_list (request):
     if request.method == 'GET':
         filtro = request.GET.get('nome', '')
-        cardapio =  Cardapio.objects.filter(nome__contains=filtro)		
+        cardapio =  Cardapio.objects.filter(nome__icontains=filtro)		
         serializer = CardapioSerializer(cardapio, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1' and request.data["tipousuario"] != '2':
+           return Response('Permissão negada. Somente um usuário do tipo chef ou auxiliar pode criar cardápios', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         serializer = CardapioSerializer(data = request.data)
         if serializer.is_valid():  
             if Cardapio.objects.filter(nome=serializer.validated_data['nome']).exists():
@@ -477,6 +545,10 @@ def cardapio_detail(request, pk):
         serializer = CardapioSerializer(cardapio)
         return Response(serializer.data)
     elif request.method == 'PUT':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1' and request.data["tipousuario"] != '2':
+           return Response('Permissão negada. Somente um usuário do tipo chef ou auxiliar pode editar cardápios', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         serializer = CardapioSerializer(cardapio, data=request.data)
         if serializer.is_valid():
             if request.data["estado"] == "1":
@@ -487,6 +559,10 @@ def cardapio_detail(request, pk):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode excluir', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         cardapio.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -510,6 +586,10 @@ def cardapioitemdocardapio_list (request):
         serializer = CardapioItemDoCardapioSerializer(cardapioitemdocardapio, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1' and request.data["tipousuario"] != '2':
+           return Response('Permissão negada. Somente um usuário do tipo chef ou auxiliar pode criar cardápios', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         serializer = CardapioItemDoCardapioSerializer(data = request.data)
         if serializer.is_valid():          
             serializer.save()
@@ -527,6 +607,10 @@ def cardapioitemdocardapio_detail(request, pk):
         serializer = CardapioItemDoCardapioSerializer(cardapioitemdocardapio)
         return Response(serializer.data)
     elif request.method == 'PUT':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1' and request.data["tipousuario"] != '2':
+           return Response('Permissão negada. Somente um usuário do tipo chef ou auxiliar pode editar cardápios', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         serializer = CardapioItemDoCardapioSerializer(cardapioitemdocardapio, data=request.data)
         if serializer.is_valid():
             if request.data["estado"] == "1":
@@ -537,6 +621,10 @@ def cardapioitemdocardapio_detail(request, pk):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode excluir', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         cardapioitemdocardapio.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -588,6 +676,10 @@ def pedidosalao_detail(request, pk):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode excluir', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         pedidosalao.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -631,6 +723,10 @@ def pedidosalaoitemdocardapio_detail(request, pk):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode excluir', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         pedidosalaoitemdocardapio.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -684,6 +780,10 @@ def pedidodelivery_detail(request, pk):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode excluir', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         pedidodelivery.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -727,6 +827,10 @@ def pedidodeliveryitemdocardapio_detail(request, pk):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode excluir', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         pedidodeliveryitemdocardapio.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -748,10 +852,14 @@ def itemdoestoque_list (request):
            return Response(serializer.data)
         else:
            filtro = request.GET.get('nome', '')
-           itemdoestoque =  ItemDoEstoque.objects.filter(nome__contains=filtro)		
+           itemdoestoque =  ItemDoEstoque.objects.filter(nome__icontains=filtro)		
            serializer = ItemDoEstoqueSerializer(itemdoestoque, many=True)
            return Response(serializer.data)
     elif request.method == 'POST':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1' and request.data["tipousuario"] != '2':
+           return Response('Permissão negada. Somente um usuário do tipo chef ou auxiliar pode criar itens do estoque', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         serializer = ItemDoEstoqueSerializer(data = request.data)
         if serializer.is_valid():  
             #if ItemDoEstoque.objects.filter(nome=serializer.validated_data['nome']).exists():
@@ -771,6 +879,10 @@ def itemdoestoque_detail(request, pk):
         serializer = ItemDoEstoqueSerializer(itemdoestoque)
         return Response(serializer.data)
     elif request.method == 'PUT':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1' and request.data["tipousuario"] != '2':
+           return Response('Permissão negada. Somente um usuário do tipo chef ou auxiliar pode editar itens do estoque', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         serializer = ItemDoEstoqueSerializer(itemdoestoque, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -778,6 +890,10 @@ def itemdoestoque_detail(request, pk):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode excluir', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         itemdoestoque.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -800,6 +916,10 @@ def pedidodecompra_list (request):
         serializer = PedidoDeCompraSerializer(pedidodecompra, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1' and request.data["tipousuario"] != '2':
+           return Response('Permissão negada. Somente um usuário do tipo chef ou auxiliar pode criar itens do estoque', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         serializer = PedidoDeCompraSerializer(data = request.data)
         if serializer.is_valid():          
             serializer.save()
@@ -817,6 +937,10 @@ def pedidodecompra_detail(request, pk):
         serializer = PedidoDeCompraSerializer(pedidodecompra)
         return Response(serializer.data)
     elif request.method == 'PUT':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1' and request.data["tipousuario"] != '2':
+           return Response('Permissão negada. Somente um usuário do tipo chef ou auxiliar pode editar pedido de compra', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         serializer = PedidoDeCompraSerializer(pedidodecompra, data=request.data)
         if serializer.is_valid():
             if request.data["estado"] == "1":
@@ -833,6 +957,10 @@ def pedidodecompra_detail(request, pk):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode excluir', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         pedidodecompra.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -858,6 +986,10 @@ def pedidodecompraitemdoestoque_list (request):
         serializer = PedidoDeCompraItemDoEstoqueSerializer(pedidodecompraitemdoestoque, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1' and request.data["tipousuario"] != '2':
+           return Response('Permissão negada. Somente um usuário do tipo chef ou auxiliar pode criar itens do estoque', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         serializer = PedidoDeCompraItemDoEstoqueSerializer(data = request.data)
         if serializer.is_valid():          
             serializer.save()
@@ -875,6 +1007,10 @@ def pedidodecompraitemdoestoque_detail(request, pk):
         serializer = PedidoDeCompraItemDoEstoqueSerializer(pedidodecompraitemdoestoque)
         return Response(serializer.data)
     elif request.method == 'PUT':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1' and request.data["tipousuario"] != '2':
+           return Response('Permissão negada. Somente um usuário do tipo chef ou auxiliar pode editar itens do estoque', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         serializer = PedidoDeCompraItemDoEstoqueSerializer(pedidodecompraitemdoestoque, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -882,6 +1018,10 @@ def pedidodecompraitemdoestoque_detail(request, pk):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode excluir', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         pedidodecompraitemdoestoque.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -905,6 +1045,10 @@ def estoque_list (request):
         serializer = EstoqueSerializer(estoque, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode dar entrada no estoque', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         serializer = EstoqueSerializer(data = request.data)
         if serializer.is_valid():            
             serializer.save()
@@ -923,6 +1067,10 @@ def estoque_detail(request, pk):
         serializer = EstoqueSerializer(estoque)
         return Response(serializer.data)
     elif request.method == 'PUT':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode editar o estoque', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         serializer = EstoqueSerializer(estoque, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -930,6 +1078,10 @@ def estoque_detail(request, pk):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode excluir', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
         estoque.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
