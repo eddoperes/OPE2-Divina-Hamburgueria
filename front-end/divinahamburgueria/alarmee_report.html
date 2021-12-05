@@ -1,0 +1,229 @@
+<html>
+
+	<head>
+		<meta charset="utf8"/>
+		<script src="jquery/jquery3.6.js"></script>
+		<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
+		<script src="bootstrap/dist/js/bootstrap.js"></script>
+		<link rel="stylesheet" href="css/sistema.css" >
+		<script src="js/sistema.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+
+	<body>        
+
+		<div class="setecincoporcento">
+
+			<input type="hidden" id="idusuario" value="0">
+
+			<div id="menu">
+                	</div>
+
+			<br/>
+			<h1 class="floatleft">Relatório alarme</h1>
+			<br/>
+			<div class="clearboth"></div>
+			<br/>
+
+			<div id="table_container">
+			</div>
+
+		</div>
+
+	</body>
+
+	<script>		
+
+		$(document).ready(function() {	
+
+			//DescontarEstoque(5);
+
+			if (CheckLogin() == false)
+				return;
+			$("#menu").load("menu.html");			
+			LoadAlarmeListsReport(); 										
+		});		
+
+		function CheckLogin(){
+			var idusuario = getLoggedUserId();
+			if (idusuario == -1)
+			{
+				var page =  window.location.pathname.split("/").pop();
+				window.location.href = window.location.href.replace(page,'login.html');	
+				return false;					
+			}								
+			else
+			{
+				$('#idusuario').val(idusuario);
+				return true;
+			}
+		}
+
+
+		var alarme_list_report;
+		var estoque_list_report;
+		var item_do_estoque_list_report;
+
+		function LoadAlarmeListsReport(){			
+
+			WebApi_GET_LIST_AlarmeE
+			(
+				'?quantidademinima=100000',
+				function success(data) {			
+					//console.log(data);			
+					alarme_list_report = data;		
+					AlarmeE();
+				},
+				function complete(xhr, text) {
+					console.log(xhr.status);
+					//console.log(xhr.responseText);			
+				}				
+			);
+
+			WebApi_GET_LIST_Estoque
+			(
+				'?quantidade=100000',
+				function success(data) {			
+					//console.log(data);			
+					estoque_list_report = data;
+					AlarmeE();		
+				},
+				function complete(xhr, text) {
+					console.log(xhr.status);
+					//console.log(xhr.responseText);			
+				}				
+			);
+
+			WebApi_GET_LIST_ItemDoEstoque
+			(
+				'?nome=', 
+				function success(data) {			
+					//console.log(data);			
+					item_do_estoque_list_report = data;
+					AlarmeE();		
+				},
+				function complete(xhr, text) {
+					console.log(xhr.status);
+					//console.log(xhr.responseText);			
+				}	     
+			);
+		
+		}
+
+		function AlarmeE(){
+
+			if(alarme_list_report == undefined)
+				return;
+
+			if(estoque_list_report == undefined)
+				return;
+
+			if(item_do_estoque_list_report == undefined)
+				return;
+
+			var textData = '<table class="table">';
+
+			textData += '<tr>';
+
+			textData += '<th>';
+			textData += 'Id';
+			textData += '</th>';
+
+			textData += '<th>';
+			textData += 'Item';
+			textData += '</th>';
+
+			textData += '<th class="coluna_oculta_cel">';
+			textData += 'Qtde min';
+			textData += '</th>';
+
+			textData += '<th class="coluna_oculta_cel">';
+			textData += 'Qtde';
+			textData += '</th>';
+
+			textData += '</tr>';
+
+			var sum_estoque = 0;
+			
+			for(i=0; i < alarme_list_report.length; i++){	
+			
+				var itensDoEstoqueComNome = item_do_estoque_list_report.filter(o=> o.nome == alarme_list_report[i].nome);
+			
+				for(k=0; k < itensDoEstoqueComNome.length; k++){
+
+					var estoque = estoque_list_report.find(o=> o.itemdoestoque == itensDoEstoqueComNome[k].id);
+
+					var este_estoque = estoque.quantidade * itensDoEstoqueComNome[k].conteudo;
+
+					var esta_unidade  = EncontrarUnidadeComparacao(itensDoEstoqueComNome[k].unidade);
+					var f = EncontrarFuncaoConversao(esta_unidade);
+					este_estoque = f(este_estoque, itensDoEstoqueComNome[k].unidade);
+
+					sum_estoque = sum_estoque + este_estoque;
+										
+				}
+
+				var unidade_alarme = EncontrarUnidadeComparacao(alarme_list_report[i].unidade);				
+				var f = EncontrarFuncaoConversao(unidade_alarme);
+				var qtde_alarme_normalizada = f(alarme_list_report[i].quantidademinima, alarme_list_report[i].unidade);
+
+				if (sum_estoque == 0){
+			
+					textData += '<tr>';
+
+					textData += '<td>';
+					textData += alarme_list_report[i].id;
+					textData += '</td>';
+
+					textData += '<td>';							
+					textData += alarme_list_report[i].nome;
+					textData += '</td>';
+
+					textData += '<td class="coluna_oculta_cel">';
+					textData += qtde_alarme_normalizada + ' ' +  unidade_alarme;
+					textData += '</td>';
+
+					textData += '<td class="coluna_oculta_cel">';
+					textData += 0 + ' ' +  unidade_alarme;
+					textData += '</td>';
+
+					textData += '</tr>';				
+				}
+				else{
+			
+					if (qtde_alarme_normalizada > sum_estoque){
+					
+						textData += '<td>';
+						textData += alarme_list_report[i].id;
+						textData += '</td>';
+
+						textData += '<td>';							
+						textData += alarme_list_report[i].nome;
+						textData += '</td>';
+
+						textData += '<td class="coluna_oculta_cel">';
+						textData += qtde_alarme_normalizada + ' ' +  unidade_alarme;
+						textData += '</td>';
+
+						textData += '<td class="coluna_oculta_cel">';
+						textData += sum_estoque.toFixed(2) + ' ' +  unidade_alarme;
+						textData += '</td>';
+
+						textData += '</tr>';
+
+					}
+
+
+				}
+
+			}
+
+			textData += '</table>'
+			$('#table_container').html(textData);
+
+		}
+
+		
+	</script>
+
+</html>

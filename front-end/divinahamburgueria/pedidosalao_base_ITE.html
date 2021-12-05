@@ -163,7 +163,8 @@
                               }, 
                               function success(data) {
                                     console.log(data);
-                                    $('#id' + i).val(data.id);
+                                    $('#id' + i).val(data.id);				    
+				    DescontarEstoque($('#itemdocardapio' + i).val()); //baixa automática
                                     CrudPedidoSalaoItemDoCardapio(i + 1);
                               },
                               function complete(xhr, text) {
@@ -180,7 +181,7 @@
                                           $('#falha' + i).text("Ocorreu uma falha: " + xhr.responseText);
                                     }					
                               }     
-                        );
+                        );			
 
                   }
                   else
@@ -251,5 +252,7 @@
             }
 
       }
+
+
 
 </script>

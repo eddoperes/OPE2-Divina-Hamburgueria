@@ -64,4 +64,11 @@ urlpatterns = [
     url(r'^receita_list/$', views.receita_list, name='receita_list'),
     path('receita_detail/<int:pk>', views.receita_detail),
 
+    url(r'^alarme_list/$', views.alarme_list, name='alarme_list'),
+    path('alarme_detail/<int:pk>', views.alarme_detail),
+
+    url(r'^alarmee_list/$', views.alarmee_list, name='alarmee_list'),
+    path('alarmee_detail/<int:pk>', views.alarmee_detail),
+
+
 ]

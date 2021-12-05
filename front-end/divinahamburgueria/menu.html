@@ -34,7 +34,7 @@
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <h4>
             <li><a class="dropdown-item" href="itemdocardapio_listar.html">Itens do Cardápio</a></li>
-            <li><a class="dropdown-item" href="cardapio_listar.html">Cardápio</a></li>
+            <li><a class="dropdown-item" href="cardapio_listar.html">Cardápios</a></li>
 	    <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="pedidosalao_listar.html">Pedidos Salão</a></li>
             <li><a class="dropdown-item" href="pedidodelivery_listar.html">Pedidos Delivery</a></li>
@@ -52,6 +52,7 @@
             <li><a class="dropdown-item" href="pedidodecompra_listar.html">Pedidos de Compra</a></li>            
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="estoque_listar.html">Estoque</a></li>
+	    <li><a class="dropdown-item" href="alarmee_listar.html">Alarmes</a></li>
             </h4>
           </ul>
         </li>
@@ -62,7 +63,11 @@
   </div>
 </nav>
 
-<div style="margin-bottom:15px;">		
+<div id="alarme" class="displaynone" style="float:left;background-color:red;padding:2px;">		
+	<a href="alarmee_report.html" style="color:white;">Alarme</a>
+</div>
+
+<div style="margin-bottom:25px;">		
 	<a style="float:right;" id="login" href="login.html">Login</a>
 	<a style="float:right;" id="logout" href="" onclick="Logout()">Logout</a>	
         <label id="ola" style="float:right;margin-right:10px;"></label>
@@ -85,11 +90,187 @@
 			$('#logout').css('display','block');				
 			$('#ola').text('Olá ' + getLoggedUserName());
 		}
+		//LoadAlarmeLists();
+		LoadAlarmeELists();
 	});	
 
 	function Logout(){
 		doLogout();	
 		$('#ola').text('');								
+	}
+
+	var alarme_list;
+	var estoque_list;
+
+	function LoadAlarmeLists(){
+
+		WebApi_GET_LIST_Alarme
+		(
+			'?quantidademinima=100000',
+			function success(data) {			
+				//console.log(data);			
+				alarme_list = data;		
+				CheckAlarme();
+			},
+			function complete(xhr, text) {
+				console.log(xhr.status);
+				//console.log(xhr.responseText);			
+			}				
+		);
+
+		WebApi_GET_LIST_Estoque
+		(
+			'?quantidade=100000',
+			function success(data) {			
+				//console.log(data);			
+				estoque_list = data;
+				CheckAlarme();		
+			},
+			function complete(xhr, text) {
+				console.log(xhr.status);
+				//console.log(xhr.responseText);			
+			}				
+		);
+		
+	}
+
+	function CheckAlarme(){
+
+		if(alarme_list == undefined)
+			return;
+
+		if(estoque_list == undefined)
+			return;
+			
+		for(i=0; i < alarme_list.length; i++){	
+			var ok = false;		
+			for(k=0; k < estoque_list.length; k++){
+				if (alarme_list[i].itemdoestoque == estoque_list[k].itemdoestoque ){
+					ok = true;
+					if(estoque_list[k].quantidade < alarme_list[i].quantidademinima){
+						$("#alarme").removeClass("displaynone");
+						//alert(alarme_list[i].itemdoestoque);						
+					}                                        
+					break;
+				}				
+			}
+
+			if (ok == false){
+				$("#alarme").removeClass("displaynone");
+				//alert(alarme_list[i].itemdoestoque);				
+			}
+
+		}
+		
+	}
+
+
+
+
+
+
+	var alarmee_list;
+	var estoquee_list;
+	var itemdoestoquee_list;
+
+
+	function LoadAlarmeELists(){
+
+		WebApi_GET_LIST_AlarmeE
+		(
+			'?quantidademinima=100000',
+			function success(data) {			
+				//console.log(data);			
+				alarmee_list = data;		
+				CheckAlarmeE();
+			},
+			function complete(xhr, text) {
+				console.log(xhr.status);
+				//console.log(xhr.responseText);			
+			}				
+		);
+
+		WebApi_GET_LIST_Estoque
+		(
+			'?quantidade=100000',
+			function success(data) {			
+				//console.log(data);			
+				estoquee_list = data;
+				CheckAlarmeE();		
+			},
+			function complete(xhr, text) {
+				console.log(xhr.status);
+				//console.log(xhr.responseText);			
+			}				
+		);
+
+		WebApi_GET_LIST_ItemDoEstoque
+		(
+			'?nome=',
+			function success(data) {			
+				//console.log(data);			
+				itemdoestoquee_list = data;
+				CheckAlarmeE();		
+			},
+			function complete(xhr, text) {
+				console.log(xhr.status);
+				//console.log(xhr.responseText);			
+			}				
+		);
+		
+	}
+
+
+	function CheckAlarmeE(){
+
+		if(alarmee_list == undefined)
+			return;
+
+		if(estoquee_list == undefined)
+			return;
+
+		if(itemdoestoquee_list == undefined)
+			return;
+
+		var sum_estoque = 0;
+			
+		for(i=0; i < alarmee_list.length; i++){	
+			
+			var itensDoEstoqueComNome = itemdoestoquee_list.filter(o=> o.nome == alarmee_list[i].nome);
+			
+			for(k=0; k < itensDoEstoqueComNome.length; k++){
+
+				var estoque = estoquee_list.find(o=> o.itemdoestoque == itensDoEstoqueComNome[k].id);
+
+				var este_estoque = estoque.quantidade * itensDoEstoqueComNome[k].conteudo;
+
+				var esta_unidade  = EncontrarUnidadeComparacao(itensDoEstoqueComNome[k].unidade);
+				var f = EncontrarFuncaoConversao(esta_unidade);
+				este_estoque = f(este_estoque, itensDoEstoqueComNome[k].unidade);
+
+				sum_estoque = sum_estoque + este_estoque;
+										
+			}
+
+			if (sum_estoque == 0){
+				$("#alarme").removeClass("displaynone");
+				break;				
+			}
+			else{
+
+				var unidade_alarme = EncontrarUnidadeComparacao(alarmee_list[i].unidade);				
+				var f = EncontrarFuncaoConversao(unidade_alarme);
+				var qtde_alarme_normalizada = f(alarmee_list[i].quantidademinima, alarmee_list[i].unidade);
+			
+				if (qtde_alarme_normalizada > sum_estoque){
+					$("#alarme").removeClass("displaynone");
+					break;	
+				}
+
+			}
+
+		}
+		
 	}
 
 </script>

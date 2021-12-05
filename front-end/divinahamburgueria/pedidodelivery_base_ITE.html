@@ -161,6 +161,7 @@
                               function success(data) {
                                     //console.log(data);
                                     $('#id' + i).val(data.id);
+				    DescontarEstoque($('#itemdocardapio' + i).val()); //baixa automática
                                     CrudPedidoDeliveryItemDoCardapio(i + 1);
                               },
                               function complete(xhr, text) {

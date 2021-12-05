@@ -82,6 +82,9 @@
 				function success(data) {			
 					//console.log(data);
 					itemdocardapio_list = data;
+					itemdocardapio_list.sort(function (a, b) {
+						return (a.nome > b.nome) ? 1 : ((b.nome > a.nome) ? -1 : 0);
+					});
 				},
 				function complete(xhr, text) {
 					console.log(xhr.status);

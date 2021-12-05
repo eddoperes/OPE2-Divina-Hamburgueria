@@ -174,8 +174,8 @@ function ValidarCNPJ(cnpj) {
 // Acesso web api - inicio
 //-------------------------------------------------------------------------------------------
 
-var urlWebApi = 'http://192.168.0.26:8000';
-//var urlWebApi = 'https://divinahamburgueria.herokuapp.com';
+//var urlWebApi = 'http://192.168.0.26:8000';
+var urlWebApi = 'https://divinahamburgueria.herokuapp.com';
 
 // Generico
 //-------------------------------------------------------------------------------------------
@@ -672,6 +672,296 @@ function WebApi_GET_LIST_Receita(filter, callbackSucess, callbackComplete){
     WebApi_GET_LIST_Generico(filter, callbackSucess, callbackComplete, 'receita_list');
 }
 
+// Alarme
+//-------------------------------------------------------------------------------------------
+
+function WebApi_POST_Alarme(data, callbackSucess, callbackComplete){
+    WebApi_POST_Generico(data, callbackSucess, callbackComplete, 'alarme_list');    
+}
+
+function WebApi_PUT_Alarme(id, data, callbackSucess, callbackComplete){
+    WebApi_PUT_Generico(id, data, callbackSucess, callbackComplete, 'alarme_detail');
+}
+
+function WebApi_DELETE_Alarme(id, callbackSucess, callbackComplete){
+    WebApi_DELETE_Generico(id, callbackSucess, callbackComplete, 'alarme_detail');    
+}
+
+function WebApi_GET_Alarme(id, callbackSucess, callbackComplete){
+    WebApi_GET_Generico(id, callbackSucess, callbackComplete, 'alarme_detail');       
+}
+
+function WebApi_GET_LIST_Alarme(filter, callbackSucess, callbackComplete){
+    WebApi_GET_LIST_Generico(filter, callbackSucess, callbackComplete, 'alarme_list');
+}
+
+// AlarmeE
+//-------------------------------------------------------------------------------------------
+
+function WebApi_POST_AlarmeE(data, callbackSucess, callbackComplete){
+    WebApi_POST_Generico(data, callbackSucess, callbackComplete, 'alarmee_list');    
+}
+
+function WebApi_PUT_AlarmeE(id, data, callbackSucess, callbackComplete){
+    WebApi_PUT_Generico(id, data, callbackSucess, callbackComplete, 'alarmee_detail');
+}
+
+function WebApi_DELETE_AlarmeE(id, callbackSucess, callbackComplete){
+    WebApi_DELETE_Generico(id, callbackSucess, callbackComplete, 'alarmee_detail');    
+}
+
+function WebApi_GET_AlarmeE(id, callbackSucess, callbackComplete){
+    WebApi_GET_Generico(id, callbackSucess, callbackComplete, 'alarmee_detail');       
+}
+
+function WebApi_GET_LIST_AlarmeE(filter, callbackSucess, callbackComplete){
+    WebApi_GET_LIST_Generico(filter, callbackSucess, callbackComplete, 'alarmee_list');
+}
+
 //-------------------------------------------------------------------------------------------
 // Acesso web api - fim
 //-------------------------------------------------------------------------------------------
+
+//-------------------------------------------------------------------------------------------
+// Conversões de unidade - inicio
+//-------------------------------------------------------------------------------------------
+
+function EncontrarUnidadeComparacao(unidade){
+	if (unidade == 'g' || unidade == 'gr' || unidade == 'kg')
+		return 'g';
+	if (unidade == 'ml' || unidade == 'l')
+		return 'ml';
+	if (unidade == 'un' || unidade == 'dz' || unidade == 'fl')
+		return 'un';
+}
+
+function EncontrarFuncaoConversao(unidade){
+	if (unidade == 'g' || unidade == 'gr')
+		return ConverterParaGramas;
+	if (unidade == 'ml')
+		return ConverterParaMililitros;
+	if (unidade == 'un')
+		return ConverterParaUnidades;
+	if (unidade == 'kg')
+		return ConverterParaKilogramas;
+	if (unidade == 'l')
+		return ConverterParaLitros;
+	if (unidade == 'dz')
+		return ConverterParaDuzias;
+	if (unidade == 'fl')
+		return ConverterParaFolhas;
+}
+
+function ConverterParaGramas(qtde, unidade) {
+	if (unidade == 'g' || unidade == 'gr')
+		return qtde;
+	if (unidade == 'kg')
+		return qtde * 1000;
+}
+
+function ConverterParaKilogramas(qtde, unidade) {
+	if (unidade == 'g' || unidade == 'gr')
+		return qtde / 1000;
+	if (unidade == 'kg')
+		return qtde;
+}
+
+function ConverterParaMililitros(qtde, unidade) {
+	if (unidade == 'ml')
+		return qtde;
+	if (unidade == 'l')
+		return qtde * 1000;
+}
+
+function ConverterParaLitros(qtde, unidade) {
+	if (unidade == 'ml')
+		return qtde * 1000;
+	if (unidade == 'l')
+		return qtde;
+}
+
+function ConverterParaUnidades(qtde, unidade) {
+	if (unidade == 'un')
+		return qtde;
+	if (unidade == 'dz')
+		return qtde * 12;
+	if (unidade == 'fl')
+		return qtde / 30;
+}
+
+function ConverterParaDuzias(qtde, unidade) {
+	if (unidade == 'un')
+		return qtde * 12;
+	if (unidade == 'dz')
+		return qtde;
+}
+
+function ConverterParaFolhas(qtde, unidade) {
+	if (unidade == 'un')
+		return qtde * 30;
+	if (unidade == 'fl')
+		return qtde;
+}
+
+//-------------------------------------------------------------------------------------------
+// Conversões de unidade - fim
+//-------------------------------------------------------------------------------------------
+
+//-------------------------------------------------------------------------------------------
+// Baixa automática estoque - inicio
+//-------------------------------------------------------------------------------------------
+
+function DescontarEstoque(itemdocardapio){
+    	
+    WebApi_GET_LIST_Revenda
+    (
+        "?itemdocardapio=" + itemdocardapio,
+        function sucess(data) {
+            //console.log(data);
+            var revenda_list = data;
+            if (revenda_list.length > 0){                
+                EncontrarEstoqueRevenda(revenda_list[0]);
+	    }
+        },
+        function complete(xhr, text) {
+            console.log(xhr.status);
+            //console.log(xhr.responseText);
+        }
+    );
+			
+    WebApi_GET_LIST_Receita
+    (
+        "?itemdocardapio=" + itemdocardapio,
+        function sucess(data) {
+            //console.log(data);
+            var receita_list = data;
+            if (receita_list.length > 0){
+                EncontrarItemDoEstoqueReceita(receita_list);													
+	    }
+        },
+        function complete(xhr, text) {
+            console.log(xhr.status);
+            //console.log(xhr.responseText);
+        }
+    );				
+			
+}	
+
+// Revenda
+//-------------------------------------------------------------------------------------------
+
+function EncontrarEstoqueRevenda(revenda){
+
+    WebApi_GET_Estoque
+    (
+        revenda.itemdoestoque,
+        function sucess(data) {
+            //console.log(data);
+            BaixarEstoqueRevenda(revenda, data);
+        },
+        function complete(xhr, text) {
+            console.log(xhr.status);
+            //console.log(xhr.responseText);
+        }
+    );
+
+}
+
+function BaixarEstoqueRevenda(revenda, estoque){
+
+    var qtde_descontada = estoque.quantidade - 1;
+
+    if (qtde_descontada < 0)
+        qtde_descontada = 0;
+
+    WebApi_PUT_Estoque
+    (
+        estoque.id,
+        {itemdoestoque : estoque.itemdoestoque , quantidade : qtde_descontada},
+        function success(data){
+            //console.log(data);
+        },
+        function complete(xhr, text){
+            console.log(xhr.status);
+            //console.log(xhr.responseText);
+        }
+    );
+
+}
+
+// Receita
+//-------------------------------------------------------------------------------------------
+
+function EncontrarItemDoEstoqueReceita(receita_list){
+
+    for(var k=0; k < receita_list.length; k++){
+
+	var k_cur = receita_list[k];
+
+        WebApi_GET_LIST_ItemDoEstoque
+        (
+            '?exato=' + k_cur.nome , 
+            function success(data) {			
+                //console.log(data);	
+		for(j=0; j < data.length; j++){
+			var receita = receita_list.find(r => r.nome == data[j].nome);	
+			EncontrarEstoqueReceita(receita, data[j],  data.length);
+		}
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);			
+            }     
+        );		
+
+    }	
+
+}
+
+function EncontrarEstoqueReceita(receita, itemdoestoque, divisor){
+        
+        WebApi_GET_Estoque
+        (
+            itemdoestoque.id,
+            function sucess(data) {
+                //console.log(data);
+                BaixarEstoqueReceita(receita, itemdoestoque, data, divisor);
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+            }
+        );
+
+}
+
+function BaixarEstoqueReceita(receita, itemdoestoque, estoque, divisor){
+
+    var f = EncontrarFuncaoConversao(itemdoestoque.unidade);    
+    var qtde = f(receita.quantidade, receita.unidade) /  divisor;
+
+    var qtde_total = (itemdoestoque.conteudo * estoque.quantidade) - qtde;
+    var qtde_descontada = qtde_total / itemdoestoque.conteudo;
+
+    if (qtde_descontada < 0)
+        qtde_descontada = 0;
+
+    WebApi_PUT_Estoque
+    (
+        estoque.id,
+        {itemdoestoque : estoque.itemdoestoque , quantidade : qtde_descontada},
+        function success(data){
+            //console.log(data);
+        },
+        function complete(xhr, text){
+            console.log(xhr.status);
+            //console.log(xhr.responseText);
+        }
+    );
+
+}
+
+//-------------------------------------------------------------------------------------------
+// Baixa automática estoque - fim
+//-------------------------------------------------------------------------------------------
+

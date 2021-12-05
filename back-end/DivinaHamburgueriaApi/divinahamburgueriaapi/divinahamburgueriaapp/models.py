@@ -256,7 +256,30 @@ class Estoque(models.Model):
         db_table = 'estoque'
 
     itemdoestoque = models.ForeignKey('ItemDoEstoque', default=1, related_name='itensdoestoque_estocados', on_delete=models.CASCADE)
-    quantidade = models.IntegerField(default=1)
+    quantidade =  models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return self.id
+
+class Alarme(models.Model):
+
+    class Meta:
+        db_table = 'alarme'
+
+    itemdoestoque = models.ForeignKey('ItemDoEstoque', default=1, related_name='itensdoestoque_alarme', on_delete=models.CASCADE)
+    quantidademinima = models.IntegerField(default=1)
+
+    def __str__(self):
+        return self.id
+
+class AlarmeE(models.Model):
+
+    class Meta:
+        db_table = 'alarmee'
+
+    nome = models.CharField(max_length=200)
+    quantidademinima = models.IntegerField(default=1)
+    unidade = models.CharField(max_length=10, default='')
 
     def __str__(self):
         return self.id

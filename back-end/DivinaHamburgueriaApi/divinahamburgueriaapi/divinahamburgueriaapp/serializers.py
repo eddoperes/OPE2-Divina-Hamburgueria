@@ -3,7 +3,7 @@ from .models import Usuario, Cliente, Fornecedor, Endereco, Telefone
 from .models import ItemDoCardapio, Cardapio, CardapioItemDoCardapio
 from .models import PedidoSalao, PedidoSalaoItemDoCardapio
 from .models import PedidoDelivery, PedidoDeliveryItemDoCardapio
-from .models import ItemDoEstoque, Estoque
+from .models import ItemDoEstoque, Estoque, Alarme, AlarmeE
 from .models import PedidoDeCompra, PedidoDeCompraItemDoEstoque
 from .models import Receita, Revenda
 
@@ -141,4 +141,18 @@ class RevendaSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = Revenda
+        fields = '__all__'
+
+class AlarmeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = Alarme
+        fields = '__all__'
+
+class AlarmeESerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        model = AlarmeE
         fields = '__all__'

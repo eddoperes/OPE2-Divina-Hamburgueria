@@ -5,14 +5,14 @@ from .models import ItemDoCardapio, Cardapio, CardapioItemDoCardapio
 from .models import Receita, Revenda
 from .models import PedidoSalao, PedidoSalaoItemDoCardapio
 from .models import PedidoDelivery, PedidoDeliveryItemDoCardapio
-from .models import ItemDoEstoque, Estoque
+from .models import ItemDoEstoque, Estoque, Alarme, AlarmeE
 from .models import PedidoDeCompra, PedidoDeCompraItemDoEstoque
 from .serializers import UsuarioSerializer, UsuarioNoPasswordSerializer, ClienteSerializer, FornecedorSerializer, EnderecoSerializer, TelefoneSerializer
 from .serializers import ItemDoCardapioSerializer, CardapioSerializer, CardapioItemDoCardapioSerializer 
 from .serializers import ReceitaSerializer, RevendaSerializer
 from .serializers import PedidoSalaoSerializer, PedidoSalaoItemDoCardapioSerializer
 from .serializers import PedidoDeliverySerializer, PedidoDeliveryItemDoCardapioSerializer
-from .serializers import ItemDoEstoqueSerializer, EstoqueSerializer
+from .serializers import ItemDoEstoqueSerializer, EstoqueSerializer, AlarmeSerializer, AlarmeESerializer
 from .serializers import PedidoDeCompraSerializer, PedidoDeCompraItemDoEstoqueSerializer
 
 from rest_framework import status
@@ -845,17 +845,23 @@ def pedidodeliveryitemdocardapio_detail(request, pk):
 @api_view(['GET', 'POST'])
 def itemdoestoque_list (request):
     if request.method == 'GET':
+
+        filtro = request.GET.get('exato', '')
+        if filtro != '': 
+           itemdoestoque =  ItemDoEstoque.objects.filter(nome=filtro)		
+           serializer = ItemDoEstoqueSerializer(itemdoestoque, many=True)
+           return Response(serializer.data)
+
         filtro = request.GET.get('tipo', '')
         if filtro != '':           
            itemdoestoque =  ItemDoEstoque.objects.filter(tipo=filtro)		
            serializer = ItemDoEstoqueSerializer(itemdoestoque, many=True)
            return Response(serializer.data)
-        else:
+        else:            
            filtro = request.GET.get('nome', '')
            itemdoestoque =  ItemDoEstoque.objects.filter(nome__icontains=filtro)		
            serializer = ItemDoEstoqueSerializer(itemdoestoque, many=True)
            return Response(serializer.data)
-    elif request.method == 'POST':
         # Permissao ini ####################################################
         if request.data["tipousuario"] != '1' and request.data["tipousuario"] != '2':
            return Response('Permissão negada. Somente um usuário do tipo chef ou auxiliar pode criar itens do estoque', status=status.HTTP_403_FORBIDDEN)
@@ -1038,7 +1044,7 @@ def estoque_list (request):
     if request.method == 'GET':
         filtro = request.GET.get('quantidade', -1)
         if (filtro != -1):
-           estoque =  Estoque.objects.filter(quantidade__range=(0, filtro))
+           estoque =  Estoque.objects.filter(quantidade__range=(0, int(filtro) - 1))
         filtro = request.GET.get('itemdoestoque', 0)		
         if (filtro != 0):
            estoque =  Estoque.objects.filter(itemdoestoque=filtro)		
@@ -1087,4 +1093,122 @@ def estoque_detail(request, pk):
 
 #---------------------------------------------------------------------------
 # Estoque - fim
+#---------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------
+# Alarme - inicio
+#---------------------------------------------------------------------------
+
+@api_view(['GET', 'POST'])
+def alarme_list (request):
+    if request.method == 'GET':          
+        #alarme =  Alarme.objects.all()	
+
+        filtro = request.GET.get('quantidademinima', -1)
+        alarme =  Alarme.objects.filter(quantidademinima__range=(0, int(filtro) - 1))
+
+        serializer = AlarmeSerializer(alarme, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode criar alarme', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
+        serializer = AlarmeSerializer(data = request.data)
+        if serializer.is_valid():            
+            serializer.save()
+            return Response(serializer.data, status = status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def alarme_detail(request, pk):
+    try:
+        alarme = Alarme.objects.get(id=pk)
+    except Alarme.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        serializer = AlarmeSerializer(alarme)
+        return Response(serializer.data)
+    elif request.method == 'PUT':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode editar o alarme', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
+        serializer = AlarmeSerializer(alarme, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode excluir', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
+        alarme.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+#---------------------------------------------------------------------------
+# Alarme - fim
+#---------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------
+# AlarmeE - inicio
+#---------------------------------------------------------------------------
+
+@api_view(['GET', 'POST'])
+def alarmee_list (request):
+    if request.method == 'GET':          
+        #alarmee =  AlarmeE.objects.all()	
+
+        filtro = request.GET.get('quantidademinima', -1)
+        alarmee =  AlarmeE.objects.filter(quantidademinima__range=(0, int(filtro) - 1))
+
+        serializer = AlarmeESerializer(alarmee, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode criar alarmee', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
+        serializer = AlarmeESerializer(data = request.data)
+        if serializer.is_valid():            
+            serializer.save()
+            return Response(serializer.data, status = status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def alarmee_detail(request, pk):
+    try:
+        alarmee = AlarmeE.objects.get(id=pk)
+    except AlarmeE.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        serializer = AlarmeESerializer(alarmee)
+        return Response(serializer.data)
+    elif request.method == 'PUT':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode editar o alarmee', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
+        serializer = AlarmeESerializer(alarmee, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        # Permissao ini ####################################################
+        if request.data["tipousuario"] != '1':
+           return Response('Permissão negada. Somente um usuário do tipo chef pode excluir', status=status.HTTP_403_FORBIDDEN)
+        # Permissao end ####################################################
+        alarmee.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+#---------------------------------------------------------------------------
+# AlarmeE - fim
 #---------------------------------------------------------------------------

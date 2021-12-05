@@ -18,16 +18,16 @@
                 	</div>
 
 			<br/>
-			<h1>Listar estoque</h1>
+			<h1>Listar alarmes</h1>
 			<br/>
 
-			<a href="estoque_entrada.html">Entrada</a>
+			<a href="alarme_novo.html">Novo</a>
 			<br/>
 			<br/>
 
 			<div class="borderumpixelpaddingvintepixel">
 				<div class="mb-3">
-					<label for="quantidade" class="form-label">Quantidade abaixo de</label>
+					<label for="quantidade" class="form-label">Quantidade mínima abaixo de</label>
 					<input id="quantidade" class="form-control" type='number' value='100' />
 				</div>
 
@@ -85,10 +85,9 @@
 
 		function Busca()
 		{
-
-			WebApi_GET_LIST_Estoque
+			WebApi_GET_LIST_Alarme
 			(
-				'?quantidade=' + $('#quantidade').val(),
+				'?quantidademinima=' + $('#quantidade').val() ,
 				function success(data) {			
 					//console.log(data);			
 					var textData = '<table class="table">';
@@ -104,7 +103,7 @@
 					textData += '</th>';
 
 					textData += '<th class="coluna_oculta_cel">';
-					textData += 'Qtde';
+					textData += 'Qtde min';
 					textData += '</th>';
 		
 					textData += '<th>';
@@ -142,15 +141,15 @@
 						}
 
 						textData += '<td class="coluna_oculta_cel">';
-						textData += data[i].quantidade;
+						textData += data[i].quantidademinima;
 						textData += '</td>';
 
 						textData += '<td>';
-						textData += '<a href="estoque_editar.html?id=' + data[i].id + '">Editar</a>';
+						textData += '<a href="alarme_editar.html?id=' + data[i].id + '">Editar</a>';
 						textData += '</td>';
 
 						textData += '<td>';
-						textData += '<a href="estoque_excluir.html?id=' + data[i].id + '">Excluir</a>';
+						textData += '<a href="alarme_excluir.html?id=' + data[i].id + '">Excluir</a>';
 						textData += '</td>';
 
 						textData += '</tr>';

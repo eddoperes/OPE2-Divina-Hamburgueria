@@ -1,0 +1,117 @@
+<html>
+
+	<head>
+		<meta charset="utf8"/>
+		<script src="jquery/jquery3.6.js"></script>
+		<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
+		<script src="bootstrap/dist/js/bootstrap.js"></script>
+		<link rel="stylesheet" href="css/sistema.css" >
+		<script src="js/sistema.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+
+	<body>        
+
+		<div class="setecincoporcento">
+
+			<input type="hidden" id="idusuario" value="0">
+
+			<div id="menu">
+                	</div>
+
+			<br/>
+			<h1 class="floatleft">Novo alarme</h1>
+			<label class="floatright widthvintecincoporcento"><label class="asterisk"></label>
+				Campos obrigatórios
+			</label>
+			<br/>
+			<div class="clearboth"></div>
+			<br/>
+
+		</div>
+
+		<div id="base_ALR" class="setecincoporcento">
+		</div>
+
+	</body>
+
+	<script>
+
+		$(document).ready(function() {	
+			if (CheckLogin() == false)
+				return;
+			$("#menu").load("menu.html");
+			$("#base_ALR").load("alarme_base_ALR.html",function (){
+				LoadLists();
+			});	 										
+		});		
+
+		function CheckLogin(){
+			var idusuario = getLoggedUserId();
+			if (idusuario == -1)
+			{
+				var page =  window.location.pathname.split("/").pop();
+				window.location.href = window.location.href.replace(page,'login.html');	
+				return false;					
+			}								
+			else
+			{
+				$('#idusuario').val(idusuario);
+				return true;
+			}
+		}
+
+		function LoadLists(){
+			WebApi_GET_LIST_ItemDoEstoque
+			(
+				"",
+				function success(data) {	
+					//console.log(data);
+				        data.sort(function (a, b) {
+						return (a.nome > b.nome) ? 1 : ((b.nome > a.nome) ? -1 : 0);
+					});
+					var i;
+					for (i=0; i < data.length; i++){									
+						$("#itemdoestoque").append('<option value="' + data[i].id + '">' + data[i].nome + ' ' + data[i].marca + ' ' + data[i].conteudo + ' ' + data[i].unidade + '</option>');
+					}
+				},
+				function complete(xhr, text) {
+					console.log(xhr.status);
+					//console.log(xhr.responseText);			
+				}	
+			);				
+		}
+
+		function EnviarClick()
+		{	
+
+			if (ValidarEstoque() == false)
+				return;
+
+			WebApi_POST_Alarme
+			(
+				{itemdoestoque : $('#itemdoestoque').val() , quantidademinima : $('#quantidade').val() },
+				function success(data){
+					//console.log(data);
+				},
+				function complete(xhr, text){
+					console.log(xhr.status);
+					//console.log(xhr.responseText);
+					if (xhr.status == 201){
+						$('#falha').css('display','none');
+						$('#sucesso').css('display','block');
+						$('#sucesso').html("O alarme foi criado com sucesso! <a href='alarme_listar.html'>Seguir para a lista de alarmes</a>");
+					}
+					else{
+						$('#sucesso').css('display','none');
+						$('#falha').css('display','block');
+						$('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+					}
+				}
+			);
+
+		}
+
+	</script>
+
+</html>

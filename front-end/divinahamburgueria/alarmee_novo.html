@@ -1,0 +1,125 @@
+<html>
+
+	<head>
+		<meta charset="utf8"/>
+		<script src="jquery/jquery3.6.js"></script>
+		<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
+		<script src="bootstrap/dist/js/bootstrap.js"></script>
+		<link rel="stylesheet" href="css/sistema.css" >
+		<script src="js/sistema.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+
+	<body>        
+
+		<div class="setecincoporcento">
+
+			<input type="hidden" id="idusuario" value="0">
+
+			<div id="menu">
+                	</div>
+
+			<br/>
+			<h1 class="floatleft">Novo alarme</h1>
+			<label class="floatright widthvintecincoporcento"><label class="asterisk"></label>
+				Campos obrigatórios
+			</label>
+			<br/>
+			<div class="clearboth"></div>
+			<br/>
+
+		</div>
+
+		<div id="base_ALE" class="setecincoporcento">
+		</div>
+
+	</body>
+
+	<script>
+
+		$(document).ready(function() {	
+			if (CheckLogin() == false)
+				return;
+			$("#menu").load("menu.html");
+			$("#base_ALE").load("alarmee_base_ALE.html", function(){
+				LoadLists();
+			});	 										
+		});		
+
+		function CheckLogin(){
+			var idusuario = getLoggedUserId();
+			if (idusuario == -1)
+			{
+				var page =  window.location.pathname.split("/").pop();
+				window.location.href = window.location.href.replace(page,'login.html');	
+				return false;					
+			}								
+			else
+			{
+				$('#idusuario').val(idusuario);
+				return true;
+			}
+		}
+
+		var _itemdoestoque_receita_list = [];
+
+		function LoadLists(){			
+			WebApi_GET_LIST_ItemDoEstoque
+			(
+				'?tipo=1', 
+				function success(data) {
+					//console.log(data);	
+					data = data.sort((a, b) => (a.nome > b.nome) ? 1 : -1);	
+					var i, last;					
+					for (i=0; i<data.length; i++){					
+						if (data[i].nome != last)
+							_itemdoestoque_receita_list.push(data[i]);
+						last = data[i].nome;						
+					}
+
+					var i;	                       
+					for (i=0; i < _itemdoestoque_receita_list.length; i++){
+						$("#nome").append('<option value="' + _itemdoestoque_receita_list[i].nome + '">' + _itemdoestoque_receita_list[i].nome + '</option>');
+					}    
+									
+				},
+				function complete(xhr, text) {
+					console.log(xhr.status);
+					//console.log(xhr.responseText);					
+				}     
+			);
+		}
+
+		function EnviarClick()
+		{	
+
+			if (ValidarEstoque() == false)
+				return;
+
+			WebApi_POST_AlarmeE
+			(
+				{nome : $('#nome').val() , quantidademinima : $('#quantidade').val(), unidade : $('#unidade').val() },
+				function success(data){
+					//console.log(data);
+				},
+				function complete(xhr, text){
+					console.log(xhr.status);
+					//console.log(xhr.responseText);
+					if (xhr.status == 201){
+						$('#falha').css('display','none');
+						$('#sucesso').css('display','block');
+						$('#sucesso').html("O alarme foi criado com sucesso! <a href='alarmee_listar.html'>Seguir para a lista de alarmes</a>");
+					}
+					else{
+						$('#sucesso').css('display','none');
+						$('#falha').css('display','block');
+						$('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+					}
+				}
+			);
+
+		}
+
+	</script>
+
+</html>

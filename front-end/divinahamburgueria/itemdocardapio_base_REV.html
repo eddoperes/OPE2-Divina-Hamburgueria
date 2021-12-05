@@ -35,7 +35,7 @@
 	function LoadRevenda(){
 		WebApi_GET_LIST_Revenda
 		(
-			"?itemdocardapio = " + $('#id').val(),
+			"?itemdocardapio=" + $('#id').val(),
 			function sucess(data) {
 				//console.log(data);
 				$('#idRevenda').val(data[0].id);
