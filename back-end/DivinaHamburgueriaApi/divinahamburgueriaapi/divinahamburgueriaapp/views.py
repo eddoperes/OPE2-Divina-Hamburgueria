@@ -639,6 +639,22 @@ def cardapioitemdocardapio_detail(request, pk):
 @api_view(['GET', 'POST'])
 def pedidosalao_list (request):
     if request.method == 'GET':
+
+
+        dateini = request.GET.get('dateini', '').replace('-','')
+        dateend = request.GET.get('dateend', '').replace('-','')
+        if (dateini != ''):
+            pedidosalao = PedidoSalao.objects.all()
+            pedidofilter = [];
+            for pedido in pedidosalao:                  
+                datacur = pedido.dataemitido.strftime("%Y/%m/%d").replace('/','')
+                if datacur >= dateini and datacur <= dateend:
+                    pedidofilter.append(pedido) 
+            serializer = PedidoSalaoSerializer(pedidofilter, many=True)
+            return Response(serializer.data)
+
+
+
         filtro = request.GET.get('estado', '')
         if (filtro == ''):
             pedidosalao = PedidoSalao.objects.all()
@@ -741,6 +757,19 @@ def pedidosalaoitemdocardapio_detail(request, pk):
 @api_view(['GET', 'POST'])
 def pedidodelivery_list (request):
     if request.method == 'GET':
+
+        dateini = request.GET.get('dateini', '').replace('-','')
+        dateend = request.GET.get('dateend', '').replace('-','')
+        if (dateini != ''):
+            pedidodelivery = PedidoDelivery.objects.all()
+            pedidofilter = [];
+            for pedido in pedidodelivery:                  
+                datacur = pedido.dataemitido.strftime("%Y/%m/%d").replace('/','')
+                if datacur >= dateini and datacur <= dateend:
+                    pedidofilter.append(pedido) 
+            serializer = PedidoDeliverySerializer(pedidofilter, many=True)
+            return Response(serializer.data)
+
         filtro = request.GET.get('estado', '')
         if (filtro == ''):
             pedidodelivery = PedidoDelivery.objects.all()
@@ -862,6 +891,7 @@ def itemdoestoque_list (request):
            itemdoestoque =  ItemDoEstoque.objects.filter(nome__icontains=filtro)		
            serializer = ItemDoEstoqueSerializer(itemdoestoque, many=True)
            return Response(serializer.data)
+    elif request.method == 'POST':
         # Permissao ini ####################################################
         if request.data["tipousuario"] != '1' and request.data["tipousuario"] != '2':
            return Response('Permissão negada. Somente um usuário do tipo chef ou auxiliar pode criar itens do estoque', status=status.HTTP_403_FORBIDDEN)

@@ -1,276 +1,385 @@
-<h4>
-<nav class="navbar navbar-expand-sm navbar-light bg-light">
-  <div class="container-fluid">
+<aside id="side-overlay">
+</aside>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<nav id="sidebar">
+    <!-- Sidebar Content -->
+    <div class="sidebar-content">
+        <!-- Side Header -->
+        <div class="content-header content-header-fullrow px-15">
+            <!-- Mini Mode -->
+            <div class="content-header-section sidebar-mini-visible-b">
+                <!-- Logo -->
+                <span class="content-header-item font-w700 font-size-xl float-left animated fadeIn">
+                                <span class="text-dual-primary-dark">c</span><span class="text-primary">b</span>
+                            </span>
+                <!-- END Logo -->
+            </div>
+            <!-- END Mini Mode -->
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <!-- Normal Mode -->
+            <div class="content-header-section text-center align-parent sidebar-mini-hidden">
+                <!-- Close Sidebar, Visible only on mobile screens -->
+                <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+                <button type="button" class="btn btn-circle btn-dual-secondary d-lg-none align-v-r"
+                        data-toggle="layout" data-action="sidebar_close">
+                    <i class="fa fa-times text-danger"></i>
+                </button>
+                <!-- END Close Sidebar -->
+            </div>
+            <!-- END Normal Mode -->
+        </div>
+        <!-- END Side Header -->
 
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="home.html">Home</a>
-        </li>
+        <!-- Side User -->
+        <div class="content-side content-side-full content-side-user px-10 align-parent">
+            <!-- Visible only in mini mode -->
+            <div class="sidebar-mini-visible-b align-v animated fadeIn">
+                <img class="img-avatar img-avatar32" src="assets/media/avatars/avatar15.jpg" alt="">
+            </div>
+            <!-- END Visible only in mini mode -->
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Cadastros
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-	    <h4>
-            <li><a class="dropdown-item" href="usuario_listar.html">Usuários</a></li>
-	    <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="cliente_listar.html">Clientes</a></li>
-            <li><a class="dropdown-item" href="fornecedor_listar.html">Fornecedores</a></li>
-            </h4>
-          </ul>
-        </li>
+            <!-- Visible only in normal mode -->
+            <div class="sidebar-mini-hidden-b text-center">
+                <a class="img-link" href="home.html">
+                    <img class="img-avatar" src="image/logo_amarelo.svg" alt="">
+                </a>
+                <ul class="list-inline mt-10">
+                    <li class="list-inline-item">
+                        <a id="ola" class="link-effect text-dual-primary-dark font-size-sm font-w600 text-uppercase"
+                        ></a>
+                    </li>
+                    <li class="list-inline-item">
+                        <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
+                        <a class="link-effect text-dual-primary-dark" data-toggle="layout"
+                           data-action="sidebar_style_inverse_toggle" href="javascript:void(0)">
+                            <i class="si si-drop"></i>
+                        </a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a class="link-effect text-dual-primary-dark" id="logout" href="" onclick="Logout()">
+                            <i class="si si-logout"></i>
+                        </a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a class="link-effect text-dual-primary-dark" id="login" href="login.html">
+                            <i class="si si-logout"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- END Visible only in normal mode -->
+        </div>
+        <!-- END Side User -->
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Vendas
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <h4>
-            <li><a class="dropdown-item" href="itemdocardapio_listar.html">Itens do Cardápio</a></li>
-            <li><a class="dropdown-item" href="cardapio_listar.html">Cardápios</a></li>
-	    <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="pedidosalao_listar.html">Pedidos Salão</a></li>
-            <li><a class="dropdown-item" href="pedidodelivery_listar.html">Pedidos Delivery</a></li>
-            </h4>
-          </ul>
-        </li>
+        <!-- Side Navigation -->
+        <div class="content-side content-side-full">
+            <ul class="nav-main">
+                <li>
+                    <a href="home.html"><i class="fa fa-home"></i><span
+                            class="sidebar-mini-hide">HOME</span></a>
+                </li>
+                <li>
+                    <a href="pedidoresumo_report.html"><i class="fa fa-money"></i><span
+                            class="sidebar-mini-hide">FATURAMENTO</span></a>
+                </li>
+                <li class="nav-main-heading"><span class="sidebar-mini-visible">CD</span><span
+                        class="sidebar-mini-hidden">CADASTROS</span></li>
+                <li>
+                    <a href="usuario_listar.html"><i class="fa fa-user"></i><span
+                            class="sidebar-mini-hide">USUÁRIOS</span></a>
+                </li>
+                <li>
+                    <a href="cliente_listar.html"><i class="fa fa-users"></i><span
+                            class="sidebar-mini-hide">CLIENTES</span></a>
+                </li>
+                <li>
+                    <a href="fornecedor_listar.html"><i class="fa fa-drivers-license"></i><span
+                            class="sidebar-mini-hide">FORNECEDORES</span></a>
+                </li>
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Compras
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <h4>
-            <li><a class="dropdown-item" href="itemdoestoque_listar.html">Itens do Estoque</a></li>	    
-            <li><a class="dropdown-item" href="pedidodecompra_listar.html">Pedidos de Compra</a></li>            
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="estoque_listar.html">Estoque</a></li>
-	    <li><a class="dropdown-item" href="alarmee_listar.html">Alarmes</a></li>
-            </h4>
-          </ul>
-        </li>
+                <li class="nav-main-heading"><span class="sidebar-mini-visible">VD</span><span
+                        class="sidebar-mini-hidden">VENDAS</span></li>
+                <li>
+                    <a href="itemdocardapio_listar.html"><i class="si si-list"></i><span
+                            class="sidebar-mini-hide">ITENS DO CARDÁPIO</span></a>
+                </li>
+                <li>
+                    <a href="cardapio_listar.html"><i class="si si-book-open"></i><span class="sidebar-mini-hide">CARDÁPIOS</span></a>
+                </li>
+                <li>
+                    <a href="pedidosalao_listar.html"><i class="fa fa-cutlery"></i><span
+                            class="sidebar-mini-hide">PEDIDOS SALÃO</span></a>
+                </li>
+                <li>
+                    <a href="pedidodelivery_listar.html"><i class="fa fa-car"></i><span class="sidebar-mini-hide">PEDIDOS DELIVERY</span></a>
+                </li>
 
-      </ul>
+                <li class="nav-main-heading"><span class="sidebar-mini-visible">CP</span><span
+                        class="sidebar-mini-hidden">COMPRAS</span></li>
+                <li>
+                    <a href="itemdoestoque_listar.html"><i class="fa fa-bars"></i><span
+                            class="sidebar-mini-hide">ITENS DO ESTOQUE</span></a>
+                </li>
+                <li>
+                    <a href="pedidodecompra_listar.html"><i class="fa fa-book"></i><span
+                            class="sidebar-mini-hide">PEDIDOS DE COMPRA</span></a>
+                </li>
+                <li>
+                    <a href="estoque_listar.html"><i class="fa fa-dropbox"></i><span
+                            class="sidebar-mini-hide">ESTOQUE</span></a>
+                </li>
+                <li>
+                    <a href="alarmee_listar.html"><i class="fa fa-warning"></i><span
+                            class="sidebar-mini-hide">ALARMES</span></a>
+                </li>
 
+            </ul>
+        </div>
+        <!-- END Side Navigation -->
     </div>
-  </div>
+    <!-- Sidebar Content -->
 </nav>
 
-<div id="alarme" class="displaynone" style="float:left;background-color:red;padding:2px;">		
-	<a href="alarmee_report.html" style="color:white;">Alarme</a>
-</div>
+<header id="page-header">
+    <div class="content-header">
+        <div class="content-header-section">
+            <button type="button" class="btn btn-circle btn-dual-secondary" data-toggle="layout"
+                    data-action="sidebar_toggle">
+                <i class="fa fa-navicon" style="color: #343a40"></i>
+            </button>
+        </div>
+    </div>
+    <div id="page-header-search" class="overlay-header">
+        <div class="content-header content-header-fullrow">
+            <form action="be_pages_generic_search.html" method="post">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <button type="button" class="btn btn-secondary" data-toggle="layout"
+                                data-action="header_search_off">
+                            <i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Search or hit ESC.."
+                           id="page-header-search-input" name="page-header-search-input">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-secondary">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="page-header-loader" class="overlay-header bg-primary">
+        <div class="content-header content-header-fullrow text-center">
+            <div class="content-header-item">
+                <i class="fa fa-sun-o fa-spin text-white"></i>
+            </div>
+        </div>
+    </div>
+    <h4>
 
-<div style="margin-bottom:25px;">		
-	<a style="float:right;" id="login" href="login.html">Login</a>
-	<a style="float:right;" id="logout" href="" onclick="Logout()">Logout</a>	
-        <label id="ola" style="float:right;margin-right:10px;"></label>
-</div>
+        <div id="alarme" class="displaynone" style="float:right;background-color: #fdd835;padding:15px;">
+            <a href="alarmee_report.html" style="color:red;"><i class="fa fa-warning"></i></a>
+        </div>
 
-</h4>
+    </h4>
+</header>
+
+<script src="assets/js/codebase.core.min.js"></script>
+<script src="assets/js/codebase.app.min.js"></script>
+
 
 <script>
 
-	$(function(){	
-		var idusuario = getLoggedUserId();
-		if (idusuario == -1){
-			$('#login').css('display','block');
-			$('#logout').css('display','none');
-			$('#ola').text('');
-		}
-		else
-		{
-			$('#login').css('display','none');
-			$('#logout').css('display','block');				
-			$('#ola').text('Olá ' + getLoggedUserName());
-		}
-		//LoadAlarmeLists();
-		LoadAlarmeELists();
-	});	
+    $(function () {
+        var idusuario = getLoggedUserId();
+        if (idusuario == -1 && location.pathname.includes('login.html') == false) {
+            location.href = "login.html";
+            $('#login').css('display', 'block');
+            $('#logout').css('display', 'none');
+            $('#ola').text('');
+        } else {
+            $('#login').css('display', 'none');
+            $('#logout').css('display', 'block');
+            $('#ola').text(getLoggedUserName());
+        }
+        //LoadAlarmeLists();
+        LoadAlarmeELists();
+    });
 
-	function Logout(){
-		doLogout();	
-		$('#ola').text('');								
-	}
+    function Logout() {
+        doLogout();
+        $('#ola').text('');
+    }
 
-	var alarme_list;
-	var estoque_list;
+    var alarme_list;
+    var estoque_list;
 
-	function LoadAlarmeLists(){
+    function LoadAlarmeLists() {
 
-		WebApi_GET_LIST_Alarme
-		(
-			'?quantidademinima=100000',
-			function success(data) {			
-				//console.log(data);			
-				alarme_list = data;		
-				CheckAlarme();
-			},
-			function complete(xhr, text) {
-				console.log(xhr.status);
-				//console.log(xhr.responseText);			
-			}				
-		);
+        WebApi_GET_LIST_Alarme
+        (
+            '?quantidademinima=100000',
+            function success(data) {
+                //console.log(data);
+                alarme_list = data;
+                CheckAlarme();
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+            }
+        );
 
-		WebApi_GET_LIST_Estoque
-		(
-			'?quantidade=100000',
-			function success(data) {			
-				//console.log(data);			
-				estoque_list = data;
-				CheckAlarme();		
-			},
-			function complete(xhr, text) {
-				console.log(xhr.status);
-				//console.log(xhr.responseText);			
-			}				
-		);
-		
-	}
+        WebApi_GET_LIST_Estoque
+        (
+            '?quantidade=100000',
+            function success(data) {
+                //console.log(data);
+                estoque_list = data;
+                CheckAlarme();
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+            }
+        );
 
-	function CheckAlarme(){
+    }
 
-		if(alarme_list == undefined)
-			return;
+    function CheckAlarme() {
 
-		if(estoque_list == undefined)
-			return;
-			
-		for(i=0; i < alarme_list.length; i++){	
-			var ok = false;		
-			for(k=0; k < estoque_list.length; k++){
-				if (alarme_list[i].itemdoestoque == estoque_list[k].itemdoestoque ){
-					ok = true;
-					if(estoque_list[k].quantidade < alarme_list[i].quantidademinima){
-						$("#alarme").removeClass("displaynone");
-						//alert(alarme_list[i].itemdoestoque);						
-					}                                        
-					break;
-				}				
-			}
+        if (alarme_list == undefined)
+            return;
 
-			if (ok == false){
-				$("#alarme").removeClass("displaynone");
-				//alert(alarme_list[i].itemdoestoque);				
-			}
+        if (estoque_list == undefined)
+            return;
 
-		}
-		
-	}
+        for (i = 0; i < alarme_list.length; i++) {
+            var ok = false;
+            for (k = 0; k < estoque_list.length; k++) {
+                if (alarme_list[i].itemdoestoque == estoque_list[k].itemdoestoque) {
+                    ok = true;
+                    if (estoque_list[k].quantidade < alarme_list[i].quantidademinima) {
+                        $("#alarme").removeClass("displaynone");
+                        //alert(alarme_list[i].itemdoestoque);
+                    }
+                    break;
+                }
+            }
 
+            if (ok == false) {
+                $("#alarme").removeClass("displaynone");
+                //alert(alarme_list[i].itemdoestoque);
+            }
+
+        }
+
+    }
 
 
+    var alarmee_list;
+    var estoquee_list;
+    var itemdoestoquee_list;
 
 
+    function LoadAlarmeELists() {
 
-	var alarmee_list;
-	var estoquee_list;
-	var itemdoestoquee_list;
+        WebApi_GET_LIST_AlarmeE
+        (
+            '?quantidademinima=100000',
+            function success(data) {
+                //console.log(data);
+                alarmee_list = data;
+                CheckAlarmeE();
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+            }
+        );
 
+        WebApi_GET_LIST_Estoque
+        (
+            '?quantidade=100000',
+            function success(data) {
+                //console.log(data);
+                estoquee_list = data;
+                CheckAlarmeE();
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+            }
+        );
 
-	function LoadAlarmeELists(){
+        WebApi_GET_LIST_ItemDoEstoque
+        (
+            '?nome=',
+            function success(data) {
+                //console.log(data);
+                itemdoestoquee_list = data;
+                CheckAlarmeE();
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+            }
+        );
 
-		WebApi_GET_LIST_AlarmeE
-		(
-			'?quantidademinima=100000',
-			function success(data) {			
-				//console.log(data);			
-				alarmee_list = data;		
-				CheckAlarmeE();
-			},
-			function complete(xhr, text) {
-				console.log(xhr.status);
-				//console.log(xhr.responseText);			
-			}				
-		);
-
-		WebApi_GET_LIST_Estoque
-		(
-			'?quantidade=100000',
-			function success(data) {			
-				//console.log(data);			
-				estoquee_list = data;
-				CheckAlarmeE();		
-			},
-			function complete(xhr, text) {
-				console.log(xhr.status);
-				//console.log(xhr.responseText);			
-			}				
-		);
-
-		WebApi_GET_LIST_ItemDoEstoque
-		(
-			'?nome=',
-			function success(data) {			
-				//console.log(data);			
-				itemdoestoquee_list = data;
-				CheckAlarmeE();		
-			},
-			function complete(xhr, text) {
-				console.log(xhr.status);
-				//console.log(xhr.responseText);			
-			}				
-		);
-		
-	}
+    }
 
 
-	function CheckAlarmeE(){
+    function CheckAlarmeE() {
 
-		if(alarmee_list == undefined)
-			return;
+        if (alarmee_list == undefined)
+            return;
 
-		if(estoquee_list == undefined)
-			return;
+        if (estoquee_list == undefined)
+            return;
 
-		if(itemdoestoquee_list == undefined)
-			return;
+        if (itemdoestoquee_list == undefined)
+            return;
 
-		var sum_estoque = 0;
-			
-		for(i=0; i < alarmee_list.length; i++){	
-			
-			var itensDoEstoqueComNome = itemdoestoquee_list.filter(o=> o.nome == alarmee_list[i].nome);
-			
-			for(k=0; k < itensDoEstoqueComNome.length; k++){
+        var sum_estoque = 0;
 
-				var estoque = estoquee_list.find(o=> o.itemdoestoque == itensDoEstoqueComNome[k].id);
+        for (i = 0; i < alarmee_list.length; i++) {
 
-				var este_estoque = estoque.quantidade * itensDoEstoqueComNome[k].conteudo;
+            var itensDoEstoqueComNome = itemdoestoquee_list.filter(o => o.nome == alarmee_list[i].nome);
 
-				var esta_unidade  = EncontrarUnidadeComparacao(itensDoEstoqueComNome[k].unidade);
-				var f = EncontrarFuncaoConversao(esta_unidade);
-				este_estoque = f(este_estoque, itensDoEstoqueComNome[k].unidade);
+            for (k = 0; k < itensDoEstoqueComNome.length; k++) {
 
-				sum_estoque = sum_estoque + este_estoque;
-										
-			}
+                var estoque = estoquee_list.find(o => o.itemdoestoque == itensDoEstoqueComNome[k].id);
 
-			if (sum_estoque == 0){
-				$("#alarme").removeClass("displaynone");
-				break;				
-			}
-			else{
+                var este_estoque = estoque.quantidade * itensDoEstoqueComNome[k].conteudo;
 
-				var unidade_alarme = EncontrarUnidadeComparacao(alarmee_list[i].unidade);				
-				var f = EncontrarFuncaoConversao(unidade_alarme);
-				var qtde_alarme_normalizada = f(alarmee_list[i].quantidademinima, alarmee_list[i].unidade);
-			
-				if (qtde_alarme_normalizada > sum_estoque){
-					$("#alarme").removeClass("displaynone");
-					break;	
-				}
+                var esta_unidade = EncontrarUnidadeComparacao(itensDoEstoqueComNome[k].unidade);
+                var f = EncontrarFuncaoConversao(esta_unidade);
+                este_estoque = f(este_estoque, itensDoEstoqueComNome[k].unidade);
 
-			}
+                sum_estoque = sum_estoque + este_estoque;
 
-		}
-		
-	}
+            }
+
+            if (sum_estoque == 0) {
+                $("#alarme").removeClass("displaynone");
+                break;
+            } else {
+
+                var unidade_alarme = EncontrarUnidadeComparacao(alarmee_list[i].unidade);
+                var f = EncontrarFuncaoConversao(unidade_alarme);
+                var qtde_alarme_normalizada = f(alarmee_list[i].quantidademinima, alarmee_list[i].unidade);
+
+                if (qtde_alarme_normalizada > sum_estoque) {
+                    $("#alarme").removeClass("displaynone");
+                    break;
+                }
+
+            }
+
+        }
+
+    }
 
 </script>

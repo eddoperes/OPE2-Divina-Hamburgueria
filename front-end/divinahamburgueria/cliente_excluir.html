@@ -1,133 +1,150 @@
 <html>
 
-	<head>
-		<meta charset="utf8"/>
-		<script src="jquery/jquery3.6.js"></script>
-		<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
-		<script src="bootstrap/dist/js/bootstrap.js"></script>
-		<link rel="stylesheet" href="css/sistema.css" >
-		<script src="js/sistema.js"></script>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	</head>
+<head>
+    <meta charset="utf8"/>
+    <script src="jquery/jquery3.6.js"></script>
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css">
+    <script src="bootstrap/dist/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/sistema.css">
+    <script src="js/sistema.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-	<body>        
+    <title>DIVINA HAMBURGUERIA</title>
 
-		<div class="setecincoporcento">
+    <link rel="shortcut icon" href="image/logo-divina-symbol.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/apple-touch-icon-180x180.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+    <link rel="stylesheet" id="css-main" href="assets/css/codebase.min.css">
 
-			<input type="hidden" id="idusuario" value="0">
+</head>
 
-			<div id="menu">
-                	</div> 
 
-			<br/>
-			<h1>Excluir cliente</h1>
-			<br/>
+<body style="background-color: #fdd835">
 
-			<div class="alert alert-warning" role="alert">
-				Atenção! Esta operação não poderá ser desfeita!
-			</div>
+<div id="page-container"
+     class="sidebar-o sidebar-inverse enable-page-overlay side-scroll page-header-glass page-header-inverse main-content-boxed">
+    <div id="menu">
+    </div>
+    <main id="main-container">
+        <div class="setecincoporcento font-w600">
+            <input type="hidden" id="idusuario" value="0">
+            <h2 class="content-heading" style="color: #343a40">EXCLUIR CLIENTE</h2>
+            <div class="block block-rounded font-w600">
+                <div class="block-content" style="background-color: #343a40; color:#e4e7ed">
+                    <div class="alert alert-warning" role="alert">
+                        Atenção! Esta operação não poderá ser desfeita!
+                    </div>
 
-			<input type="hidden" id="idcliente" value="0">
+                    <input type="hidden" id="idcliente" value="0">
 
-			<div class="mb-3">
-				<label for="nome" class="form-label asterisk">Nome</label>                                                            
-				<input id="nome" class="form-control" type='text' value="" />
-				<label id="feedNome" class="invalid-feedback">O nome precisa ser informado</label>  
-			</div>
-			
-			<div class="mb-3 ">
-				<label for="cpf" class="form-label">CPF</label>
-				<input id="cpf" class="form-control" type='number' value="" />   
-				<label id="feedCpf" class="invalid-feedback">O CPF precisa ser válido, não use pontos ou traços</label>  
-			</div>
+                    <div class="mb-3">
+                        <label for="nome" class="form-label asterisk">Nome</label>
+                        <input id="nome" class="form-control" type='text' value=""/>
+                        <label id="feedNome" class="invalid-feedback">O nome precisa ser informado</label>
+                    </div>
 
-		</div>
+                    <div class="mb-3 ">
+                        <label for="cpf" class="form-label">CPF</label>
+                        <input id="cpf" class="form-control" type='number' value=""/>
+                        <label id="feedCpf" class="invalid-feedback">O CPF precisa ser válido, não use pontos ou
+                            traços</label>
+                    </div>
+                    <div id="base_ENV" class="setecincoporcento">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div class="content">
+        <div class="content py-20 font-size-sm clearfix">
+            <div class="float-left">
+                Copyright © 2021 Divina Hamburgueria
+            </div>
+            <div class="float-right">
+                Desenvolvido por VirtualSoft  <i class="si si-badge"></i>
+            </div>
+        </div>
 
-		<div id="base_ENV" class="setecincoporcento">				
-		</div>
+    </div>
+</div>
 
-	</body>
+</body>
 
-	<script>
+<script>
 
-		var _loadEnvCompleted = false;
+    var _loadEnvCompleted = false;
 
-		$(document).ready(function() {
-			if (CheckLogin() == false)
-				return;
-			$("#menu").load("menu.html");
-			$("#nome").attr('disabled', true);
-			$("#cpf").attr('disabled', true);
-			$("#base_ENV").load("cliente_base_ENV.html", function (){
-				_loadEnvCompleted = true;
-				StartLoadData();
-			});					
-		});
+    $(document).ready(function () {
+        if (CheckLogin() == false)
+            return;
+        $("#menu").load("menu.html");
+        $("#nome").attr('disabled', true);
+        $("#cpf").attr('disabled', true);
+        $("#base_ENV").load("cliente_base_ENV.html", function () {
+            _loadEnvCompleted = true;
+            StartLoadData();
+        });
+    });
 
-		function CheckLogin(){
-			var idusuario = getLoggedUserId();
-			if (idusuario == -1)
-			{
-				var page =  window.location.pathname.split("/").pop();
-				window.location.href = window.location.href.replace(page,'login.html');	
-				return false;					
-			}								
-			else
-			{
-				$('#idusuario').val(idusuario);
-				return true;
-			}
-		}
+    function CheckLogin() {
+        var idusuario = getLoggedUserId();
+        if (idusuario == -1) {
+            var page = window.location.pathname.split("/").pop();
+            window.location.href = window.location.href.replace(page, 'login.html');
+            return false;
+        } else {
+            $('#idusuario').val(idusuario);
+            return true;
+        }
+    }
 
-		function StartLoadData(){
-			if (!_loadEnvCompleted)
-				return;
-			LoadData();
-		}
+    function StartLoadData() {
+        if (!_loadEnvCompleted)
+            return;
+        LoadData();
+    }
 
-		function LoadData(){
-			var query = queryObj();
-			WebApi_GET_Cliente
-            (
-				query.id, 
-				function success(data) {			
-					//console.log(data);	                                             
-					$('#idcliente').val(data.id);		
-					$('#nome').val(data.nome);
-					$('#cpf').val(data.cpf);                       
-				},
-				function complete(xhr, text) {
-					console.log(xhr.status);
-					//console.log(xhr.responseText);			
-				}
-            );
-		}
+    function LoadData() {
+        var query = queryObj();
+        WebApi_GET_Cliente
+        (
+            query.id,
+            function success(data) {
+                //console.log(data);
+                $('#idcliente').val(data.id);
+                $('#nome').val(data.nome);
+                $('#cpf').val(data.cpf);
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+            }
+        );
+    }
 
-		function EnviarClick()
-		{	
-			WebApi_DELETE_Cliente
-			(
-				$('#idcliente').val(),
-				function success(data){
-					//console.log(data);
-				},
-				function complete(xhr, text){
-					console.log(xhr.status);
-					//console.log(xhr.responseText);
-					if (xhr.status == 204){
-						$('#falha').css('display','none');
-						$('#sucesso').css('display','block');
-						$('#sucesso').html("O cliente foi excluido com sucesso! <a href='cliente_listar.html'>Seguir para a lista de clientes</a>");				
-					}
-					else{
-						$('#sucesso').css('display','none');
-						$('#falha').css('display','block');
-						$('#falha').text("Ocorreu uma falha: " + xhr.responseText);
-					}
-				}
-			);
-		}
+    function EnviarClick() {
+        WebApi_DELETE_Cliente
+        (
+            $('#idcliente').val(),
+            function success(data) {
+                //console.log(data);
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+                if (xhr.status == 204) {
+                    $('#falha').css('display', 'none');
+                    $('#sucesso').css('display', 'block');
+                    $('#sucesso').html("O cliente foi excluido com sucesso! <a href='cliente_listar.html'>Seguir para a lista de clientes</a>");
+                } else {
+                    $('#sucesso').css('display', 'none');
+                    $('#falha').css('display', 'block');
+                    $('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+                }
+            }
+        );
+    }
 
-	</script>
+</script>
 
 </html>

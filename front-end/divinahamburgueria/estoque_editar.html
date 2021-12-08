@@ -1,135 +1,175 @@
 <html>
 
-	<head>
-		<meta charset="utf8"/>
-		<script src="jquery/jquery3.6.js"></script>
-		<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
-		<script src="bootstrap/dist/js/bootstrap.js"></script>
-		<link rel="stylesheet" href="css/sistema.css" >
-		<script src="js/sistema.js"></script>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	</head>
+<head>
+    <meta charset="utf8"/>
+    <script src="jquery/jquery3.6.js"></script>
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css">
+    <script src="bootstrap/dist/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/sistema.css">
+    <script src="js/sistema.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-	<body>        
+    <title>DIVINA HAMBURGUERIA</title>
 
-		<div class="setecincoporcento">
+    <link rel="shortcut icon" href="image/logo-divina-symbol.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/apple-touch-icon-180x180.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+    <link rel="stylesheet" id="css-main" href="assets/css/codebase.min.css">
 
-			<input type="hidden" id="idusuario" value="0">
+</head>
 
-			<div id="menu">
-                	</div>
 
-			<br/>
-			<h1 class="floatleft">Editar estoque</h1>
-			<label class="floatright widthvintecincoporcento"><label class="asterisk"></label>
-				Campos obrigatórios
-			</label>
-			<br/>
-			<div class="clearboth"></div>
-			<br/>
+<body style="background-color: #fdd835">
 
-		</div>
+<div id="page-container"
+     class="sidebar-o sidebar-inverse enable-page-overlay side-scroll page-header-glass page-header-inverse main-content-boxed">
+    <div id="menu">
+    </div>
+    <main id="main-container">
+        <div class="setecincoporcento font-w600">
+            <input type="hidden" id="idusuario" value="0">
+            <h2 class="content-heading" style="color: #343a40">EDITAR CLIENTE</h2>
+            <div class="block block-rounded font-w600">
+                <div class="block-content" style="background-color: #343a40; color:#e4e7ed">
+                    <label class="floatright widthvintecincoporcento"><label class="asterisk"></label>
+                        Campos obrigatórios
+                    </label>
+                    <br/>
+                    <div class="clearboth"></div>
+                    <br/>
+                    <div id="base_EST" class="setecincoporcento">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div class="content">
+        <div class="content py-20 font-size-sm clearfix">
+            <div class="float-left">
+                Copyright © 2021 Divina Hamburgueria
+            </div>
+            <div class="float-right">
+                Desenvolvido por VirtualSoft  <i class="si si-badge"></i>
+            </div>
+        </div>
 
-		<div id="base_EST" class="setecincoporcento">
-		</div>
+    </div>
+</div>
 
-	</body>
 
-	<script>
+<!--<div class="setecincoporcento">-->
 
-		$(document).ready(function() {	
-			if (CheckLogin() == false)
-				return;
-			$("#menu").load("menu.html");
-			$("#base_EST").load("estoque_base_EST.html",function (){
-				$("#itemdoestoque").attr('disabled','true');
-				LoadLists();
-			});	 										
-		});		
+<!--    <input type="hidden" id="idusuario" value="0">-->
 
-		function CheckLogin(){
-			var idusuario = getLoggedUserId();
-			if (idusuario == -1)
-			{
-				var page =  window.location.pathname.split("/").pop();
-				window.location.href = window.location.href.replace(page,'login.html');	
-				return false;					
-			}								
-			else
-			{
-				$('#idusuario').val(idusuario);
-				return true;
-			}
-		}
+<!--    <div id="menu">-->
+<!--    </div>-->
 
-		function LoadLists(){
-			WebApi_GET_LIST_ItemDoEstoque
-			(
-				"",
-				function success(data) {	
-					//console.log(data);
-					var i;
-					for (i=0; i < data.length; i++){									
-						$("#itemdoestoque").append('<option value="' + data[i].id + '">' + data[i].nome + ' ' + data[i].marca + ' ' + data[i].conteudo + ' ' + data[i].unidade + '</option>');
-					}
-					LoadData();
-				},
-				function complete(xhr, text) {
-					console.log(xhr.status);
-					//console.log(xhr.responseText);			
-				}	
-			);				
-		}
+<!--    <br/>-->
+<!--    <h1 class="floatleft">Editar estoque</h1>-->
+<!--    <label class="floatright widthvintecincoporcento"><label class="asterisk"></label>-->
+<!--        Campos obrigatórios-->
+<!--    </label>-->
+<!--    <br/>-->
+<!--    <div class="clearboth"></div>-->
+<!--    <br/>-->
 
-		function LoadData(){
-			var query = queryObj();
-			WebApi_GET_Estoque
-			(
-				query.id,
-				function sucess(data) {
-					//console.log(data);
-					$('#id').val(data.id);
-					$('#itemdoestoque').val(data.itemdoestoque);						
-					$('#quantidade').val(data.quantidade);
-				},
-				function complete(xhr, text) {
-					console.log(xhr.status);
-					//console.log(xhr.responseText);
-				}
-			);
-		}
+<!--</div>-->
 
-		function EnviarClick()
-		{	
+<!--<div id="base_EST" class="setecincoporcento">-->
+<!--</div>-->
 
-			if (ValidarEstoque() == false)
-				return;
+</body>
 
-			WebApi_PUT_Estoque
-			(
-				$('#id').val(),
-				{itemdoestoque : $('#itemdoestoque').val() , quantidade : $('#quantidade').val() },
-				function success(data){
-					//console.log(data);
-				},
-				function complete(xhr, text){
-					console.log(xhr.status);
-					//console.log(xhr.responseText);
-					if (xhr.status == 200){
-						$('#falha').css('display','none');
-						$('#sucesso').css('display','block');
-						$('#sucesso').html("O estoque foi editado com sucesso! <a href='estoque_listar.html'>Seguir para a lista de estoque</a>");
-					}
-					else{
-						$('#sucesso').css('display','none');
-						$('#falha').css('display','block');
-						$('#falha').text("Ocorreu uma falha: " + xhr.responseText);
-					}
-				}
-			);
+<script>
 
-		}
+    $(document).ready(function () {
+        if (CheckLogin() == false)
+            return;
+        $("#menu").load("menu.html");
+        $("#base_EST").load("estoque_base_EST.html", function () {
+            $("#itemdoestoque").attr('disabled', 'true');
+            LoadLists();
+        });
+    });
 
-	</script>
+    function CheckLogin() {
+        var idusuario = getLoggedUserId();
+        if (idusuario == -1) {
+            var page = window.location.pathname.split("/").pop();
+            window.location.href = window.location.href.replace(page, 'login.html');
+            return false;
+        } else {
+            $('#idusuario').val(idusuario);
+            return true;
+        }
+    }
+
+    function LoadLists() {
+        WebApi_GET_LIST_ItemDoEstoque
+        (
+            "",
+            function success(data) {
+                //console.log(data);
+                var i;
+                for (i = 0; i < data.length; i++) {
+                    $("#itemdoestoque").append('<option value="' + data[i].id + '">' + data[i].nome + ' ' + data[i].marca + ' ' + data[i].conteudo + ' ' + data[i].unidade + '</option>');
+                }
+                LoadData();
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+            }
+        );
+    }
+
+    function LoadData() {
+        var query = queryObj();
+        WebApi_GET_Estoque
+        (
+            query.id,
+            function sucess(data) {
+                //console.log(data);
+                $('#id').val(data.id);
+                $('#itemdoestoque').val(data.itemdoestoque);
+                $('#quantidade').val(data.quantidade);
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+            }
+        );
+    }
+
+    function EnviarClick() {
+
+        if (ValidarEstoque() == false)
+            return;
+
+        WebApi_PUT_Estoque
+        (
+            $('#id').val(),
+            {itemdoestoque: $('#itemdoestoque').val(), quantidade: $('#quantidade').val()},
+            function success(data) {
+                //console.log(data);
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+                if (xhr.status == 200) {
+                    $('#falha').css('display', 'none');
+                    $('#sucesso').css('display', 'block');
+                    $('#sucesso').html("O estoque foi editado com sucesso! <a href='estoque_listar.html'>Seguir para a lista de estoque</a>");
+                } else {
+                    $('#sucesso').css('display', 'none');
+                    $('#falha').css('display', 'block');
+                    $('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+                }
+            }
+        );
+
+    }
+
+</script>
 
 </html>

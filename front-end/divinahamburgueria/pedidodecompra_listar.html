@@ -1,162 +1,182 @@
 <html>
 
-	<head>
-		<meta charset="utf8"/>
-		<script src="jquery/jquery3.6.js"></script>
-		<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
-		<script src="bootstrap/dist/js/bootstrap.js"></script>
-		<link rel="stylesheet" href="css/sistema.css" >
-		<script src="js/sistema.js"></script>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	</head>
+<head>
+    <meta charset="utf8"/>
+    <script src="jquery/jquery3.6.js"></script>
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css">
+    <script src="bootstrap/dist/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/sistema.css">
+    <script src="js/sistema.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-	<body>     
+    <title>DIVINA HAMBURGUERIA</title>
 
-		<div class="setecincoporcento">
+    <link rel="shortcut icon" href="image/logo-divina-symbol.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/apple-touch-icon-180x180.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+    <link rel="stylesheet" id="css-main" href="assets/css/codebase.min.css">
 
-			<input type="hidden" id="idusuario" value="0">
+</head>
 
-			<div id="menu">
-                	</div>
+<body style="background-color: #fdd835">
 
-			<br/>
-			<h1>Listar pedidos de compra</h1>
-			<br/>
+<div id="page-container"
+     class="sidebar-o sidebar-inverse enable-page-overlay side-scroll page-header-glass page-header-inverse main-content-boxed">
 
-			<a href="pedidodecompra_novo.html">Novo</a>
-			<br/>
-			<br/>
+    <div id="menu">
+    </div>
 
-			<div class="borderumpixelpaddingvintepixel">
-				<div class="mb-3">
-					<label for="estado" class="form-label">Estado</label>
-					<select id="estado" class="form-control">
-						<option value="">Qualquer</option>
-                        <option value="1">Cotacao</option>
-						<option value="2">Emitido</option>
-						<option value="3">Cancelado</option>
-						<option value="4">Entregue</option>
-						<option value="5">Estocado</option>
-					</select>
-				</div>
+    <main id="main-container">
+        <div class="setecincoporcento font-w600">
 
-				<div class="col-auto">
-						<input type='button' class="btn btn-primary mb-3" value='Pesquisar' onclick="Busca()" />    
-				</div>
-			</div>
+            <h2 class="content-heading" style="color: #343a40">LISTAR PEDIDOS DE COMPRA</h2>
+            <a href="pedidodecompra_novo.html" style="color: #343a40">
+                <button type="button" class="btn btn-alt-secondary mb-5">
+                    <i class="fa fa-plus"></i> ADICIONAR PEDIDO
+                </button>
+            </a>
+            <div class="block block-rounded font-w600">
 
-			<div id="table_container">
-			</div>
+                <div class="block-content font-w600" style="background-color: #343a40; color:#e4e7ed">
+                    <div class="mb-3">
+                        <label for="estado" class="form-label">Estado</label>
+                        <select id="estado" class="form-control">
+                            <option value="">Qualquer</option>
+                            <option value="1">Cotacao</option>
+                            <option value="2">Emitido</option>
+                            <option value="3">Cancelado</option>
+                            <option value="4">Entregue</option>
+                            <option value="5">Estocado</option>
+                        </select>
+                    </div>
 
-		</div>
+                    <div class="col-auto" style="color: #343a40">
+                        <input type='button' class="btn btn-alt-secondary mb-5" value='Pesquisar' onclick="Busca()"/>
+                    </div>
+                    <div class="table-responsive" style="color: #e4e7ed">
+                        <div id="table_container" style="color: #e4e7ed">
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-	</body>
+        </div>
+    </main>
+    <div class="content">
+        <div class="content py-20 font-size-sm clearfix">
+            <div class="float-left">
+                Copyright © 2021 Divina Hamburgueria
+            </div>
+            <div class="float-right">
+                Desenvolvido por VirtualSoft <i class="si si-badge"></i>
+            </div>
+        </div>
+    </div>
+</div>
 
-	<script>
+</body>
 
-		$(document).ready(function() {
-			if (CheckLogin() == false)
-				return; 	
-			$("#menu").load("menu.html");			
-		});	
+<script>
 
-		function CheckLogin(){
-			var idusuario = getLoggedUserId();
-			if (idusuario == -1)
-			{
-				var page =  window.location.pathname.split("/").pop();
-				window.location.href = window.location.href.replace(page,'login.html');	
-				return false;					
-			}								
-			else
-			{
-				return true;
-			}
-		}
+    $(document).ready(function () {
+        if (CheckLogin() == false)
+            return;
+        $("#menu").load("menu.html");
+    });
 
-		function Busca()
-		{
+    function CheckLogin() {
+        var idusuario = getLoggedUserId();
+        if (idusuario == -1) {
+            var page = window.location.pathname.split("/").pop();
+            window.location.href = window.location.href.replace(page, 'login.html');
+            return false;
+        } else {
+            return true;
+        }
+    }
 
-			WebApi_GET_LIST_PedidoDeCompra
-			(
-				'?estado=' + $('#estado').val(), 
-				function success(data) {			
-					//console.log(data);			
-					var textData = '<table class="table">';
+    function Busca() {
 
-					textData += '<tr>';
+        WebApi_GET_LIST_PedidoDeCompra
+        (
+            '?estado=' + $('#estado').val(),
+            function success(data) {
+                //console.log(data);
+                var textData = '<table class="table font-w600" style="color: #e4e7ed" >';
 
-					textData += '<th>';
-					textData += 'Id';
-					textData += '</th>';
+                textData += '<tr>';
 
-					textData += '<th>';
-					textData += 'Observacao';
-					textData += '</th>';
+                textData += '<th>';
+                textData += 'Id';
+                textData += '</th>';
 
-					textData += '<th class="coluna_oculta_cel">';
-					textData += 'Estado';
-					textData += '</th>';
+                textData += '<th>';
+                textData += 'Observacao';
+                textData += '</th>';
 
-					textData += '<th>';
-					textData += '';
-					textData += '</th>';
+                textData += '<th class="coluna_oculta_cel">';
+                textData += 'Estado';
+                textData += '</th>';
 
-					textData += '<th>';
-					textData += '';
-					textData += '</th>';
+                textData += '<th>';
+                textData += '';
+                textData += '</th>';
 
-					textData += '</tr>';
+                textData += '<th>';
+                textData += '';
+                textData += '</th>';
 
-					var i;	                       
-					for (i=0; i < data.length; i++){
-						textData += '<tr>';
+                textData += '</tr>';
 
-						textData += '<td>';
-						textData += data[i].id;
-						textData += '</td>';
+                var i;
+                for (i = 0; i < data.length; i++) {
+                    textData += '<tr>';
 
-						textData += '<td>';
-						if (data[i].observacao == null)
-							textData += '-- em branco --';
-						else
-							textData += data[i].observacao;
-						textData += '</td>';
+                    textData += '<td>';
+                    textData += data[i].id;
+                    textData += '</td>';
 
-						textData += '<td class="coluna_oculta_cel">';
-						if (data[i].estado == 1)
-							textData += 'Cotacao';
-						else if (data[i].estado == 2)
-							textData += 'Emitido';
-						else if (data[i].estado == 3)
-							textData += 'Cancelado';
-						else if (data[i].estado == 4)
-							textData += 'Entregue';						
-						else
-							textData += 'Estocado';
-						textData += '</td>';
+                    textData += '<td>';
+                    if (data[i].observacao == null)
+                        textData += '-- em branco --';
+                    else
+                        textData += data[i].observacao;
+                    textData += '</td>';
 
-						textData += '<td>';
-						textData += '<a href="pedidodecompra_editar.html?id=' + data[i].id + '">Editar</a>';
-						textData += '</td>';
+                    textData += '<td class="coluna_oculta_cel">';
+                    if (data[i].estado == 1)
+                        textData += 'Cotacao';
+                    else if (data[i].estado == 2)
+                        textData += 'Emitido';
+                    else if (data[i].estado == 3)
+                        textData += 'Cancelado';
+                    else if (data[i].estado == 4)
+                        textData += 'Entregue';
+                    else
+                        textData += 'Estocado';
+                    textData += '</td>';
 
-						textData += '<td>';
-						textData += '<a href="pedidodecompra_excluir.html?id=' + data[i].id + '">Excluir</a>';
-						textData += '</td>';
+                    textData += '<td>';
+                    textData += '<a href="pedidodecompra_editar.html?id=' + data[i].id + '">Editar</a>';
+                    textData += '</td>';
 
-						textData += '</tr>';
-					}	
-					textData += '</table>'
-					$('#table_container').html(textData);	
-				},
-				function complete(xhr, text) {
-					console.log(xhr.status);
-					//console.log(xhr.responseText);			
-				}     
-			);
+                    textData += '<td>';
+                    textData += '<a href="pedidodecompra_excluir.html?id=' + data[i].id + '">Excluir</a>';
+                    textData += '</td>';
 
-		}
+                    textData += '</tr>';
+                }
+                textData += '</table>'
+                $('#table_container').html(textData);
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+            }
+        );
 
-	</script>
+    }
+
+</script>
 
 </html>

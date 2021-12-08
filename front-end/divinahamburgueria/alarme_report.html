@@ -1,225 +1,253 @@
 <html>
 
-	<head>
-		<meta charset="utf8"/>
-		<script src="jquery/jquery3.6.js"></script>
-		<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
-		<script src="bootstrap/dist/js/bootstrap.js"></script>
-		<link rel="stylesheet" href="css/sistema.css" >
-		<script src="js/sistema.js"></script>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	</head>
+<head>
+    <meta charset="utf8"/>
+    <script src="jquery/jquery3.6.js"></script>
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css">
+    <script src="bootstrap/dist/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/sistema.css">
+    <script src="js/sistema.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-	<body>        
+    <title>DIVINA HAMBURGUERIA</title>
 
-		<div class="setecincoporcento">
+    <link rel="shortcut icon" href="image/logo-divina-symbol.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/apple-touch-icon-180x180.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+    <link rel="stylesheet" id="css-main" href="assets/css/codebase.min.css">
 
-			<input type="hidden" id="idusuario" value="0">
+</head>
 
-			<div id="menu">
-                	</div>
+<body style="background-color: #fdd835">
 
-			<br/>
-			<h1 class="floatleft">Relatório alarme</h1>
-			<br/>
-			<div class="clearboth"></div>
-			<br/>
+<div id="page-container"
+     class="sidebar-o sidebar-inverse enable-page-overlay side-scroll page-header-glass page-header-inverse main-content-boxed">
+    <div id="menu">
+    </div>
+    <main id="main-container">
+        <div class="setecincoporcento font-w600">
+            <input type="hidden" id="idusuario" value="0">
+            <h2 class="content-heading" style="color: #343a40">RELATÓRIO ALARME</h2>
+            <div class="block block-rounded font-w600">
+                <div class="block-content" style="background-color: #343a40; color:#e4e7ed">
+                    <label class="floatright widthvintecincoporcento"><label class="asterisk"></label>
+                        Campos obrigatórios
+                    </label>
+                    <div class="clearboth"></div>
+                    <br/>
+                    <div id="table_container">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
 
-			<div id="table_container">
-			</div>
+<!--<div class="setecincoporcento">-->
 
-		</div>
+<!--    <input type="hidden" id="idusuario" value="0">-->
 
-	</body>
+<!--    <div id="menu">-->
+<!--    </div>-->
 
-	<script>		
+<!--    <br/>-->
+<!--    <h1 class="floatleft">Relatório alarme</h1>-->
+<!--    <br/>-->
+<!--    <div class="clearboth"></div>-->
+<!--    <br/>-->
 
-		$(document).ready(function() {	
+<!--    <div id="table_container">-->
+<!--    </div>-->
 
-			//DescontarEstoque(5);
+<!--</div>-->
 
-			if (CheckLogin() == false)
-				return;
-			$("#menu").load("menu.html");			
-			LoadAlarmeListsReport(); 										
-		});		
+</body>
 
-		function CheckLogin(){
-			var idusuario = getLoggedUserId();
-			if (idusuario == -1)
-			{
-				var page =  window.location.pathname.split("/").pop();
-				window.location.href = window.location.href.replace(page,'login.html');	
-				return false;					
-			}								
-			else
-			{
-				$('#idusuario').val(idusuario);
-				return true;
-			}
-		}
+<script>
+
+    $(document).ready(function () {
+
+        //DescontarEstoque(5);
+
+        if (CheckLogin() == false)
+            return;
+        $("#menu").load("menu.html");
+        LoadAlarmeListsReport();
+    });
+
+    function CheckLogin() {
+        var idusuario = getLoggedUserId();
+        if (idusuario == -1) {
+            var page = window.location.pathname.split("/").pop();
+            window.location.href = window.location.href.replace(page, 'login.html');
+            return false;
+        } else {
+            $('#idusuario').val(idusuario);
+            return true;
+        }
+    }
 
 
-		var alarme_list_report;
-		var estoque_list_report;
-		var item_do_estoque_list_report;
+    var alarme_list_report;
+    var estoque_list_report;
+    var item_do_estoque_list_report;
 
-		function LoadAlarmeListsReport(){			
+    function LoadAlarmeListsReport() {
 
-			WebApi_GET_LIST_Alarme
-			(
-				'?quantidademinima=100000',
-				function success(data) {			
-					//console.log(data);			
-					alarme_list_report = data;		
-					CheckAlarmeReport();
-				},
-				function complete(xhr, text) {
-					console.log(xhr.status);
-					//console.log(xhr.responseText);			
-				}				
-			);
+        WebApi_GET_LIST_Alarme
+        (
+            '?quantidademinima=100000',
+            function success(data) {
+                //console.log(data);
+                alarme_list_report = data;
+                CheckAlarmeReport();
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+            }
+        );
 
-			WebApi_GET_LIST_Estoque
-			(
-				'?quantidade=100000',
-				function success(data) {			
-					//console.log(data);			
-					estoque_list_report = data;
-					CheckAlarmeReport();		
-				},
-				function complete(xhr, text) {
-					console.log(xhr.status);
-					//console.log(xhr.responseText);			
-				}				
-			);
+        WebApi_GET_LIST_Estoque
+        (
+            '?quantidade=100000',
+            function success(data) {
+                //console.log(data);
+                estoque_list_report = data;
+                CheckAlarmeReport();
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+            }
+        );
 
-			WebApi_GET_LIST_ItemDoEstoque
-			(
-				'?nome=', 
-				function success(data) {			
-					//console.log(data);			
-					item_do_estoque_list_report = data;
-					CheckAlarmeReport();
-				},
-				function complete(xhr, text) {
-					console.log(xhr.status);
-					//console.log(xhr.responseText);			
-				}	     
-			);
-		
-		}
+        WebApi_GET_LIST_ItemDoEstoque
+        (
+            '?nome=',
+            function success(data) {
+                //console.log(data);
+                item_do_estoque_list_report = data;
+                CheckAlarmeReport();
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+            }
+        );
 
-		function CheckAlarmeReport(){
+    }
 
-			if(alarme_list_report == undefined)
-				return;
+    function CheckAlarmeReport() {
 
-			if(estoque_list_report == undefined)
-				return;
+        if (alarme_list_report == undefined)
+            return;
 
-			if(item_do_estoque_list_report == undefined)
-				return;
+        if (estoque_list_report == undefined)
+            return;
 
-			var textData = '<table class="table">';
+        if (item_do_estoque_list_report == undefined)
+            return;
 
-			textData += '<tr>';
+        var textData = '<table class="table font-w600" style="color: #e4e7ed" >';
 
-			textData += '<th>';
-			textData += 'Id';
-			textData += '</th>';
+        textData += '<tr>';
 
-			textData += '<th>';
-			textData += 'Item';
-			textData += '</th>';
+        textData += '<th>';
+        textData += 'Id';
+        textData += '</th>';
 
-			textData += '<th class="coluna_oculta_cel">';
-			textData += 'Qtde min';
-			textData += '</th>';
+        textData += '<th>';
+        textData += 'Item';
+        textData += '</th>';
 
-			textData += '<th class="coluna_oculta_cel">';
-			textData += 'Qtde';
-			textData += '</th>';
+        textData += '<th class="coluna_oculta_cel">';
+        textData += 'Qtde min';
+        textData += '</th>';
 
-			textData += '</tr>';
-			
-			for(i=0; i < alarme_list_report.length; i++){	
-       				var ok = false;		
-				for(k=0; k < estoque_list_report.length; k++){
-					if (alarme_list_report[i].itemdoestoque == estoque_list_report[k].itemdoestoque ){
-						ok = true;						
-						if(estoque_list_report[k].quantidade < alarme_list_report[i].quantidademinima){
-							
-							textData += '<tr>';
+        textData += '<th class="coluna_oculta_cel">';
+        textData += 'Qtde';
+        textData += '</th>';
 
-							textData += '<td>';
-							textData += alarme_list_report[i].itemdoestoque;
-							textData += '</td>';
+        textData += '</tr>';
 
-							textData += '<td>';
-							var itemDoEstoque = item_do_estoque_list_report.find(x => x.id === alarme_list_report[i].itemdoestoque);
-							textData += itemDoEstoque.nome +
-								    " " +
-								    itemDoEstoque.marca +
-								    " " +
-								    itemDoEstoque.conteudo +
-								    " " +
-								    itemDoEstoque.unidade;
-							textData += '</td>';
+        for (i = 0; i < alarme_list_report.length; i++) {
+            var ok = false;
+            for (k = 0; k < estoque_list_report.length; k++) {
+                if (alarme_list_report[i].itemdoestoque == estoque_list_report[k].itemdoestoque) {
+                    ok = true;
+                    if (estoque_list_report[k].quantidade < alarme_list_report[i].quantidademinima) {
 
-							textData += '<td class="coluna_oculta_cel">';
-							textData += alarme_list_report[i].quantidademinima;
-							textData += '</td>';
+                        textData += '<tr>';
 
-							textData += '<td class="coluna_oculta_cel">';
-							textData += estoque_list_report[k].quantidade;
-							textData += '</td>';
+                        textData += '<td>';
+                        textData += alarme_list_report[i].itemdoestoque;
+                        textData += '</td>';
 
-							textData += '</tr>';					
+                        textData += '<td>';
+                        var itemDoEstoque = item_do_estoque_list_report.find(x => x.id === alarme_list_report[i].itemdoestoque);
+                        textData += itemDoEstoque.nome +
+                            " " +
+                            itemDoEstoque.marca +
+                            " " +
+                            itemDoEstoque.conteudo +
+                            " " +
+                            itemDoEstoque.unidade;
+                        textData += '</td>';
 
-						}                                                                                        
-						break;
-					}										
-				}
+                        textData += '<td class="coluna_oculta_cel">';
+                        textData += alarme_list_report[i].quantidademinima;
+                        textData += '</td>';
 
-				if (ok == false){
+                        textData += '<td class="coluna_oculta_cel">';
+                        textData += estoque_list_report[k].quantidade;
+                        textData += '</td>';
 
-					textData += '<tr>';
+                        textData += '</tr>';
 
-					textData += '<td>';
-					textData += alarme_list_report[i].itemdoestoque;
-					textData += '</td>';
+                    }
+                    break;
+                }
+            }
 
-					textData += '<td>';
-					var itemDoEstoque = item_do_estoque_list_report.find(x => x.id === alarme_list_report[i].itemdoestoque);
-					textData += itemDoEstoque.nome +
-						    " " +
-						    itemDoEstoque.marca +
-						    " " +
-						    itemDoEstoque.conteudo +
-						    " " +
-						    itemDoEstoque.unidade;
-					textData += '</td>';
+            if (ok == false) {
 
-					textData += '<td class="coluna_oculta_cel">';
-					textData += alarme_list_report[i].quantidademinima;
-					textData += '</td>';
+                textData += '<tr>';
 
-					textData += '<td class="coluna_oculta_cel">';
-					textData += '0';
-					textData += '</td>';
+                textData += '<td>';
+                textData += alarme_list_report[i].itemdoestoque;
+                textData += '</td>';
 
-					textData += '</tr>';
-				
-				}
+                textData += '<td>';
+                var itemDoEstoque = item_do_estoque_list_report.find(x => x.id === alarme_list_report[i].itemdoestoque);
+                textData += itemDoEstoque.nome +
+                    " " +
+                    itemDoEstoque.marca +
+                    " " +
+                    itemDoEstoque.conteudo +
+                    " " +
+                    itemDoEstoque.unidade;
+                textData += '</td>';
 
-			}
+                textData += '<td class="coluna_oculta_cel">';
+                textData += alarme_list_report[i].quantidademinima;
+                textData += '</td>';
 
-			textData += '</table>'
-			$('#table_container').html(textData);
-		
-		}
+                textData += '<td class="coluna_oculta_cel">';
+                textData += '0';
+                textData += '</td>';
 
-	</script>
+                textData += '</tr>';
+
+            }
+
+        }
+
+        textData += '</table>'
+        $('#table_container').html(textData);
+
+    }
+
+</script>
 
 </html>

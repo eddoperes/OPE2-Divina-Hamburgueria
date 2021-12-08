@@ -1,178 +1,182 @@
 <html>
 
 <head>
-	<meta charset="utf8"/>
-	<script src="jquery/jquery3.6.js"></script>
-	<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
-	<script src="bootstrap/dist/js/bootstrap.js"></script>
-    <link rel="stylesheet" href="css/sistema.css" >
-    <script src="js/sistema.js"></script>	
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf8"/>
+    <script src="jquery/jquery3.6.js"></script>
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css">
+    <script src="bootstrap/dist/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/sistema.css">
+    <script src="js/sistema.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>DIVINA HAMBURGUERIA</title>
+    <link rel="shortcut icon" href="image/logo-divina-symbol.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/apple-touch-icon-180x180.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+    <link rel="stylesheet" id="css-main" href="assets/css/codebase.min.css">
+
 </head>
 
-<body>
+<body style="background-color: #fdd835">
 
-	<div class="setecincoporcento">
-
-		<div id="menu">
-                </div> 
-
-		<br/>
-		<h1>Esqueci a senha</h1>
-		<br/>
-
-		<div class="mb-3">
-  			<label for="email" class="form-label asterisk">Email</label>
-  			<input id="email" class="form-control" type='text' value='' />
-			<label class="invalid-feedback">O email precisa ser informado</label>
-		</div>
-
-		<div class="col-auto">
-    		<input id="enviartoken" type="button" class="btn btn-primary mb-3" value='Enviar um token' />    
-		</div>
-
-		<div id="sucessotoken" class="alert alert-success displaynone" role="alert" >
-			Token enviado! Cheque sua caixa de email
-		</div>
-
-		<div id="falhatoken" class="alert alert-danger displaynone" role="alert" >  			
-		</div>
-
-		<div class="mb-3">
-			<label for="token" class="form-label asterisk">Token</label>
-			<input id="token" class="form-control" type='text' value='' />
-		  	<label class="invalid-feedback">O token precisa ser informado</label>
-	  	</div>
-
-		<div class="mb-3">
-			<label for="novasenha" class="form-label asterisk">Nova senha</label>
-			<input id="novasenha" class="form-control" type='password' value='' />
-		  	<label class="invalid-feedback">A nova senha precisa ser informada</label>
-	  	</div>
-
-		<div class="mb-3">
-			<label for="novasenhadenovo" class="form-label asterisk">Nova senha de novo</label>
-			<input id="novasenhadenovo" class="form-control" type='password' value='' />
-		  	<label class="invalid-feedback">A nova senha de novo precisa ser igual a nova senha</label>
-	  	</div>
-
-		<div class="col-auto">
-    		<input id="enviar" type="button" class="btn btn-primary mb-3" value='Alterar a senha' />    
-		</div>
-
-		<div id="sucesso" class="alert alert-success displaynone" role="alert" >
-			Senha alterada! <a href="login.html">Seguir para o login</a>
-		</div>
-
-		<div id="falha" class="alert alert-danger displaynone" role="alert" >  			
-		</div>
-
-	</div>
-
+<div id="page-container">
+    <div class="setecincoporcento font-w600">
+        <h2 class="content-heading" style="color: #343a40">ESQUECI A SENHA
+            <a href="login.html" style="color: #343a40">
+                <button type="button" class="btn btn-alt-secondary float-right">
+                    <i class="fa fa-user mr-5"></i>Página de Login
+                </button>
+            </a>
+        </h2>
+        <div class="block block-rounded font-w600">
+            <div class="block-content font-w600" style="background-color: #343a40; color:#e4e7ed">
+                <div class="mb-3">
+                    <label for="email" class="form-label asterisk">Email</label>
+                    <input id="email" class="form-control" type='text' value=''/>
+                    <label class="invalid-feedback">O email precisa ser informado</label>
+                </div>
+                <div class="col-auto">
+                    <input id="enviartoken" type="button" class="btn btn-alt-secondary mb-5" value='Enviar um token'/>
+                </div>
+                <div id="sucessotoken" class="alert alert-success displaynone" role="alert">
+                    Token enviado! Cheque sua caixa de email
+                </div>
+                <div id="falhatoken" class="alert alert-danger displaynone" role="alert">
+                </div>
+                <div class="mb-3">
+                    <label for="token" class="form-label asterisk">Token</label>
+                    <input id="token" class="form-control" type='text' value=''/>
+                    <label class="invalid-feedback">O token precisa ser informado</label>
+                </div>
+                <div class="mb-3">
+                    <label for="novasenha" class="form-label asterisk">Nova senha</label>
+                    <input id="novasenha" class="form-control" type='password' value=''/>
+                    <label class="invalid-feedback">A nova senha precisa ser informada</label>
+                </div>
+                <div class="mb-3">
+                    <label for="novasenhadenovo" class="form-label asterisk">Nova senha de novo</label>
+                    <input id="novasenhadenovo" class="form-control" type='password' value=''/>
+                    <label class="invalid-feedback">A nova senha de novo precisa ser igual a nova senha</label>
+                </div>
+                <div class="col-auto">
+                    <input id="enviar" type="button" class="btn btn-alt-secondary mb-5" value='Alterar a senha'/>
+                </div>
+                <div id="sucesso" class="alert alert-success displaynone" role="alert">
+                    Senha alterada! <a href="login.html">Seguir para o login</a>
+                </div>
+                <div id="falha" class="alert alert-danger displaynone" role="alert">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <div class="content py-20 font-size-sm clearfix">
+            <div class="float-left">
+                Copyright © 2021 Divina Hamburgueria
+            </div>
+            <div class="float-right">
+                Desenvolvido por VirtualSoft <i class="si si-badge"></i>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 
 <script>
 
-	$(document).ready(function() {	
+    $(document).ready(function () {
 
-		$("#menu").load("menu.html");
+        $("#email").on(" keyup focusout change ", function () {
+            if ($("#email").val() == "")
+                $("#email").addClass("is-invalid");
+            else
+                $("#email").removeClass("is-invalid");
+        });
 
-		$("#email").on(" keyup focusout change ", function (){
-			if ($("#email").val() == "")
-				$("#email").addClass("is-invalid");
-			else
-				$("#email").removeClass("is-invalid");
-		}); 
+        $("#token").on(" keyup focusout change ", function () {
+            if ($("#token").val() == "")
+                $("#token").addClass("is-invalid");
+            else
+                $("#token").removeClass("is-invalid");
+        });
 
-		$("#token").on(" keyup focusout change ", function (){
-			if ($("#token").val() == "")
-				$("#token").addClass("is-invalid");
-			else
-				$("#token").removeClass("is-invalid");
-		});
+        $("#novasenha").on(" keyup focusout change ", function () {
+            if ($("#novasenha").val() == "")
+                $("#novasenha").addClass("is-invalid");
+            else
+                $("#novasenha").removeClass("is-invalid");
+        });
 
-		$("#novasenha").on(" keyup focusout change ", function (){
-			if ($("#novasenha").val() == "")
-				$("#novasenha").addClass("is-invalid");
-			else
-				$("#novasenha").removeClass("is-invalid");
-		});
+        $("#novasenhadenovo").on(" keyup focusout change ", function () {
+            if ($("#novasenhadenovo").val() != $("#novasenha").val())
+                $("#novasenhadenovo").addClass("is-invalid");
+            else
+                $("#novasenhadenovo").removeClass("is-invalid");
+        });
 
-		$("#novasenhadenovo").on(" keyup focusout change ", function (){
-			if ($("#novasenhadenovo").val() != $("#novasenha").val())
-				$("#novasenhadenovo").addClass("is-invalid");
-			else
-				$("#novasenhadenovo").removeClass("is-invalid");
-		});
+        $("#enviartoken").on(" click ", function () {
+            EnviarTokenClick();
+        });
 
-		$("#enviartoken").on(" click ", function (){
-			EnviarTokenClick();
-		});
+        $("#enviar").on(" click ", function () {
+            EnviarClick();
+        });
 
-		$("#enviar").on(" click ", function (){
-			EnviarClick();
-		});
+        $(document).on(" keypress ", function (e) {
+            if (e.keyCode == 13)
+                EnviarClick();
+        });
 
-		$(document).on(" keypress ", function (e){			
-			if (e.keyCode == 13)
-				EnviarClick();
-		});
+    });
 
-	});
+    function EnviarTokenClick() {
 
-	function EnviarTokenClick()
-	{
-		
-		WebApi_POST_EnviarToken
-		(
-			{email : $('#email').val()}, 
-			function success (data) {
-				console.log(data);
-				doLogin(data['id']);					
-			}, 
-			function complete(xhr, text) {
-				console.log(xhr.status);
-				console.log(xhr.responseText);
-				if (xhr.status == 200){
-					$('#falhatoken').css('display','none');
-					$('#sucessotoken').css('display','block');				
-				}
-				else{
-					$('#sucessotoken').css('display','none');
-					$('#falhatoken').css('display','block');
-					$('#falhatoken').text("Ocorreu uma falha: " + xhr.responseText);
-				}
-			}     
-		)
-		
-	}
+        WebApi_POST_EnviarToken
+        (
+            {email: $('#email').val()},
+            function success(data) {
+                //console.log(data);
+                //doLogin(data['id']);
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                console.log(xhr.responseText);
+                if (xhr.status == 200) {
+                    $('#falhatoken').css('display', 'none');
+                    $('#sucessotoken').css('display', 'block');
+                } else {
+                    $('#sucessotoken').css('display', 'none');
+                    $('#falhatoken').css('display', 'block');
+                    $('#falhatoken').text("Ocorreu uma falha: " + xhr.responseText);
+                }
+            }
+        )
 
-	function EnviarClick()
-	{
-		
-		WebApi_POST_AlterarSenha
-		(
-			{email : $('#email').val(), token : $('#token').val(), senha : $('#novasenha').val() }, 
-			function success (data) {
-				console.log(data);
-				doLogin(data['id']);					
-			}, 
-			function complete(xhr, text) {
-				console.log(xhr.status);
-				console.log(xhr.responseText);
-				if (xhr.status == 200){
-					$('#falha').css('display','none');
-					$('#sucesso').css('display','block');				
-				}
-				else{
-					$('#sucesso').css('display','none');
-					$('#falha').css('display','block');
-					$('#falha').text("Ocorreu uma falha: " + xhr.responseText);
-				}
-			}     
-		)
-		
-	}
+    }
+
+    function EnviarClick() {
+
+        WebApi_POST_AlterarSenha
+        (
+            {email: $('#email').val(), token: $('#token').val(), senha: $('#novasenha').val()},
+            function success(data) {
+                //console.log(data);
+                //doLogin(data['id']);
+            },
+            function complete(xhr, text) {
+                //console.log(xhr.status);
+                //console.log(xhr.responseText);
+                if (xhr.status == 200) {
+                    $('#falha').css('display', 'none');
+                    $('#sucesso').css('display', 'block');
+                } else {
+                    $('#sucesso').css('display', 'none');
+                    $('#falha').css('display', 'block');
+                    $('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+                }
+            }
+        )
+
+    }
 
 </script>
 

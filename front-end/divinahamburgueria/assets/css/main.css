@@ -1,0 +1,32 @@
+.page-header-inverse #page-header .nav-main-header ul, .page-header-inverse #page-header .nav-main-header > li:hover > a.nav-submenu, .page-header-inverse.page-header-glass.page-header-scroll #page-header .nav-main-header ul, .page-header-inverse.page-header-glass.page-header-scroll #page-header .nav-main-header > li:hover > a.nav-submenu {
+  background-color: #ffffff;
+}
+
+.page-header-inverse #page-header .btn-dual-secondary, .sidebar-inverse #sidebar .btn-dual-secondary {
+  color: #000000;
+  background-color: transparent;
+  border-color: transparent
+}
+
+#page-container.page-header-inverse #page-header {
+  color: #000000;
+  background-color: #FFFFFF;
+}
+
+.page-header-inverse #page-header .nav-main-header a, .page-header-inverse.page-header-glass.page-header-scroll #page-header .nav-main-header a {
+  color: #9aa0ac;
+}
+
+#page-container.sidebar-inverse #sidebar {
+  color: #e4e7ed;
+  background-color: #FFFFFF;
+  box-shadow: none
+}
+
+#page-container.sidebar-inverse #sidebar .content-side-user {
+  background-color: #FFFFFF;
+}
+
+.sidebar-inverse #sidebar .nav-main a {
+  color: #9aa0ac;
+}

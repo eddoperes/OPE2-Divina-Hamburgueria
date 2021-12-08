@@ -1,0 +1,298 @@
+<html>
+
+<head>
+    <meta charset="utf8"/>
+    <script src="jquery/jquery3.6.js"></script>
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css">
+    <script src="bootstrap/dist/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/sistema.css">
+    <script src="js/sistema.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+    <title>DIVINA HAMBURGUERIA</title>
+
+    <link rel="shortcut icon" href="image/logo-divina-symbol.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/apple-touch-icon-180x180.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+    <link rel="stylesheet" id="css-main" href="assets/css/codebase.min.css">
+
+</head>
+
+<body style="background-color: #fdd835">
+
+<div id="page-container"
+     class="sidebar-o sidebar-inverse enable-page-overlay side-scroll page-header-glass page-header-inverse main-content-boxed">
+    <div id="menu">
+    </div>
+    <main id="main-container">
+        <div class="setecincoporcento font-w600">
+            <input type="hidden" id="idusuario" value="0">
+            <h2 class="content-heading" style="color: #343a40">RESUMO DOS PEDIDOS</h2>
+            <div class="block block-rounded font-w600">
+                <div class="block-content" style="background-color: #343a40">
+                    <label class="floatright widthvintecincoporcento"><label class="asterisk"></label>
+                        Campos obrigatórios
+                    </label>
+                    <div class="mb-3">
+                        <label for="dateini" class="form-label">Início</label>
+                        <input id="dateini" type="date" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="dateend" class="form-label">Fim</label>
+                        <input id="dateend" type="date" class="form-control">
+                    </div>
+
+                    <div class="col-auto">
+                        <input type='button' class="btn btn-alt-secondary mb-5" value='Pesquisar' onclick="Busca()"/>
+                    </div>
+                </div>
+
+                <div class="block-content" style="background-color: #343a40; color:#e4e7ed">
+                    <h1 id="salao" class="displaynone" style="color: #e4e7ed">Salão</h1>
+                    <div id="table_container_salao" style="color:#e4e7ed">
+                    </div>
+                </div>
+
+                <div class="block-content" style="background-color: #343a40; color:#e4e7ed">
+                    <h1 id="delivery" class="displaynone" style="color: #e4e7ed">Delivery</h1>
+                    <div id="table_container_delivery" style="color:#e4e7ed">
+                    </div>
+                </div>
+                <!--                <div class="clearboth"></div>-->
+                <!--                <br/>-->
+                <!--                <div id="table_container">-->
+                <!--                </div>-->
+            </div>
+        </div>
+    </main>
+    <div class="content">
+        <div class="content py-20 font-size-sm clearfix">
+            <div class="float-left">
+                Copyright © 2021 Divina Hamburgueria
+            </div>
+            <div class="float-right">
+                Desenvolvido por VirtualSoft <i class="si si-badge"></i>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+
+    $(document).ready(function () {
+        if (CheckLogin() == false)
+            return;
+        $("#menu").load("menu.html");
+
+        var today = new Date();
+        var strIni = today.getFullYear() + '-' +
+            String(today.getMonth() + 1).padStart(2, '0') + '-' +
+            '01';
+        $("#dateini").val(strIni);
+
+        var nextDay = '30';
+
+        if (today.getMonth() + 1 == 1 ||
+            today.getMonth() + 1 == 3 ||
+            today.getMonth() + 1 == 5 ||
+            today.getMonth() + 1 == 7 ||
+            today.getMonth() + 1 == 8 ||
+            today.getMonth() + 1 == 10 ||
+            today.getMonth() + 1 == 12) {
+            nextDay = '31';
+        }
+
+        if (today.getMonth() + 1 == 2) {
+            nextDay = '28';
+        }
+
+        var strEnd = today.getFullYear() + '-' +
+            String(today.getMonth() + 1).padStart(2, '0') + '-' +
+            nextDay;
+        $("#dateend").val(strEnd);
+
+    });
+
+    function CheckLogin() {
+        var idusuario = getLoggedUserId();
+        if (idusuario == -1) {
+            var page = window.location.pathname.split("/").pop();
+            window.location.href = window.location.href.replace(page, 'login.html');
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    function Busca() {
+
+        WebApi_GET_LIST_PedidoDelivery
+        (
+            '?dateini=' + $('#dateini').val() + '&dateend=' + $('#dateend').val(),
+            function success(data) {
+                //console.log(data);
+
+                $("#delivery").removeClass("displaynone");
+
+                var textData = '<table class="table font-w600" style="color: #e4e7ed" >';
+
+                textData += '<tr>';
+
+                textData += '<th>';
+                textData += 'Periodo';
+                textData += '</th>';
+
+                textData += '<th>';
+                textData += 'Total';
+                textData += '</th>';
+
+                textData += '</tr>';
+
+                const collection = new Map();
+
+                var i;
+                for (i = 0; i < data.length; i++) {
+
+                    var thisDate = new Date(data[i].dataemitido)
+
+                    var key = String(thisDate.getMonth() + 1).padStart(2, '0') + '/' + thisDate.getFullYear();
+
+                    var temp = collection.get(key);
+
+                    if (temp == undefined) {
+                        collection.set(key, parseFloat(data[i].total));
+                    } else {
+                        collection.set(key, parseFloat(data[i].total) + parseFloat(temp));
+                    }
+
+                }
+
+                var total = 0;
+                for (let [key, value] of collection) {
+
+                    textData += '<tr>';
+
+                    textData += '<td>';
+                    textData += key;
+                    textData += '</td>';
+
+                    textData += '<td>';
+                    textData += value.toLocaleString('pt-br',{style:'currency', currency:'BRL'});
+                    textData += '</td>';
+
+                    textData += '</tr>';
+
+                    total += value;
+
+                }
+
+                textData += '<tr>';
+
+                textData += '<td>';
+                textData += 'Acumulado';
+                textData += '</td>';
+
+                textData += '<td>';
+                textData += total.toLocaleString('pt-br',{style:'currency', currency:'BRL'});
+                textData += '</td>';
+
+                textData += '</tr>';
+
+                textData += '</table>'
+                $('#table_container_delivery').html(textData);
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+            }
+        );
+
+        WebApi_GET_LIST_PedidoSalao
+        (
+            '?dateini=' + $('#dateini').val() + '&dateend=' + $('#dateend').val(),
+            function success(data) {
+                //console.log(data);
+
+
+                $("#salao").removeClass("displaynone");
+
+                var textData = '<table class="table font-w600" style="color: #e4e7ed">';
+
+                textData += '<tr>';
+
+                textData += '<th>';
+                textData += 'Periodo';
+                textData += '</th>';
+
+                textData += '<th>';
+                textData += 'Total';
+                textData += '</th>';
+
+                textData += '</tr>';
+
+                const collection = new Map();
+
+                var i;
+                for (i = 0; i < data.length; i++) {
+
+                    var thisDate = new Date(data[i].dataemitido)
+
+                    var key = String(thisDate.getMonth() + 1).padStart(2, '0') + '/' + thisDate.getFullYear();
+
+                    var temp = collection.get(key);
+
+                    if (temp == undefined) {
+                        collection.set(key, parseFloat(data[i].total));
+                    } else {
+                        collection.set(key, parseFloat(data[i].total) + parseFloat(temp));
+                    }
+
+                }
+
+                var total = 0;
+                for (let [key, value] of collection) {
+
+                    textData += '<tr>';
+
+                    textData += '<td>';
+                    textData += key;
+                    textData += '</td>';
+
+                    textData += '<td>';
+                    textData += value.toLocaleString('pt-br',{style:'currency', currency:'BRL'});
+                    textData += '</td>';
+
+                    textData += '</tr>';
+
+                    total += value;
+                }
+
+                textData += '<tr>';
+
+                textData += '<td>';
+                textData += 'Acumulado';
+                textData += '</td>';
+
+                textData += '<td>';
+                textData += total.toLocaleString('pt-br',{style:'currency', currency:'BRL'});
+                textData += '</td>';
+
+                textData += '</tr>';
+
+                textData += '</table>'
+                $('#table_container_salao').html(textData);
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+            }
+        );
+
+
+    }
+
+</script>
+
+</html>

@@ -1,171 +1,194 @@
 <html>
 
-	<head>
-		<meta charset="utf8"/>
-		<script src="jquery/jquery3.6.js"></script>
-		<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
-		<script src="bootstrap/dist/js/bootstrap.js"></script>
-        	<link rel="stylesheet" href="css/sistema.css" >
-        	<script src="js/sistema.js"></script>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	</head>
+<head>
+    <meta charset="utf8"/>
+    <script src="jquery/jquery3.6.js"></script>
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css">
+    <script src="bootstrap/dist/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/sistema.css">
+    <script src="js/sistema.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-	<body>     
+    <title>DIVINA HAMBURGUERIA</title>
 
-		<div class="setecincoporcento">
+    <link rel="shortcut icon" href="image/logo-divina-symbol.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/apple-touch-icon-180x180.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+    <link rel="stylesheet" id="css-main" href="assets/css/codebase.min.css">
 
-			<div id="menu">
-                	</div>
+</head>
 
-			<br/>
-			<h1>Listar estoque</h1>
-			<br/>
+<body style="background-color: #fdd835">
 
-			<a href="estoque_entrada.html">Entrada</a>
-			<br/>
-			<br/>
+<div id="page-container"
+     class="sidebar-o sidebar-inverse enable-page-overlay side-scroll page-header-glass page-header-inverse main-content-boxed">
 
-			<div class="borderumpixelpaddingvintepixel">
-				<div class="mb-3">
-					<label for="quantidade" class="form-label">Quantidade abaixo de</label>
-					<input id="quantidade" class="form-control" type='number' value='100' />
-				</div>
+    <div id="menu">
+    </div>
 
-				<div class="col-auto">
-					<input type='button' class="btn btn-primary mb-3" value='Pesquisar' onclick="Busca()" />    
-				</div>
-			</div>
+    <main id="main-container">
+        <div class="setecincoporcento font-w600">
 
-			<div id="table_container">
-			</div>
+            <h2 class="content-heading" style="color: #343a40">LISTAR ESTOQUE</h2>
+            <a href="estoque_entrada.html" style="color: #343a40">
+                <button type="button" class="btn btn-alt-secondary mb-5">
+                    <i class="fa fa-plus"></i> ADICIONAR ENTRADA
+                </button>
+            </a>
+            <div class="block block-rounded font-w600">
 
-		</div>
+                <div class="block-content font-w600" style="background-color: #343a40; color:#e4e7ed">
+                    <div class="mb-3">
+                        <label for="quantidade" class="form-label">Quantidade abaixo de</label>
+                        <input id="quantidade" class="form-control" type='number' value='100'/>
+                    </div>
 
-	</body>
+                    <div class="col-auto" style="color: #343a40">
+                        <input type='button' class="btn btn-alt-secondary mb-5" value='Pesquisar' onclick="Busca()"/>
+                    </div>
+                    <div class="table-responsive" style="color: #e4e7ed">
+                        <div id="table_container" style="color: #e4e7ed">
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-	<script>
-		
-		$(document).ready(function() {					
-			if (CheckLogin() == false)
-				return;	
-			$("#menu").load("menu.html");					
-			LoadLists();
-		});		
+        </div>
+    </main>
+    <div class="content">
+        <div class="content py-20 font-size-sm clearfix">
+            <div class="float-left">
+                Copyright © 2021 Divina Hamburgueria
+            </div>
+            <div class="float-right">
+                Desenvolvido por VirtualSoft <i class="si si-badge"></i>
+            </div>
+        </div>
+    </div>
 
-		var itemdoestoquelist;
+</div>
 
-		function LoadLists(){
-			WebApi_GET_LIST_ItemDoEstoque
-			(
-				"",
-				function success(data) {	
-					//console.log(data);
-					itemdoestoquelist = data;
-				},
-				function complete(xhr, text) {
-					console.log(xhr.status);
-					//console.log(xhr.responseText);			
-				}	
-			);	
-		}
+</body>
 
-		function CheckLogin(){
-			var idusuario = getLoggedUserId();
-			if (idusuario == -1)
-			{
-				var page =  window.location.pathname.split("/").pop();
-				window.location.href = window.location.href.replace(page,'login.html');	
-				return false;					
-			}								
-			else
-			{
-				return true;
-			}
-		}
+<script>
 
-		function Busca()
-		{
+    $(document).ready(function () {
+        if (CheckLogin() == false)
+            return;
+        $("#menu").load("menu.html");
+        LoadLists();
+    });
 
-			WebApi_GET_LIST_Estoque
-			(
-				'?quantidade=' + $('#quantidade').val(),
-				function success(data) {			
-					//console.log(data);			
-					var textData = '<table class="table">';
+    var itemdoestoquelist;
 
-					textData += '<tr>';
+    function LoadLists() {
+        WebApi_GET_LIST_ItemDoEstoque
+        (
+            "",
+            function success(data) {
+                //console.log(data);
+                itemdoestoquelist = data;
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+            }
+        );
+    }
 
-					textData += '<th>';
-					textData += 'Id';
-					textData += '</th>';
+    function CheckLogin() {
+        var idusuario = getLoggedUserId();
+        if (idusuario == -1) {
+            var page = window.location.pathname.split("/").pop();
+            window.location.href = window.location.href.replace(page, 'login.html');
+            return false;
+        } else {
+            return true;
+        }
+    }
 
-					textData += '<th>';
-					textData += 'Item';
-					textData += '</th>';
+    function Busca() {
 
-					textData += '<th class="coluna_oculta_cel">';
-					textData += 'Qtde';
-					textData += '</th>';
-		
-					textData += '<th>';
-					textData += '';
-					textData += '</th>';
+        WebApi_GET_LIST_Estoque
+        (
+            '?quantidade=' + $('#quantidade').val(),
+            function success(data) {
+                //console.log(data);
+                var textData = '<table class="table font-w600" style="color: #e4e7ed" >';
 
-					textData += '<th>';
-					textData += '';
-					textData += '</th>';
+                textData += '<tr>';
 
-					textData += '</tr>';
+                textData += '<th>';
+                textData += 'Id';
+                textData += '</th>';
 
-					var i;	                       
-					for (i=0; i < data.length; i++){
-						textData += '<tr>';
+                textData += '<th>';
+                textData += 'Item';
+                textData += '</th>';
 
-						textData += '<td>';
-						textData += data[i].id;
-						textData += '</td>';								
-						
-						var k;
-						for (k=0; k < itemdoestoquelist.length; k++){
-							if (itemdoestoquelist[k].id ==  data[i].itemdoestoque){
-								textData += '<td>';
-								textData += itemdoestoquelist[k].nome +
-											" " +
-											itemdoestoquelist[k].marca +
-											" " +
-											itemdoestoquelist[k].conteudo +
-											" " +
-											itemdoestoquelist[k].unidade;
-								textData += '</td>';
-								break;
-							}
-						}
+                textData += '<th class="coluna_oculta_cel">';
+                textData += 'Qtde';
+                textData += '</th>';
 
-						textData += '<td class="coluna_oculta_cel">';
-						textData += data[i].quantidade;
-						textData += '</td>';
+                textData += '<th>';
+                textData += '';
+                textData += '</th>';
 
-						textData += '<td>';
-						textData += '<a href="estoque_editar.html?id=' + data[i].id + '">Editar</a>';
-						textData += '</td>';
+                textData += '<th>';
+                textData += '';
+                textData += '</th>';
 
-						textData += '<td>';
-						textData += '<a href="estoque_excluir.html?id=' + data[i].id + '">Excluir</a>';
-						textData += '</td>';
+                textData += '</tr>';
 
-						textData += '</tr>';
-					}	
-					textData += '</table>'
-					$('#table_container').html(textData);	
-				},
-				function complete(xhr, text) {
-					console.log(xhr.status);
-					//console.log(xhr.responseText);			
-				}				
-			);
+                var i;
+                for (i = 0; i < data.length; i++) {
+                    textData += '<tr>';
 
-		}
+                    textData += '<td>';
+                    textData += data[i].id;
+                    textData += '</td>';
 
-	</script>
+                    var k;
+                    for (k = 0; k < itemdoestoquelist.length; k++) {
+                        if (itemdoestoquelist[k].id == data[i].itemdoestoque) {
+                            textData += '<td>';
+                            textData += itemdoestoquelist[k].nome +
+                                " " +
+                                itemdoestoquelist[k].marca +
+                                " " +
+                                itemdoestoquelist[k].conteudo +
+                                " " +
+                                itemdoestoquelist[k].unidade;
+                            textData += '</td>';
+                            break;
+                        }
+                    }
+
+                    textData += '<td class="coluna_oculta_cel">';
+                    textData += data[i].quantidade;
+                    textData += '</td>';
+
+                    textData += '<td>';
+                    textData += '<a href="estoque_editar.html?id=' + data[i].id + '">Editar</a>';
+                    textData += '</td>';
+
+                    textData += '<td>';
+                    textData += '<a href="estoque_excluir.html?id=' + data[i].id + '">Excluir</a>';
+                    textData += '</td>';
+
+                    textData += '</tr>';
+                }
+                textData += '</table>'
+                $('#table_container').html(textData);
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+            }
+        );
+
+    }
+
+</script>
 
 </html>

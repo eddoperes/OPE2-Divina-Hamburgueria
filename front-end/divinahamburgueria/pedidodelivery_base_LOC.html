@@ -1,5 +1,5 @@
 <div class="accordion" id="accordiSixExample">
-      <div class="accordion-item">
+      <div class="accordion-item" style="background-color: #343a40">
             <h2 class="accordion-header" id="headingSix">
                   <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="true" aria-controls="collapseSix">
                         Localizar cliente
@@ -14,7 +14,7 @@
                         </div>
 
                         <div class="col-auto">
-                              <input type='button' class="btn btn-primary mb-3" value='Pesquisar' onclick="Busca()" />    
+                              <input type='button' class="btn btn-alt-secondary mb-5" value='Pesquisar' onclick="Busca()" />
                         </div>
 
                         <div id="table_container">
@@ -36,7 +36,7 @@
                   '?nome=' + $('#nome_busca').val(), 
                   function success(data) {			
                         console.log(data);			
-                        var textData = '<table class="table">';
+                        var textData = '<table class="table font-w600" style="color: #e4e7ed" >';
 
                         textData += '<tr>';
 

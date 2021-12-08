@@ -1,146 +1,187 @@
 <html>
 
-	<head>
-		<meta charset="utf8"/>
-		<script src="jquery/jquery3.6.js"></script>
-		<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
-		<script src="bootstrap/dist/js/bootstrap.js"></script>
-		<link rel="stylesheet" href="css/sistema.css" >
-		<script src="js/sistema.js"></script>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	</head>
+<head>
+    <meta charset="utf8"/>
+    <script src="jquery/jquery3.6.js"></script>
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css">
+    <script src="bootstrap/dist/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/sistema.css">
+    <script src="js/sistema.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-	<body>        
+    <title>DIVINA HAMBURGUERIA</title>
 
-		<div class="setecincoporcento">
+    <link rel="shortcut icon" href="image/logo-divina-symbol.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/apple-touch-icon-180x180.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+    <link rel="stylesheet" id="css-main" href="assets/css/codebase.min.css">
 
-			<input type="hidden" id="idusuario" value="0">
+</head>
 
-			<div id="menu">
-                	</div>
 
-			<br/>
-			<h1 class="floatleft">Excluir pedido de compra</h1>
-			<label class="floatright widthvintecincoporcento"><label class="asterisk"></label>
-				Campos obrigatórios
-			</label>
-			<br/>
-			<div class="clearboth">
-			</div>
-			<br/>
+<body style="background-color: #fdd835">
 
-		</div>
+<div id="page-container"
+     class="sidebar-o sidebar-inverse enable-page-overlay side-scroll page-header-glass page-header-inverse main-content-boxed">
+    <div id="menu">
+    </div>
+    <main id="main-container">
+        <div class="setecincoporcento font-w600">
+            <input type="hidden" id="idusuario" value="0">
+            <h2 class="content-heading" style="color: #343a40">EXCLUIR PEDIDO DE COMPRA</h2>
+            <div class="block block-rounded font-w600">
+                <div class="block-content" style="background-color: #343a40; color:#e4e7ed">
+                    <div class="alert alert-warning" role="alert">
+                        Atenção! Esta operação não poderá ser desfeita!
+                    </div>
 
-		<div id="base_PDC" class="setecincoporcento">
-		</div>
+                    <input type="hidden" id="idcliente" value="0">
 
-		<div id="base_ENV" class="setecincoporcento">
-		</div>
+                    <div id="base_PDC" class="setecincoporcento">
+                    </div>
 
-	</body>
+                    <div id="base_ENV" class="setecincoporcento">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div class="content">
+        <div class="content py-20 font-size-sm clearfix">
+            <div class="float-left">
+                Copyright © 2021 Divina Hamburgueria
+            </div>
+            <div class="float-right">
+                Desenvolvido por VirtualSoft <i class="si si-badge"></i>
+            </div>
+        </div>
+    </div>
+</div>
 
-	<script>
+<div class="setecincoporcento">
 
-		$(document).ready(function() {
-			$("#menu").load("menu.html");
-			$("#base_ENV").load("pedidodecompra_base_ENV.html");		
-			if (CheckLogin() == false)
-				return;	
-			$("#base_PDC").load("pedidodecompra_base_PDC.html", function (){
-				LoadLists();
-			}); 							
-		});		
+    <input type="hidden" id="idusuario" value="0">
 
-		function CheckLogin(){
-			var idusuario = getLoggedUserId();
-			if (idusuario == -1)
-			{
-				var page =  window.location.pathname.split("/").pop();
-				window.location.href = window.location.href.replace(page,'login.html');	
-				return false;					
-			}								
-			else
-			{
-				$('#idusuario').val(idusuario);
-				return true;
-			}
-		}
-		
-		var itemdoestoque_list;		
+    <div id="menu">
+    </div>
 
-		function LoadLists(){
+    <br/>
+    <h1 class="floatleft">Excluir pedido de compra</h1>
+    <label class="floatright widthvintecincoporcento"><label class="asterisk"></label>
+        Campos obrigatórios
+    </label>
+    <br/>
+    <div class="clearboth">
+    </div>
+    <br/>
 
-			WebApi_GET_LIST_ItemDoEstoque
-			(
-				'', 
-				function success(data) {			
-					//console.log(data);
-					itemdoestoque_list = data;
-					LoadData();					
-				},
-				function complete(xhr, text) {
-					console.log(xhr.status);
-					//console.log(xhr.responseText);			
-				}   
-			)		
-		
-		}
+</div>
 
-		function LoadData(){
+<div id="base_PDC" class="setecincoporcento">
+</div>
 
-			var query = queryObj();
+<div id="base_ENV" class="setecincoporcento">
+</div>
 
-			WebApi_GET_PedidoDeCompra
-			(
-				query.id, 
-				function success(data) {
-					//console.log(data);
-					$('#id').val(data.id);
-					$('#fornecedor').val(data.fornecedor);
-					$('#estado').val(data.estado);					
-					$('#observacao').val(data.observacao);
-					$('#pago').val(data.estadopagamento);
-					if (data.estadopagamento == 1)
-						$('#pago').prop('checked', true);
-					$('#estado').prop('disabled', true);
-					$('#fornecedor').prop('disabled', true);
-					$('#observacao').prop('disabled', true);
-					$('#pago').prop('disabled', true);						
-				},
-				function complete(xhr, text) {
-					console.log(xhr.status);
-					//console.log(xhr.responseText);
-				} 
-			);				
+</body>
 
-		}
+<script>
 
-		function EnviarClick()
-		{						
-			WebApi_DELETE_PedidoDeCompra
-			(
-				$('#id').val(), 
-				function success(data) {
-					//console.log(data);
-				},
-				function complete(xhr, text) {
-					console.log(xhr.status);
-					//console.log(xhr.responseText);
-					if (xhr.status == 204){
-						$('#falha').css('display','none');
-						$('#sucesso').css('display','block');
-						$('#sucesso').html("O pedido de compra foi excluido com sucesso! <a href='pedidodecompra_listar.html'>Seguir para a lista de pedidos de compra</a>");
-					}
-					else{
-						$('#sucesso').css('display','none');
-						$('#falha').css('display','block');
-						$('#falha').text("Ocorreu uma falha: " + xhr.responseText);
-					}
-				}
-			);					
-	
-		}
+    $(document).ready(function () {
+        $("#menu").load("menu.html");
+        $("#base_ENV").load("pedidodecompra_base_ENV.html");
+        if (CheckLogin() == false)
+            return;
+        $("#base_PDC").load("pedidodecompra_base_PDC.html", function () {
+            LoadLists();
+        });
+    });
 
-	</script>
+    function CheckLogin() {
+        var idusuario = getLoggedUserId();
+        if (idusuario == -1) {
+            var page = window.location.pathname.split("/").pop();
+            window.location.href = window.location.href.replace(page, 'login.html');
+            return false;
+        } else {
+            $('#idusuario').val(idusuario);
+            return true;
+        }
+    }
+
+    var itemdoestoque_list;
+
+    function LoadLists() {
+
+        WebApi_GET_LIST_ItemDoEstoque
+        (
+            '',
+            function success(data) {
+                //console.log(data);
+                itemdoestoque_list = data;
+                LoadData();
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+            }
+        )
+
+    }
+
+    function LoadData() {
+
+        var query = queryObj();
+
+        WebApi_GET_PedidoDeCompra
+        (
+            query.id,
+            function success(data) {
+                //console.log(data);
+                $('#id').val(data.id);
+                $('#fornecedor').val(data.fornecedor);
+                $('#estado').val(data.estado);
+                $('#observacao').val(data.observacao);
+                $('#pago').val(data.estadopagamento);
+                if (data.estadopagamento == 1)
+                    $('#pago').prop('checked', true);
+                $('#estado').prop('disabled', true);
+                $('#fornecedor').prop('disabled', true);
+                $('#observacao').prop('disabled', true);
+                $('#pago').prop('disabled', true);
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+            }
+        );
+
+    }
+
+    function EnviarClick() {
+        WebApi_DELETE_PedidoDeCompra
+        (
+            $('#id').val(),
+            function success(data) {
+                //console.log(data);
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+                if (xhr.status == 204) {
+                    $('#falha').css('display', 'none');
+                    $('#sucesso').css('display', 'block');
+                    $('#sucesso').html("O pedido de compra foi excluido com sucesso! <a href='pedidodecompra_listar.html'>Seguir para a lista de pedidos de compra</a>");
+                } else {
+                    $('#sucesso').css('display', 'none');
+                    $('#falha').css('display', 'block');
+                    $('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+                }
+            }
+        );
+
+    }
+
+</script>
 
 </html>

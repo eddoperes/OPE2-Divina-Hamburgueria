@@ -1,15 +1,15 @@
 <input type="hidden" id="idendereco" value="">
 
-<div class="mb-3">
+<div class="mb-3" style="background-color: #343a40">
       <label for="cep" class="form-label asterisk">CEP</label>
       <input id="cep" class="form-control" type='number' value=''/>
-      <label id="feedCep" class="invalid-feedback">O CEP precisa ser válido, não use pontos ou traços</label>  
+      <label id="feedCep" class="invalid-feedback">O CEP precisa ser válido, não use pontos ou traços</label>
 </div>
 
 <div class="mb-3">
       <label for="logradouro" class="form-label asterisk">Logradouro</label>
       <input id="logradouro" class="form-control" type='text' value='' />
-      <label id="feedLogradouro" class="invalid-feedback">O logradouro precisa ser informado</label>  
+      <label id="feedLogradouro" class="invalid-feedback">O logradouro precisa ser informado</label>
 </div>
 
 <div class="mb-3">
@@ -47,10 +47,10 @@
 <div id="sucessoendereco" class="alert alert-success displaynone" role="alert" >
 </div>
 
-<div id="falhaendereco" class="alert alert-danger displaynone" role="alert" >  			
+<div id="falhaendereco" class="alert alert-danger displaynone" role="alert" >
 </div>
 
-<input id="retirarEndereco" type="button" class="btn btn-link heighttrintapixel" onclick="RetirarEndereco()" value='Retirar Endereço' />
+<input id="retirarEndereco" type="button" class="btn btn-alt-secondary btn-link heighttrintapixel" onclick="RetirarEndereco()" value='Retirar Endereço' />
 
 
 <script>
@@ -66,21 +66,21 @@
 
             WebApi_GET_Endereco
             (
-                  id, 
-                  function success(data) {			
-                        //console.log(data);	
-                        $('#idendereco').val(data.id);		
+                  id,
+                  function success(data) {
+                        //console.log(data);
+                        $('#idendereco').val(data.id);
                         $('#cep').val(data.cep);
                         $('#logradouro').val(data.logradouro);
-                        $('#numero').val(data.numero); 
+                        $('#numero').val(data.numero);
                         $('#complemento').val(data.complemento);
                         $('#bairro').val(data.bairro);
-                        $('#cidade').val(data.cidade); 
+                        $('#cidade').val(data.cidade);
                         $('#uf').val(data.uf);
                   },
                   function complete(xhr, text) {
                         console.log(xhr.status);
-                        //console.log(xhr.responseText);			
+                        //console.log(xhr.responseText);
                   }
             );
 
@@ -92,15 +92,15 @@
             //if ($('#base_CLI_END').is(':visible'))
             if ($('#base_CLI_END').css('display') == 'block')
             {
-                  if($('#idendereco').val() == '0'){		
-                        
+                  if($('#idendereco').val() == '0'){
+
                         WebApi_POST_Endereco
                         (
                               {
                                     cep : $('#cep').val() , logradouro : $('#logradouro').val(),
                                     numero : $('#numero').val() , complemento : $('#complemento').val(),
-                                    bairro : $('#bairro').val() , cidade : $('#cidade').val() , uf : $('#uf').val()                  
-                              }, 
+                                    bairro : $('#bairro').val() , cidade : $('#cidade').val() , uf : $('#uf').val()
+                              },
                               function success(data) {
                                     //console.log(data);
                                     $('#idendereco').val(data.id);
@@ -119,21 +119,21 @@
                                           $('#falhaendereco').css('display','block');
                                           $('#falhaendereco').text("Ocorreu uma falha: " + xhr.responseText);
                                     }
-                              }     
+                              }
                         );
-                        
+
                   }
                   else
                   {
 
                         WebApi_PUT_Endereco
                         (
-                              $('#idendereco').val(), 
+                              $('#idendereco').val(),
                               {
                                     cep : $('#cep').val() , logradouro : $('#logradouro').val(),
                                     numero : $('#numero').val() , complemento : $('#complemento').val(),
-                                    bairro : $('#bairro').val() , cidade : $('#cidade').val() , uf : $('#uf').val()                  
-                              }, 
+                                    bairro : $('#bairro').val() , cidade : $('#cidade').val() , uf : $('#uf').val()
+                              },
                               function success(data) {
                                     //console.log(data);
                               },
@@ -151,8 +151,8 @@
                                           $('#falhaendereco').text("Ocorreu uma falha: " + xhr.responseText);
                                     }
                               }
-                        );     
-                        CrudCliente();                   
+                        );
+                        CrudCliente();
                   }
             }
             else
@@ -193,7 +193,7 @@
                   } else {
                         $("#logradouro").removeClass("is-invalid");
                   }
-            
+
                   if (!($("#numero").val() > 0)){
                         $("#numero").addClass("is-invalid");
                         result = false;
@@ -214,7 +214,7 @@
                   } else {
                         $("#cidade").removeClass("is-invalid");
                   }
-            
+
             }
 
             return result;

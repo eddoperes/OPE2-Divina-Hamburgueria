@@ -1,139 +1,157 @@
 <html>
 
-	<head>
-		<meta charset="utf8"/>
-		<script src="jquery/jquery3.6.js"></script>
-		<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
-		<script src="bootstrap/dist/js/bootstrap.js"></script>
-		<link rel="stylesheet" href="css/sistema.css" >
-		<script src="js/sistema.js"></script>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	</head>
+<head>
+    <meta charset="utf8"/>
+    <script src="jquery/jquery3.6.js"></script>
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css">
+    <script src="bootstrap/dist/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/sistema.css">
+    <script src="js/sistema.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-	<body>        
+    <title>DIVINA HAMBURGUERIA</title>
 
-		<div class="setecincoporcento">
+    <link rel="shortcut icon" href="image/logo-divina-symbol.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/apple-touch-icon-180x180.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+    <link rel="stylesheet" id="css-main" href="assets/css/codebase.min.css">
 
-			<input type="hidden" id="idusuario" value="0">
+</head>
 
-			<div id="menu">
-                	</div> 
 
-			<br/>
-			<h1 class="floatleft">Editar usuário</h1>
-			<label class="floatright widthvintecincoporcento"><label class="asterisk"></label>
-				Campos obrigatórios
-			</label>
-			<br/>
-			<div class="clearboth"></div>
-			<br/>
+<body style="background-color: #fdd835">
 
-		</div>
+<div id="page-container"
+     class="sidebar-o sidebar-inverse enable-page-overlay side-scroll page-header-glass page-header-inverse main-content-boxed">
+    <div id="menu">
+    </div>
+    <main id="main-container">
+        <div class="setecincoporcento font-w600">
+            <input type="hidden" id="idusuario" value="0">
+            <h2 class="content-heading" style="color: #343a40">EDITAR USUÁRIO</h2>
+            <div class="block block-rounded font-w600">
+                <div class="block-content" style="background-color: #343a40; color:#e4e7ed">
+                    <label class="floatright widthvintecincoporcento"><label class="asterisk"></label>
+                        Campos obrigatórios
+                    </label>
+                    <br/>
+                    <div class="clearboth"></div>
+                    <br/>
+                    <div id="base_USU" class="setecincoporcento">
+                    </div>
+                    <div id="base_SEN" class="setecincoporcento">
+                    </div>
+                    <div id="base_ENV" class="setecincoporcento">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div class="content">
+        <div class="content py-20 font-size-sm clearfix">
+            <div class="float-left">
+                Copyright © 2021 Divina Hamburgueria
+            </div>
+            <div class="float-right">
+                Desenvolvido por VirtualSoft <i class="si si-badge"></i>
+            </div>
+        </div>
+    </div>
+</div>
 
-		<div id="base_USU" class="setecincoporcento">
-		</div>
+</body>
 
-		<div id="base_ENV" class="setecincoporcento">
-		</div>
+<script>
 
-	</body>
+    var _loadUsuCompleted = false;
+    var _loadEnvCompleted = false;
 
-	<script>
+    $(document).ready(function () {
+        if (CheckLogin() == false)
+            return;
+        $("#menu").load("menu.html");
+        $("#base_USU").load("usuario_base_USU.html", function () {
+            _loadUsuCompleted = true;
+            StartLoadData();
+        });
+        $("#base_ENV").load("usuario_base_ENV.html", function () {
+            _loadEnvCompleted = true;
+            StartLoadData();
+        });
+    });
 
-		var _loadUsuCompleted = false;
-		var _loadEnvCompleted = false;
+    function CheckLogin() {
+        var idusuario = getLoggedUserId();
+        if (idusuario == -1) {
+            var page = window.location.pathname.split("/").pop();
+            window.location.href = window.location.href.replace(page, 'login.html');
+            return false;
+        } else {
+            $('#idusuario').val(idusuario);
+            return true;
+        }
+    }
 
-		$(document).ready(function() {	
-			if (CheckLogin() == false)
-				return;
-			$("#menu").load("menu.html");
-			$("#base_USU").load("usuario_base_USU.html", function (){
-				_loadUsuCompleted = true;
-				StartLoadData();
-			});	 		
-			$("#base_ENV").load("usuario_base_ENV.html", function (){
-				_loadEnvCompleted = true;
-				StartLoadData();
-			});								
-		});		
+    function StartLoadData() {
+        if (!_loadUsuCompleted)
+            return;
+        if (!_loadEnvCompleted)
+            return;
+        LoadData();
+    }
 
-		function CheckLogin(){
-			var idusuario = getLoggedUserId();
-			if (idusuario == -1)
-			{
-				var page =  window.location.pathname.split("/").pop();
-				window.location.href = window.location.href.replace(page,'login.html');	
-				return false;					
-			}								
-			else
-			{
-				$('#idusuario').val(idusuario);
-				return true;
-			}
-		}
+    function LoadData() {
+        var query = queryObj();
+        WebApi_GET_Usuario
+        (
+            query.id,
+            function sucess(data) {
+                //console.log(data);
+                $('#id').val(data.id);
+                $('#nome').val(data.nome);
+                $('#tipo').val(data.tipo);
+                $('#email').val(data.email);
+                $('#estado').val(data.estado);
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+            }
+        );
+    }
 
-		function StartLoadData(){
-			if (!_loadUsuCompleted)
-				return;
-			if (!_loadEnvCompleted)
-				return;
-			LoadData();
-		}
+    function EnviarClick() {
 
-		function LoadData(){
-			var query = queryObj();
-			WebApi_GET_Usuario
-			(
-				query.id,
-				function sucess(data) {
-					//console.log(data);
-					$('#id').val(data.id);
-					$('#nome').val(data.nome);						
-					$('#tipo').val(data.tipo);
-					$('#email').val(data.email);
-					$('#estado').val(data.estado);
-				},
-				function complete(xhr, text) {
-					console.log(xhr.status);
-					//console.log(xhr.responseText);
-				}
-			);
-		}
+        if (ValidarUsuario() == false)
+            return;
 
-		function EnviarClick()
-		{	
+        WebApi_PUT_Usuario
+        (
+            $('#id').val(),
+            {
+                nome: $('#nome').val(), tipo: $('#tipo').val(),
+                email: $('#email').val(), estado: $('#estado').val()
+            },
+            function success(data) {
+                //console.log(data);
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+                if (xhr.status == 200) {
+                    $('#falha').css('display', 'none');
+                    $('#sucesso').css('display', 'block');
+                    $('#sucesso').html("O usuário foi editado com sucesso! <a href='usuario_listar.html'>Seguir para a lista de usuários</a>");
+                } else {
+                    $('#sucesso').css('display', 'none');
+                    $('#falha').css('display', 'block');
+                    $('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+                }
+            }
+        );
 
-			if (ValidarUsuario() == false)
-				return;
+    }
 
-			WebApi_PUT_Usuario
-			(
-				$('#id').val(),
-				{
-					nome : $('#nome').val() , tipo : $('#tipo').val(), 
-					email : $('#email').val(), estado : $('#estado').val()										
-				},
-				function success(data){
-					//console.log(data);
-				},
-				function complete(xhr, text){
-					console.log(xhr.status);
-					//console.log(xhr.responseText);
-					if (xhr.status == 200){
-						$('#falha').css('display','none');
-						$('#sucesso').css('display','block');
-						$('#sucesso').html("O usuário foi editado com sucesso! <a href='usuario_listar.html'>Seguir para a lista de usuários</a>");
-					}
-					else{
-						$('#sucesso').css('display','none');
-						$('#falha').css('display','block');
-						$('#falha').text("Ocorreu uma falha: " + xhr.responseText);
-					}
-				}
-			);
-
-		}
-
-	</script>
+</script>
 
 </html>

@@ -1,165 +1,188 @@
 <html>
 
-	<head>
-		<meta charset="utf8"/>
-		<script src="jquery/jquery3.6.js"></script>
-		<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
-		<script src="bootstrap/dist/js/bootstrap.js"></script>
-        	<link rel="stylesheet" href="css/sistema.css" >
-        	<script src="js/sistema.js"></script>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	</head>
+<head>
+    <meta charset="utf8"/>
+    <script src="jquery/jquery3.6.js"></script>
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css">
+    <script src="bootstrap/dist/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/sistema.css">
+    <script src="js/sistema.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-	<body>     
+    <title>DIVINA HAMBURGUERIA</title>
 
-		<div class="setecincoporcento">
+    <link rel="shortcut icon" href="image/logo-divina-symbol.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/apple-touch-icon-180x180.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+    <link rel="stylesheet" id="css-main" href="assets/css/codebase.min.css">
 
-			<div id="menu">
-                	</div> 
+</head>
 
-			<br/>
-			<h1>Listar usuários</h1>
-			<br/>
+<body style="background-color: #fdd835">
 
-			<a href="usuario_novo.html">Novo</a>
-			<br/>
-			<br/>
+<div id="page-container"
+     class="sidebar-o sidebar-inverse enable-page-overlay side-scroll page-header-glass page-header-inverse main-content-boxed">
 
-			<div class="borderumpixelpaddingvintepixel">
-				<div class="mb-3">
-					<label for="nome" class="form-label">Nome</label>
-					<input id="nome" class="form-control" type='text' value='' />
-				</div>
+    <div id="menu">
+    </div>
 
-				<div class="col-auto">
-						<input type='button' class="btn btn-primary mb-3" value='Pesquisar' onclick="Busca()" />    
-				</div>
-			</div>
+    <main id="main-container">
+        <div class="setecincoporcento font-w600">
 
-			<div id="table_container">
-			</div>
+            <h2 class="content-heading" style="color: #343a40">LISTAR USUÁRIOS</h2>
+            <a href="usuario_novo.html" style="color: #343a40">
+                <button type="button" class="btn btn-alt-secondary mb-5">
+                    <i class="fa fa-plus"></i> ADICIONAR USUÁRIO
+                </button>
+            </a>
+            <div class="block block-rounded font-w600">
 
-		</div>
+                <div class="block-content font-w600" style="background-color: #343a40; color:#e4e7ed">
+                    <div class="mb-3">
+                        <label for="nome" class="form-label">Nome</label>
+                        <input id="nome" class="form-control" type='text' value=''/>
+                    </div>
 
-	</body>
+                    <div class="col-auto" style="color: #343a40">
+                        <input type='button' class="btn btn-alt-secondary mb-5" value='Pesquisar' onclick="Busca()"/>
+                    </div>
+                    <div class="table-responsive" style="color: #e4e7ed">
+                        <div id="table_container" style="color: #e4e7ed">
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-	<script>
+        </div>
+    </main>
+    <div class="content">
+        <div class="content py-20 font-size-sm clearfix">
+            <div class="float-left">
+                Copyright © 2021 Divina Hamburgueria
+            </div>
+            <div class="float-right">
+                Desenvolvido por VirtualSoft <i class="si si-badge"></i>
+            </div>
+        </div>
+    </div>
+</div>
 
-		$(document).ready(function() {				
-			if (CheckLogin() == false)
-				return;		
-			$("#menu").load("menu.html");									
-		});		
 
-		function CheckLogin(){
-			var idusuario = getLoggedUserId();
-			if (idusuario == -1)
-			{
-				var page =  window.location.pathname.split("/").pop();
-				window.location.href = window.location.href.replace(page,'login.html');	
-				return false;					
-			}								
-			else
-			{
-				return true;
-			}
-		}
+</body>
 
-		function Busca()
-		{
+<script>
 
-			WebApi_GET_LIST_Usuario
-			(
-				'?nome=' + $('#nome').val(),
-				function success(data) {			
-					//console.log(data);			
-					var textData = '<table class="table">';
+    $(document).ready(function () {
+        if (CheckLogin() == false)
+            return;
+        $("#menu").load("menu.html");
+    });
 
-					textData += '<tr>';
+    function CheckLogin() {
+        var idusuario = getLoggedUserId();
+        if (idusuario == -1) {
+            var page = window.location.pathname.split("/").pop();
+            window.location.href = window.location.href.replace(page, 'login.html');
+            return false;
+        } else {
+            return true;
+        }
+    }
 
-					textData += '<th>';
-					textData += 'Id';
-					textData += '</th>';
+    function Busca() {
 
-					textData += '<th>';
-					textData += 'Nome';
-					textData += '</th>';
+        WebApi_GET_LIST_Usuario
+        (
+            '?nome=' + $('#nome').val(),
+            function success(data) {
+                //console.log(data);
+                var textData = '<table class="table font-w600" style="color: #e4e7ed" >';
 
-					textData += '<th class="coluna_oculta_cel">';
-					textData += 'Email';
-					textData += '</th>';
+                textData += '<tr>';
 
-					textData += '<th class="coluna_oculta_cel">';
-					textData += 'Tipo';
-					textData += '</th>';
+                textData += '<th';
+                textData += 'Id';
+                textData += '</th>';
 
-					textData += '<th class="coluna_oculta_cel">';
-					textData += 'Estado';
-					textData += '</th>';
+                textData += '<th >';
+                textData += 'Nome';
+                textData += '</th>';
 
-					textData += '<th>';
-					textData += '';
-					textData += '</th>';
+                textData += '<th class="coluna_oculta_cel">';
+                textData += 'Email';
+                textData += '</th>';
 
-					textData += '<th>';
-					textData += '';
-					textData += '</th>';
+                textData += '<th class="coluna_oculta_cel">';
+                textData += 'Tipo';
+                textData += '</th>';
 
-					textData += '</tr>';
+                textData += '<th class="coluna_oculta_cel">';
+                textData += 'Estado';
+                textData += '</th>';
 
-					var i;	                       
-					for (i=0; i < data.length; i++){
-						textData += '<tr>';
+                textData += '<th>';
+                textData += '';
+                textData += '</th>';
 
-						textData += '<td>';
-						textData += data[i].id;
-						textData += '</td>';
+                textData += '<th>';
+                textData += '';
+                textData += '</th>';
 
-						textData += '<td>';
-						textData += data[i].nome;
-						textData += '</td>';
+                textData += '</tr>';
 
-						textData += '<td class="coluna_oculta_cel">';
-						textData += data[i].email;
-						textData += '</td>';
+                var i;
+                for (i = 0; i < data.length; i++) {
+                    textData += '<tr>';
 
-						textData += '<td class="coluna_oculta_cel">';
-						if (data[i].tipo == 1)
-							textData += 'Chef';
-						else if (data[i].tipo == 2)
-							textData += 'Auxiliar';
-						else
-							textData += 'Caixa';
-						textData += '</td>';
+                    textData += '<td>';
+                    textData += data[i].id;
+                    textData += '</td>';
 
-						textData += '<td class="coluna_oculta_cel">';
-						if (data[i].estado == 1)
-							textData += 'Ativo';
-						else
-							textData += 'Inativo';
-						textData += '</td>';
+                    textData += '<td>';
+                    textData += data[i].nome;
+                    textData += '</td>';
 
-						textData += '<td>';
-						textData += '<a href="usuario_editar.html?id=' + data[i].id + '">Editar</a>';
-						textData += '</td>';
+                    textData += '<td class="coluna_oculta_cel">';
+                    textData += data[i].email;
+                    textData += '</td>';
 
-						textData += '<td>';
-						textData += '<a href="usuario_excluir.html?id=' + data[i].id + '">Excluir</a>';
-						textData += '</td>';
+                    textData += '<td class="coluna_oculta_cel">';
+                    if (data[i].tipo == 1)
+                        textData += 'Chef';
+                    else if (data[i].tipo == 2)
+                        textData += 'Auxiliar';
+                    else
+                        textData += 'Caixa';
+                    textData += '</td>';
 
-						textData += '</tr>';
-					}	
-					textData += '</table>'
-					$('#table_container').html(textData);	
-				},
-				function complete(xhr, text) {
-					console.log(xhr.status);
-					//console.log(xhr.responseText);			
-				}				
-			);
+                    textData += '<td class="coluna_oculta_cel">';
+                    if (data[i].estado == 1)
+                        textData += 'Ativo';
+                    else
+                        textData += 'Inativo';
+                    textData += '</td>';
 
-		}
+                    textData += '<td>';
+                    textData += '<a href="usuario_editar.html?id=' + data[i].id + '">Editar</a>';
+                    textData += '</td>';
 
-	</script>
+                    textData += '<td>';
+                    textData += '<a href="usuario_excluir.html?id=' + data[i].id + '">Excluir</a>';
+                    textData += '</td>';
+
+                    textData += '</tr>';
+                }
+                textData += '</table>'
+                $('#table_container').html(textData);
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+            }
+        );
+
+    }
+
+</script>
 
 </html>

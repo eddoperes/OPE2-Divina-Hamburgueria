@@ -1,33 +1,156 @@
 <html>
 
-	<head>
-		<meta charset="utf8"/>
-		<script src="jquery/jquery3.6.js"></script>
-		<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css" >
-		<script src="bootstrap/dist/js/bootstrap.js"></script>
-        	<link rel="stylesheet" href="css/sistema.css" >
-        	<script src="js/sistema.js"></script>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	</head>
+<head>
+    <meta charset="utf8"/>
+    <script src="jquery/jquery3.6.js"></script>
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css">
+    <script src="bootstrap/dist/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/sistema.css">
+    <script src="js/sistema.js"></script>
+    <!--		<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-	<body class="setecincoporcento" > 
+    <title>DIVINA HAMBURGUERIA</title>
 
-		<div id="menu">
-                </div> 
-		
-		<br/>
-		
- 		<img src="image/hamburguer.png" alt="hamburguer" class="center"> 
-		<h1 class="center">Divina Hamburgueria<h1>
+    <!--        &lt;!&ndash; Open Graph Meta &ndash;&gt;-->
+    <!--        <meta property="og:title" content="Codebase - Bootstrap 4 Admin Template &amp; UI Framework">-->
+    <!--        <meta property="og:site_name" content="Codebase">-->
+    <!--        <meta property="og:description" content="Codebase - Bootstrap 4 Admin Template &amp; UI Framework created by pixelcave and published on Themeforest">-->
+    <!--        <meta property="og:type" content="website">-->
+    <!--        <meta property="og:url" content="">-->
+    <!--        <meta property="og:image" content="">-->
 
-	</body>
+    <!-- Icons -->
+    <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
+    <!--    <link rel="shortcut icon" href="image/logo-divina-symbol.svg">-->
+    <link rel="shortcut icon" href="image/logo-divina-symbol.svg">
+    <!--        <link rel="icon" type="image/png" sizes="192x192" href="assets/media/favicons/favicon-192x192.png">-->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/apple-touch-icon-180x180.png">
+    <!-- END Icons -->
 
-	<script>
+    <!-- Stylesheets -->
+    <!-- Fonts and Codebase framework -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+    <link rel="stylesheet" id="css-main" href="assets/css/codebase.min.css">
 
-		$(document).ready(function() {
-			$("#menu").load("menu.html");	 	 				
-		});
+    <!-- You can include a specific file from css/themes/ folder to alter the default color theme of the template. eg: -->
+    <!-- <link rel="stylesheet" id="css-theme" href="assets/css/themes/flat.min.css"> -->
+    <!-- END Stylesheets -->
+</head>
 
-	</script>
+<body style="background-color: #fdd835">
+
+<div id="page-container"
+     class="sidebar-o sidebar-inverse enable-page-overlay side-scroll page-header-glass page-header-inverse main-content-boxed">
+
+    <div id="menu">
+    </div>
+
+    <main id="main-container">
+        <div class="content">
+            <!-- Simple Icon Tiles -->
+            <h2 class="content-heading">CLIENTES<small> ACESSO RÁPIDO</small></h2>
+            <div class="row gutters-tiny">
+                <div class="col-6 col-md-4 col-xl-4">
+                    <a class="block block-link-shadow text-center" href="cliente_novo.html">
+                        <div class="block-content">
+                            <p class="mt-5">
+                                <i class="fa fa-plus fa-4x text-success"></i>
+                            </p>
+                            <p class="font-w600">ADICIONAR</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-6 col-md-4 col-xl-4">
+                    <a class="block block-link-shadow text-center" href="cliente_listar.html">
+                        <div class="block-content">
+                            <p class="mt-5">
+                                <i class="fa fa-search fa-4x text-corporate"></i>
+                            </p>
+                            <p class="font-w600">CONSULTAR</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <!-- END Simple Icon Tiles -->
+        </div>
+        <div class="content">
+            <!-- Simple Icon Tiles -->
+            <h2 class="content-heading">PEDIDO SALÃO<small> ACESSO RÁPIDO</small></h2>
+            <div class="row gutters-tiny">
+                <div class="col-6 col-md-4 col-xl-4">
+                    <a class="block block-link-shadow text-center" href="pedidosalao_novo.html">
+                        <div class="block-content">
+                            <p class="mt-5">
+                                <i class="fa fa-plus fa-4x text-success"></i>
+                            </p>
+                            <p class="font-w600">ADICIONAR</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-6 col-md-4 col-xl-4">
+                    <a class="block block-link-shadow text-center" href="pedidosalao_listar.html">
+                        <div class="block-content">
+                            <p class="mt-5">
+                                <i class="fa fa-search fa-4x text-corporate"></i>
+                            </p>
+                            <p class="font-w600">CONSULTAR</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <!-- END Simple Icon Tiles -->
+        </div>
+        <div class="content">
+            <!-- Simple Icon Tiles -->
+            <h2 class="content-heading">PEDIDO DELIVERY<small> ACESSO RÁPIDO</small></h2>
+            <div class="row gutters-tiny">
+                <div class="col-6 col-md-4 col-xl-4">
+                    <a class="block block-link-shadow text-center" href="pedidodelivery_novo.html">
+                        <div class="block-content">
+                            <p class="mt-5">
+                                <i class="fa fa-plus fa-4x text-success"></i>
+                            </p>
+                            <p class="font-w600">ADICIONAR</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-6 col-md-4 col-xl-4">
+                    <a class="block block-link-shadow text-center" href="pedidodelivery_listar.html">
+                        <div class="block-content">
+                            <p class="mt-5">
+                                <i class="fa fa-search fa-4x text-corporate"></i>
+                            </p>
+                            <p class="font-w600">CONSULTAR</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <!-- END Simple Icon Tiles -->
+        </div>
+
+    </main>
+    <div class="content">
+        <div class="content py-20 font-size-sm clearfix">
+            <div class="float-left">
+                Copyright © 2021 Divina Hamburgueria
+            </div>
+            <div class="float-right">
+                Desenvolvido por VirtualSoft  <i class="si si-badge"></i>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</body>
+
+<script>
+
+    $(document).ready(function () {
+        $("#menu").load("menu.html");
+    });
+
+</script>
 
 </html>
