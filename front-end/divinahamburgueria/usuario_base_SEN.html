@@ -1,7 +1,7 @@
 <div class="mb-3">
  	<label id="senhalabel" for="senha" class="form-label asterisk">Senha</label>
   	<input id="senha" class="form-control" type='password' value='' />
-	<label class="invalid-feedback">A senha precisa ser informada</label>
+	<label class="invalid-feedback">A senha precisa ter cinco digitos ou mais</label>
 </div>
 
 <div class="mb-3">
@@ -15,7 +15,7 @@
 	$(document).ready(function() {	
 		
 		$("#senha").on(" keyup focusout change ", function (){
-			if ($("#senha").val() == "")
+			if ($("#senha").val().length < 5)
 				$("#senha").addClass("is-invalid");
 			else
 				$("#senha").removeClass("is-invalid");

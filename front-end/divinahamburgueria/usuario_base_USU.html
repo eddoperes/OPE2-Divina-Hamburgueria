@@ -83,12 +83,14 @@
 		}
 
 		if ($("#senha") != null){
-			if ($("#senha").val() == ""){
+			
+			if ($("#senha").val().length < 5){
 				$("#senha").addClass("is-invalid");
 				result = false;
 			}else{
 				$("#senha").removeClass("is-invalid");
 			}
+
 		}
 
 		if ($("#senhadenovo") != null){
