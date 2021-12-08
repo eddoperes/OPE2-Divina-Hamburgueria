@@ -152,3 +152,28 @@ nav {
     padding:10px;
     border:2px solid red;
 }
+
+.accordion-body{
+	border: solid white 1px;
+}
+
+
+/* unvisited link */
+tr a:link {
+  color: yellow;
+}
+
+/* visited link */
+tr a:visited {
+  color: yellow;
+}
+
+/* mouse over link */
+tr a:hover {
+  color: lightyellow !important;
+}
+
+/* selected link */
+tr  a:active {
+  color: lightyellow !important;
+} 

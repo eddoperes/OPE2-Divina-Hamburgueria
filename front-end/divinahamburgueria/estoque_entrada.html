@@ -232,11 +232,13 @@
 
     function POST_Estoque(pedidodecompraitemdoestoque) {
 
+	var qtde = parseFloat(pedidodecompraitemdoestoque.quantidade);
+
         WebApi_POST_Estoque
         (
             {
                 itemdoestoque: pedidodecompraitemdoestoque.itemdoestoque,
-                quantidade: pedidodecompraitemdoestoque.quantidade
+                quantidade: qtde.toFixed(2)
             },
             function success(data) {
                 //console.log(data);
@@ -256,12 +258,14 @@
 
     function PUT_Estoque(estoque, pedidodecompraitemdoestoque) {
 
+	var qtde = parseFloat(estoque.quantidade + pedidodecompraitemdoestoque.quantidade);
+
         WebApi_PUT_Estoque
         (
             estoque.id,
             {
                 itemdoestoque: estoque.itemdoestoque,
-                quantidade: estoque.quantidade + pedidodecompraitemdoestoque.quantidade
+                quantidade: qtde.toFixed(2)
             },
             function success(data) {
                 //console.log(data);

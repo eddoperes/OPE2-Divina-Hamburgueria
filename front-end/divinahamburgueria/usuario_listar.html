@@ -100,7 +100,7 @@
 
                 textData += '<tr>';
 
-                textData += '<th';
+                textData += '<th>';
                 textData += 'Id';
                 textData += '</th>';
 
@@ -108,9 +108,11 @@
                 textData += 'Nome';
                 textData += '</th>';
 
+		/*
                 textData += '<th class="coluna_oculta_cel">';
                 textData += 'Email';
                 textData += '</th>';
+		*/
 
                 textData += '<th class="coluna_oculta_cel">';
                 textData += 'Tipo';
@@ -142,9 +144,11 @@
                     textData += data[i].nome;
                     textData += '</td>';
 
+		    /*	
                     textData += '<td class="coluna_oculta_cel">';
                     textData += data[i].email;
                     textData += '</td>';
+		    */
 
                     textData += '<td class="coluna_oculta_cel">';
                     if (data[i].tipo == 1)
