@@ -22,6 +22,7 @@ from rest_framework.response import Response
 import random
 import smtplib
 from datetime import datetime
+import hashlib 
 
 # Create your views here.
 
@@ -42,10 +43,13 @@ def usuario_list (request):
            return Response('Permissão negada. Somente um usuário do tipo chef pode criar usuários', status=status.HTTP_403_FORBIDDEN)
         # Permissao end ####################################################
         serializer = UsuarioSerializer(data = request.data)
+        
+        hash = hashlib.md5(request.data['senha'].encode()) 
+
         if serializer.is_valid():  
             if Usuario.objects.filter(nome=serializer.validated_data['nome']).exists():
                  return Response('Nome duplicado', status = status.HTTP_400_BAD_REQUEST)         
-            serializer.save()
+            serializer.save(senha = hash.digest())
             return Response(serializer.data, status = status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
@@ -84,7 +88,11 @@ def usuario_detail(request, pk):
 @api_view(['POST'])
 def usuario_login(request):  
     email = request.data['email']
-    senha = request.data['senha']
+
+    #senha = request.data['senha']
+    hash = hashlib.md5(request.data['senha'].encode())    
+    senha = hash.digest()	
+
     usuario = Usuario.objects.filter(email=email).first()
     if usuario is None:
         return Response('Usuário inválido', status=status.HTTP_404_NOT_FOUND)
@@ -125,7 +133,11 @@ def usuario_alterar_senha(request):
        return Response('email não encontrado', status=status.HTTP_404_NOT_FOUND)
     if usuario.token != request.data['token']:
        return Response('token inválido', status=status.HTTP_400_BAD_REQUEST)
-    usuario.senha = request.data['senha']
+
+    #usuario.senha = request.data['senha']
+    hash = hashlib.md5(request.data['senha'].encode())    
+    usuario.senha = hash.digest()
+   
     usuario.save()
     serializer = UsuarioSerializer(usuario)
     return Response(serializer.data)
