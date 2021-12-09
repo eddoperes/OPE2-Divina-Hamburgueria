@@ -157,10 +157,12 @@
                         $('#falha').css('display', 'none');
                         $('#sucesso').css('display', 'block');
                         $('#sucesso').html("O pedido salão foi criado com sucesso! <a href='pedidosalao_listar.html'>Seguir para a lista de pedidos salão</a>");
+			$('#cupom').css('display', 'block');
                     } else {
                         $('#sucesso').css('display', 'none');
                         $('#falha').css('display', 'block');
                         $('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+			$('#cupom').css('display', 'none');
                     }
                 }
             );
@@ -185,10 +187,12 @@
                         $('#falha').css('display', 'none');
                         $('#sucesso').css('display', 'block');
                         $('#sucesso').html("O pedido salão foi editado com sucesso! <a href='pedidosalao_listar.html'>Seguir para a lista de pedidos salão</a>");
+			$('#cupom').css('display', 'block');
                     } else {
                         $('#sucesso').css('display', 'none');
                         $('#falha').css('display', 'block');
                         $('#falha').text("Ocorreu uma falha: " + xhr.responseText);
+			$('#cupom').css('display', 'none');
                     }
                 }
             );

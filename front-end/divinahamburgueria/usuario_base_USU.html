@@ -84,22 +84,32 @@
 
 		if ($("#senha") != null){
 			
-			if ($("#senha").val().length < 5){
-				$("#senha").addClass("is-invalid");
-				result = false;
-			}else{
-				$("#senha").removeClass("is-invalid");
+			if ($("#senha").val() != undefined){
+
+				if ($("#senha").val().length < 5){
+					$("#senha").addClass("is-invalid");
+					result = false;
+				}else{
+					$("#senha").removeClass("is-invalid");
+				}
+
 			}
 
 		}
 
 		if ($("#senhadenovo") != null){
-			if ($("#senhadenovo").val() != $("#senha").val()){
-				$("#senhadenovo").addClass("is-invalid");
-				result = false;
-			}else{
-				$("#senhadenovo").removeClass("is-invalid");
+
+			if ($("#senhadenovo").val() != undefined){
+	
+				if ($("#senhadenovo").val() != $("#senha").val()){
+					$("#senhadenovo").addClass("is-invalid");
+					result = false;
+				}else{
+					$("#senhadenovo").removeClass("is-invalid");
+				}
+
 			}
+
 		}
 
 		return result;

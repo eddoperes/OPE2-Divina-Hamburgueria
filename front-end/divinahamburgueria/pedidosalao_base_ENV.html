@@ -5,11 +5,93 @@
 <div id="sucesso" class="alert alert-success displaynone" role="alert" >
 </div>
 
+<div id="cupom" class="alert alert-success displaynone" role="alert" >
+
+	<a href="#" class="abrir" onclick="abrirModal();">Para ver o cupom clique aqui</a>
+
+	<div id="fundo"></div>
+	<div id="modal">
+  		<a href="#" class="fechar" onclick="fecharModal();">fechar</a>
+		<div id="cupom_container">
+		</div>
+	</div>
+
+</div>
+
 <div id="falha" class="alert alert-danger displaynone" role="alert" >  			
 </div>
 
 
 <script>
+
+	function fecharModal()
+	{
+  		$('#fundo').css('display','none');
+  		$('#modal').css('display','none');
+	}
+
+	function abrirModal()
+	{
+
+		var textData = '<table class="table font-w600" style="color:black;border:1px solid transparent;font-family:Courier New;" >';
+
+                textData += '<tr>';
+
+                textData += '<th>';
+                textData += 'Pedido';
+                textData += '</th>';
+
+ 		textData += '<th style="text-align: right;">';
+                textData += $('#id').val() + 's';
+                textData += '</th>';
+
+                textData += '</tr>';
+
+		var total = 0.0;
+
+		for (i=1; i <= incrementar_id; i++){
+
+			if ($('#item' + i).css('display') == 'block'){				
+
+				textData += '<tr>';
+
+	                	textData += '<td>';
+        	        	textData += $('#itemdocardapio' + i + ' option:selected').text(); 
+                		textData += '</td>';
+
+	                	textData += '<td style="text-align: right;">';
+        	        	textData += parseFloat($('#preco'+ i).val()).toFixed(2);
+                		textData += '</td>';
+		
+				textData += '</tr>';
+
+				total += parseFloat($('#preco'+ i).val());
+
+			}			
+
+		}	
+                
+		textData += '<tr>';
+
+                textData += '<td>';
+                textData += 'Total';
+                textData += '</td>';
+
+		textData += '<td style="text-align: right;">';
+                textData += total.toFixed(2);
+                textData += '</td>';
+
+                textData += '</tr>';
+
+                textData += '</table>'
+                $('#cupom_container').html(textData);
+
+
+
+  		$('#fundo').css('display','block');
+  		$('#modal').css('display','block');
+	}
+
 
       $(document).ready(function() {	
 
