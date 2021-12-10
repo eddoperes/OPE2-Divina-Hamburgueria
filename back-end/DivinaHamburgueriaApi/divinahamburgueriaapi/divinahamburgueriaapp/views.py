@@ -1094,8 +1094,8 @@ def estoque_list (request):
         return Response(serializer.data)
     elif request.method == 'POST':
         # Permissao ini ####################################################
-        if request.data["tipousuario"] != '1':
-           return Response('Permissão negada. Somente um usuário do tipo chef pode dar entrada no estoque', status=status.HTTP_403_FORBIDDEN)
+        if request.data["tipousuario"] != '1' and request.data["tipousuario"] != '2':
+           return Response('Permissão negada. Somente um usuário do tipo chef ou auxiliar pode dar entrada no estoque', status=status.HTTP_403_FORBIDDEN)
         # Permissao end ####################################################
         serializer = EstoqueSerializer(data = request.data)
         if serializer.is_valid():            
@@ -1116,8 +1116,8 @@ def estoque_detail(request, pk):
         return Response(serializer.data)
     elif request.method == 'PUT':
         # Permissao ini ####################################################
-        if request.data["tipousuario"] != '1':
-           return Response('Permissão negada. Somente um usuário do tipo chef pode editar o estoque', status=status.HTTP_403_FORBIDDEN)
+        if request.data["tipousuario"] != '1' and request.data["tipousuario"] != '2':
+           return Response('Permissão negada. Somente um usuário do tipo chef ou auxiliar pode editar o estoque', status=status.HTTP_403_FORBIDDEN)
         # Permissao end ####################################################
         serializer = EstoqueSerializer(estoque, data=request.data)
         if serializer.is_valid():
