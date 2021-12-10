@@ -193,6 +193,7 @@
                 //console.log(data);
                 $('#id').val(data.id);
                 $('#estado').val(data.estado);
+		$('#estadoini').val(data.estado);
                 $('#observacao').val(data.observacao);
                 $('#total').val(data.total);
                 $('#pago').val(data.estadopagamento);
@@ -239,6 +240,14 @@
         if (!$('#base_CLI_CLI').is(':visible')) {
             $('#idcliente').val('');
         }
+
+	if ($('#estado').val() == 4 && $('#estadoini').val() != 4){		
+		$('#estadoini').val(4);
+		for (i=1; i <= incrementar_id; i++){		
+			//alert($('#itemdocardapio' + i).val());
+			DescontarEstoque($('#itemdocardapio' + i).val()); //baixa automática
+		}
+	}
 
         WebApi_PUT_PedidoDelivery
         (

@@ -160,8 +160,7 @@
                               }, 
                               function success(data) {
                                     //console.log(data);
-                                    $('#id' + i).val(data.id);
-				    DescontarEstoque($('#itemdocardapio' + i).val()); //baixa automática
+                                    $('#id' + i).val(data.id);				    
                                     CrudPedidoDeliveryItemDoCardapio(i + 1);
                               },
                               function complete(xhr, text) {
