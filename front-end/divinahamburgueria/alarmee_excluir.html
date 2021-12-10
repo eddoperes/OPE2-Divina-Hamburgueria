@@ -102,25 +102,25 @@
         }
     }
 
-    var _itemdoestoque_receita_list = [];
+    var _itemdoestoque_list = [];
 
     function LoadLists() {
         WebApi_GET_LIST_ItemDoEstoque
         (
-            '?tipo=1',
+            '',
             function success(data) {
                 //console.log(data);
                 data = data.sort((a, b) => (a.nome > b.nome) ? 1 : -1);
                 var i, last;
                 for (i = 0; i < data.length; i++) {
                     if (data[i].nome != last)
-                        _itemdoestoque_receita_list.push(data[i]);
+                        _itemdoestoque_list.push(data[i]);
                     last = data[i].nome;
                 }
 
                 var i;
-                for (i = 0; i < _itemdoestoque_receita_list.length; i++) {
-                    $("#nome").append('<option value="' + _itemdoestoque_receita_list[i].nome + '">' + _itemdoestoque_receita_list[i].nome + '</option>');
+                for (i = 0; i < _itemdoestoque_list .length; i++) {
+                    $("#nome").append('<option value="' + _itemdoestoque_list[i].nome + '">' + _itemdoestoque_list[i].nome + '</option>');
                 }
                 LoadData();
 
@@ -142,6 +142,7 @@
                 $('#id').val(data.id);
                 $('#nome').val(data.nome);
                 $('#quantidade').val(data.quantidademinima);
+		PopulateUnidade();
                 $('#unidade').val(data.unidade);
             },
             function complete(xhr, text) {

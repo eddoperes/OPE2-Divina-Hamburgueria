@@ -99,7 +99,7 @@
         }
     }
 
-    var _itemdoestoque_receita_list = [];
+    var _itemdoestoque_list = [];
 
     function LoadLists() {
         WebApi_GET_LIST_ItemDoEstoque
@@ -111,14 +111,16 @@
                 var i, last;
                 for (i = 0; i < data.length; i++) {
                     if (data[i].nome != last)
-                        _itemdoestoque_receita_list.push(data[i]);
+                        _itemdoestoque_list.push(data[i]);
                     last = data[i].nome;
                 }
 
                 var i;
-                for (i = 0; i < _itemdoestoque_receita_list.length; i++) {
-                    $("#nome").append('<option value="' + _itemdoestoque_receita_list[i].nome + '">' + _itemdoestoque_receita_list[i].nome + '</option>');
+                for (i = 0; i < _itemdoestoque_list.length; i++) {
+                    $("#nome").append('<option value="' + _itemdoestoque_list[i].nome + '">' + _itemdoestoque_list[i].nome + '</option>');
                 }
+
+		PopulateUnidade();
 
             },
             function complete(xhr, text) {

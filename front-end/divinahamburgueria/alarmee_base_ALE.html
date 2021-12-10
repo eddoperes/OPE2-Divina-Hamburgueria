@@ -16,9 +16,13 @@
     <div class="mb-3">
 	<label for="unidade" class="form-label asterisk">Unidade</label>
         <select id="unidade" class="form-control">
+
+	    <!--
             <option value="kg">Kilos</option>
    	    <option value="l">Litros</option>
             <option value="un">Unidades</option>
+	    -->
+
         </select>        
         <label id="feedUnidade" class="invalid-feedback">A unidade precisa ser informada</label>
     </div>
@@ -43,6 +47,7 @@
 				$("#nome").addClass("is-invalid");
 			else
 				$("#nome").removeClass("is-invalid");
+			PopulateUnidade();
 		}); 
 
 		$("#quantidade").on(" keyup focusout change ", function (){
@@ -82,6 +87,35 @@
 		}
 
 		return result;
+
+	}
+
+        function PopulateUnidade(){
+
+		$('#unidade').find('option').remove();
+
+		var itemdoestoque = _itemdoestoque_list.find(o=> o.nome == $("#nome").val())
+
+		if (   itemdoestoque.unidade == 'g'
+                    || itemdoestoque.unidade == 'kg'
+		    || itemdoestoque.unidade == 'gr'){
+			$("#unidade").append('<option value="kg">Kilos</option>');
+			$("#unidade").append('<option value="g">Gramas</option>');
+		}
+
+		if (   itemdoestoque.unidade == 'ml'
+                    || itemdoestoque.unidade == 'l'){
+			$("#unidade").append('<option value="ml">Mililitros</option>');
+			$("#unidade").append('<option value="l">Litros</option>');
+  		}
+
+		if (   itemdoestoque.unidade == 'un'){
+			$("#unidade").append('<option value="un">Unidades</option>');				
+		}
+
+		if (   itemdoestoque.unidade == 'dz'){
+			$("#unidade").append('<option value="dz">Duzias</option>');				
+		}
 
 	}
 	
