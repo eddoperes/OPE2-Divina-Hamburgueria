@@ -1,0 +1,195 @@
+<html>
+
+<head>
+    <meta charset="utf8"/>
+    <script src="jquery/jquery3.6.js"></script>
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css">
+    <script src="bootstrap/dist/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/sistema.css">
+    <script src="js/sistema.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+    <title>DIVINA HAMBURGUERIA</title>
+
+    <link rel="shortcut icon" href="image/logo-divina-symbol.svg">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/apple-touch-icon-180x180.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,400i,600,700&display=swap">
+    <link rel="stylesheet" id="css-main" href="assets/css/codebase.min.css">
+
+</head>
+
+<body style="background-color: #fdd835">
+
+<div id="page-container"
+     class="sidebar-o sidebar-inverse enable-page-overlay side-scroll page-header-glass page-header-inverse main-content-boxed">
+    <div id="menu">
+    </div>
+    <main id="main-container">
+        <div class="setecincoporcento font-w600">
+            <input type="hidden" id="idusuario" value="0">
+            <h2 class="content-heading" style="color: #343a40">O QUE TEMOS HOJE!</h2>
+            <div class="block block-rounded font-w600">
+
+		<div class="clearboth"></div>
+
+                <div class="block-content" style="background-color: #343a40; color:#e4e7ed">
+                    <div id="table_container" style="color:#e4e7ed">
+                    </div>
+                </div>
+
+                <div class="block-content" style="background-color: #343a40; color:#e4e7ed">
+                    <h1 id="delivery" class="displaynone" style="color: #e4e7ed">Delivery</h1>
+                    <div id="table_container_delivery" style="color:#e4e7ed">
+                    </div>
+                </div>
+		
+            </div>
+        </div>
+    </main>
+    <div class="content">
+        <div class="content py-20 font-size-sm clearfix">
+            <div class="float-left">
+                Copyright © 2021 Divina Hamburgueria
+            </div>
+            <div class="float-right">
+                Desenvolvido por VirtualSoft <i class="si si-badge"></i>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+
+    $(document).ready(function () {
+        if (CheckLogin() == false)
+            return;
+        $("#menu").load("menu.html");
+	Busca();
+    });
+
+    function CheckLogin() {
+        var idusuario = getLoggedUserId();
+        if (idusuario == -1) {
+            var page = window.location.pathname.split("/").pop();
+            window.location.href = window.location.href.replace(page, 'login.html');
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    function Busca() {
+
+	WebApi_GET_LIST_Cardapio
+        (
+	    '',
+            function success(data) {
+                // console.log(data);
+
+		var textData = '<table class="table font-w600" style="color: #e4e7ed" >';
+
+		var i;
+		for (i = 0; i < data.length; i++) {
+ 			if (data[i].estado == 1){
+                   		textData += '<h1 style="color: #e4e7ed">' + data[i].nome + '</h1>';
+		   		textData += '<div id="table_' + data[i].id + '" style="color:#e4e7ed"></div>';		  
+			}
+                }
+
+                textData += '</table>'
+                $('#table_container').html(textData);
+
+		for (i = 0; i < data.length; i++) {
+			LoadItens(data[i].id);
+		}
+
+            },
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+            }
+        );
+
+       
+    }
+
+    function LoadItens(idcardapio){
+
+   	var textData = '<table class="table font-w600" style="color: #e4e7ed" >';
+
+        textData += '<tr>';
+
+        textData += '<th>';
+        textData += 'Item';
+        textData += '</th>';
+
+        textData += '<th>';
+        textData += 'Preço';
+        textData += '</th>';
+
+        textData += '</tr>';
+
+	WebApi_GET_LIST_CardapioItemDoCardapio
+        (
+	    '?cardapio=' + idcardapio,
+            function success(data) {
+                //console.log(data);
+
+		var i;
+                for (i = 0; i < data.length; i++) {
+
+			if (data[i].estado == 1){
+
+				textData += '<tr>';
+
+		                textData += '<td id="item_' + data[i].itemdocardapio + '">';
+        		        textData += '</td>';
+
+		                textData += '<td>';
+        		        textData += data[i].preco.toLocaleString('pt-br',{style:'currency', currency:'BRL'});
+                		textData += '</td>';
+	
+		                textData += '</tr>';
+
+			}
+
+		}
+
+        	textData += '</table>'
+        	$('#table_' + idcardapio).html(textData);
+
+		for (i = 0; i < data.length; i++) {
+			LoadNomeItem(data[i].itemdocardapio);
+		}
+
+ 	},
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+            }
+        );
+
+    }
+
+    function LoadNomeItem(iditem){
+
+	WebApi_GET_ItemDoCardapio
+        (
+	    iditem,
+            function success(data) {
+                //console.log(data);
+		$("#item_" + iditem).text(data.nome);		
+ 	},
+            function complete(xhr, text) {
+                console.log(xhr.status);
+                //console.log(xhr.responseText);
+            }
+        );	
+
+
+    }
+
+</script>
+
+</html>
