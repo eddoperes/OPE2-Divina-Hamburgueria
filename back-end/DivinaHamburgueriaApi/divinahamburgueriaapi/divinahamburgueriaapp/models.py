@@ -211,6 +211,7 @@ class ItemDoEstoque(models.Model):
     tipo = models.IntegerField(default=1)
     conteudo = models.IntegerField(default=1)
     unidade =  models.CharField(max_length=10, default='')
+    validadedias = models.IntegerField(default=15)
 
     def __str__(self):
         return self.nome

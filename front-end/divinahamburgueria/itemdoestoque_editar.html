@@ -90,6 +90,7 @@
                 $('#tipo').val(data.tipo);
                 $('#conteudo').val(data.conteudo);
                 $('#unidade').val(data.unidade);
+		$('#validade').val(data.validadedias);
             },
             function complete(xhr, text) {
                 console.log(xhr.status);
@@ -109,6 +110,7 @@
             {
                 nome: $('#nome').val(), marca: $('#marca').val(), tipo: $('#tipo').val()
                 , conteudo: $('#conteudo').val(), unidade: $('#unidade').val()
+                ,  validadedias: $('#validade').val()
             },
             function success(data) {
                 //console.log(data);

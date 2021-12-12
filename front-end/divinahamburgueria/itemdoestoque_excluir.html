@@ -110,11 +110,13 @@
                 $('#conteudo').val(data.conteudo);
                 $('#unidade').val(data.unidade);
                 $('#marca').val(data.marca);
+		$('#validade').val(data.validadedias);
                 $("#nome").attr("disabled", true);
                 $("#tipo").attr("disabled", true);
                 $("#conteudo").attr("disabled", true);
                 $("#unidade").attr("disabled", true);
                 $("#marca").attr("disabled", true);
+		$("#validade").attr("disabled", true);
             },
             function complete(xhr, text) {
                 console.log(xhr.status);

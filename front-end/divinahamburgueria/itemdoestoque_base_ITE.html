@@ -38,6 +38,12 @@
 	</select>
 </div>
 
+<div class="mb-3">
+	<label for="validade" class="form-label asterisk">Validade (dias)</label>
+	<input id="validade" class="form-control" type="number" value='0' />
+	<label class="invalid-feedback">A validade precisa ser maior que zero</label>
+</div>
+
 <div class="col-auto">
 	<input id="enviar" type="button" class="btn btn-alt-secondary btn-primary mb-3" value='Enviar' />
 </div>
@@ -71,6 +77,13 @@
 				$("#conteudo").addClass("is-invalid");
 			else
 				$("#conteudo").removeClass("is-invalid");
+		}); 
+
+		$("#validade").on('keyup focusout change', function (){
+			if ($("#validade").val() <= 0)
+				$("#validade").addClass("is-invalid");
+			else
+				$("#validade").removeClass("is-invalid");
 		}); 
 
 		$("#enviar").on(" click ", function (){
@@ -109,6 +122,14 @@
 		}
 		else{
 			$("#conteudo").removeClass("is-invalid");
+		}
+
+		if ($("#validade").val() <= 0){
+			$("#validade").addClass("is-invalid");
+			result = false;
+		}
+		else{
+			$("#validade").removeClass("is-invalid");
 		}
 
 		return result;
