@@ -956,6 +956,20 @@ def itemdoestoque_detail(request, pk):
 @api_view(['GET', 'POST'])
 def pedidodecompra_list (request):
     if request.method == 'GET':
+
+
+        dateini = request.GET.get('dateini', '').replace('-','')        
+        if (dateini != ''):
+            pedidodecompra = PedidoDeCompra.objects.all()
+            pedidofilter = [];
+            for pedido in pedidodecompra:                  
+                datacur = pedido.dataestocado.strftime("%Y/%m/%d").replace('/','')
+                if datacur >= dateini:
+                    pedidofilter.append(pedido) 
+            serializer = PedidoDeCompraSerializer(pedidofilter, many=True)
+            return Response(serializer.data)
+
+
         filtro = request.GET.get('estado', '')
         if (filtro == ''):
             pedidodecompra = PedidoDeCompra.objects.all()
@@ -1023,13 +1037,21 @@ def pedidodecompra_detail(request, pk):
 @api_view(['GET', 'POST'])
 def pedidodecompraitemdoestoque_list (request):
     if request.method == 'GET':
-        filtroA = request.GET.get('pedidodecompra', '')        
-        pedidodecompraitemdoestoque =  PedidoDeCompraItemDoEstoque.objects.filter(pedidodecompra=filtroA)		
+
+        filtroA = request.GET.get('pedidodecompra', '')  
+        if (filtroA != ''):      
+           pedidodecompraitemdoestoque =  PedidoDeCompraItemDoEstoque.objects.filter(pedidodecompra=filtroA)		
 
         filtroB = request.GET.get('estocado', '')
         if (filtroB != ''):
            pedidodecompraitemdoestoque = pedidodecompraitemdoestoque.filter(estocado=filtroB)
  
+        filtroC = request.GET.get('pks', '')
+        if (filtroC != ''):
+           arr = filtroC.split('-')
+           for x in range(len(arr)):
+              arr[x] = int(arr[x])
+           pedidodecompraitemdoestoque = PedidoDeCompraItemDoEstoque.objects.filter(pedidodecompra__in=arr)
 
         serializer = PedidoDeCompraItemDoEstoqueSerializer(pedidodecompraitemdoestoque, many=True)
         return Response(serializer.data)

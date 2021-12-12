@@ -32,9 +32,16 @@
                 <div class="block-content" style="background-color: #343a40; color:#e4e7ed">
 
                     <div class="clearboth"></div>
-                    <br/>
-                    <div id="table_container">
+
+		    <h1 style="color: #e4e7ed">Estoque baixo</h1>                    
+                    <div id="table_container_estoque">
                     </div>
+
+ 		    <h1 style="color: #e4e7ed">Estoque vencido</h1>                    
+                    <div id="table_container_validade">
+                    </div>
+
+
                 </div>
             </div>
         </div>
@@ -100,6 +107,8 @@
     var alarme_list_report;
     var estoque_list_report;
     var item_do_estoque_list_report;
+    var pedido_de_compra_list_report;
+    var pedido_de_compra_item_do_estoque_list_report;
 
     function LoadAlarmeListsReport() {
 
@@ -124,6 +133,7 @@
                 //console.log(data);
                 estoque_list_report = data;
                 AlarmeE();
+		AlarmeV();
             },
             function complete(xhr, text) {
                 console.log(xhr.status);
@@ -138,6 +148,62 @@
                 //console.log(data);
                 item_do_estoque_list_report = data;
                 AlarmeE();
+
+		var maxValiadadeDias = 0;
+		for (i = 0; i < item_do_estoque_list_report.length; i++) {
+			if (item_do_estoque_list_report[i].validadedias > maxValiadadeDias){
+				maxValiadadeDias = item_do_estoque_list_report[i].validadedias;
+			}
+		}
+
+		var dateIni = new Date();
+		dateIni.setDate(dateIni.getDate() - maxValiadadeDias);
+
+        	var strIni = dateIni.getFullYear() + '-' +
+            		     String(dateIni.getMonth() + 1).padStart(2, '0') + '-' +
+            	             String(dateIni.getDate()).padStart(2, '0');
+		
+		WebApi_GET_LIST_PedidoDeCompra
+        	(
+            		'?dateini=' + strIni,
+            		function success(data) {
+                		//console.log(data);
+                		pedido_de_compra_list_report = data;
+				
+				var filtro = '';
+				for (i = 0; i < pedido_de_compra_list_report.length; i++) {
+					if (filtro == '')
+						filtro = filtro + pedido_de_compra_list_report[i].id;
+					else
+						filtro = filtro + '-' + pedido_de_compra_list_report[i].id;		
+				}
+							
+				WebApi_GET_LIST_PedidoDeCompraItemDoEstoque
+        			(
+            				'?pks=' + filtro,
+            				function success(data) {
+                				//console.log(data);
+                				pedido_de_compra_item_do_estoque_list_report = data;
+						pedido_de_compra_item_do_estoque_list_report.sort(function (a, b) {
+                    					return (a.pedidodecompra < b.pedidodecompra) ? 1 : ((a.pedidodecompra < b.pedidodecompra) ? -1 : 0);
+                				});						
+						AlarmeV();
+	        			},
+            				function complete(xhr, text) {
+                				console.log(xhr.status);
+                				//console.log(xhr.responseText);
+            				}
+        			);
+
+	        	},
+            		function complete(xhr, text) {
+                		console.log(xhr.status);
+                		//console.log(xhr.responseText);
+            		}
+        	);
+
+
+
             },
             function complete(xhr, text) {
                 console.log(xhr.status);
@@ -163,18 +229,14 @@
         textData += '<tr>';
 
         textData += '<th>';
-        textData += 'Id';
-        textData += '</th>';
-
-        textData += '<th>';
         textData += 'Item';
         textData += '</th>';
 
-        textData += '<th class="coluna_oculta_cel">';
+        textData += '<th>';
         textData += 'Qtde min';
         textData += '</th>';
 
-        textData += '<th class="coluna_oculta_cel">';
+        textData += '<th>';
         textData += 'Qtde';
         textData += '</th>';
 
@@ -210,59 +272,152 @@
 
             if (sum_estoque == 0) {
 
-                textData += '<tr>';
+		textData += '<tr>';
 
-                textData += '<td>';
-                textData += alarme_list_report[i].id;
-                textData += '</td>';
+	        textData += '<td>';
+        	textData += alarme_list_report[i].nome;
+	        textData += '</td>';
 
-                textData += '<td>';
-                textData += alarme_list_report[i].nome;
-                textData += '</td>';
+	        textData += '<td>';
+        	textData += qtde_alarme_normalizada + ' ' + unidade_alarme;
+	        textData += '</td>';
 
-                textData += '<td class="coluna_oculta_cel">';
-                textData += qtde_alarme_normalizada + ' ' + unidade_alarme;
-                textData += '</td>';
+	        textData += '<td>';
+        	textData += 0 + ' ' + unidade_alarme;
+	        textData += '</td>';
 
-                textData += '<td class="coluna_oculta_cel">';
-                textData += 0 + ' ' + unidade_alarme;
-                textData += '</td>';
+	        textData += '</tr>';   
 
-                textData += '</tr>';
             } else {
 
                 if (qtde_alarme_normalizada > sum_estoque) {
 
-                    textData += '<td>';
-                    textData += alarme_list_report[i].id;
-                    textData += '</td>';
 
-                    textData += '<td>';
-                    textData += alarme_list_report[i].nome;
-                    textData += '</td>';
+        		textData += '<tr>';
 
-                    textData += '<td class="coluna_oculta_cel">';
-                    textData += qtde_alarme_normalizada + ' ' + unidade_alarme;
-                    textData += '</td>';
+		        textData += '<td>';
+        		textData += alarme_list_report[i].nome;
+        		textData += '</td>';
 
-                    textData += '<td class="coluna_oculta_cel">';
-                    textData += sum_estoque.toFixed(2) + ' ' + unidade_alarme;
-                    textData += '</td>';
+        		textData += '<td>';
+        		textData += qtde_alarme_normalizada + ' ' + unidade_alarme;
+        		textData += '</td>';
 
-                    textData += '</tr>';
+        		textData += '<td>';
+        		textData += sum_estoque.toFixed(2) + ' ' + unidade_alarme;
+        		textData += '</td>';
+
+        		textData += '</tr>';   
 
                 }
-
 
             }
 
         }
 
         textData += '</table>'
-        $('#table_container').html(textData);
+        $('#table_container_estoque').html(textData);
 
     }
 
+    function AlarmeV() {
+
+        if (estoque_list_report == undefined)
+            return;
+
+        if (pedido_de_compra_item_do_estoque_list_report == undefined)
+            return;
+
+
+	var textData = '<table class="table font-w600" style="color: #e4e7ed" >';
+
+        textData += '<tr>';
+
+        textData += '<th>';
+        textData += 'Item';
+        textData += '</th>';
+
+        textData += '<th>';
+        textData += 'Validade em dias';
+        textData += '</th>';
+
+        textData += '<th>';
+        textData += 'Estocado antes de';
+        textData += '</th>';
+
+        textData += '<th>';
+        textData += 'Qtde';
+        textData += '</th>';
+
+        textData += '</tr>'; 
+
+	for (i = 0; i < estoque_list_report.length; i++) {
+		
+		var sum = 0;
+
+		var itemdoestoque = item_do_estoque_list_report.find(element => element.id == estoque_list_report[i].itemdoestoque);
+
+		var dateIni = new Date();
+		dateIni.setDate(dateIni.getDate() - itemdoestoque.validadedias);
+
+		for (k = 0; k < pedido_de_compra_item_do_estoque_list_report.length; k++) {		
+
+			var pedidodecompra = pedido_de_compra_list_report.find(element => element.id == pedido_de_compra_item_do_estoque_list_report[k].pedidodecompra);
+			var dataestocado = new Date(pedidodecompra.dataestocado);
+
+			if (dataestocado >= dateIni){
+
+				if (estoque_list_report[i].itemdoestoque == pedido_de_compra_item_do_estoque_list_report[k].itemdoestoque){
+
+
+				       //console.log(itemdoestoque.nome);
+					
+
+
+					sum += pedido_de_compra_item_do_estoque_list_report[k].quantidade;
+				}					
+			}
+
+		}
+
+		if (estoque_list_report[i].quantidade > sum){
+
+
+				//if (estoque_list_report[i].itemdoestoque == 24){
+				//	console.log(sum);				
+				//}
+
+
+ 		    textData += '<td>';
+                    textData += itemdoestoque.nome;
+                    textData += '</td>';
+
+                    textData += '<td>';
+                    textData += itemdoestoque.validadedias
+                    textData += '</td>';
+
+		    var strIni = String(dateIni.getDate()).padStart(2, '0') + '-' +
+            	                 String(dateIni.getMonth() + 1).padStart(2, '0') + '-' +
+            	                 dateIni.getFullYear() ;
+
+                    textData += '<td>';
+                    textData += strIni;
+                    textData += '</td>';
+
+                    textData += '<td>';
+                    textData += parseFloat(estoque_list_report[i].quantidade - sum).toFixed(2);
+                    textData += '</td>';
+
+                    textData += '</tr>';
+
+		}
+
+	}
+
+        textData += '</table>'
+        $('#table_container_validade').html(textData);
+
+    }
 
 </script>
 
